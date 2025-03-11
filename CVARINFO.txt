@@ -1,0 +1,16 @@
+user bool helm_showdisplay = true;
+user float helm_backalpha = 1.0;
+user float helm_helmetalpha = 1.0;
+user bool helm_showmugshot = true;
+user bool helm_showcracks = true;
+user float helm_crackalpha = 1.0;
+user bool helm_flicker = true;
+user bool helm_shake = true;
+user bool helm_swapammo = false;
+user bool helm_showstats = true;
+user bool helm_warnflash = true;
+user bool helm_alwayslight = false;
+user bool helm_projectlight = true;
+user bool helm_projectbeam = true;
+user bool helm_armorlay = true;
+user float helm_armoralpha = 1.0;

@@ -1,0 +1,57 @@
+#library "CRACK"
+#include "zcommon.acs"
+
+script "ourch" (void)
+{
+	GiveInventory("Ouchies", 1);
+	Delay(10);
+	TakeInventory("Ouchies", 1);
+}
+script "helmquake" (void)
+{
+	GiveInventory("HelmShaker", 1);
+	GiveInventory("OuchMore", 1);
+	Delay(10);
+	TakeInventory("HelmShaker", 1);
+	Delay(25);
+	TakeInventory("OuchMore", 1);
+}
+
+script "YesThisWorks" (void)
+{
+	int id=10;
+	HudMessage(s:"Yes, that script works"; HUDMSG_TYPEON, 1, CR_FIRE, -0.13, 0.7, 2.0, 0.05, 2.6);
+}
+
+/*
+
+script "CRACK" DEATH
+{
+	sethudsize(428, 200, false);
+	SetFont("VBRKA0");
+	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
+	Delay(1);
+	SetFont("VBRKB0");
+	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
+	Delay(1);
+	SetFont("VBRKC0");
+	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
+	Delay(1);
+	SetFont("VBRKD0");
+	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
+	Delay(1);
+	SetFont("VBRKE0");
+	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
+	Delay(1);
+	SetFont("VBRKF0");
+	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
+	Delay(1);
+	SetFont("VBRKG0");
+	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
+	Delay(1);
+	SetFont("VBRKH0");
+	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 999999);
+	Delay(1);
+
+}
+*/

@@ -1,0 +1,39 @@
+
+
+AddOptionMenu "OptionsMenu"
+{
+	StaticText "", "Red"
+	Submenu "Helmeter Options", "HELM_SETTINGS"
+}
+
+OptionMenu "HELM_SETTINGS" {	
+	Title "Helmet Settings"
+	StaticText ""
+	Slider "Helmet Transparency", "helm_helmetalpha", 0, 1, 0.05, 2, "helm_showhelmet"
+	StaticText "Note: will not affect the transparency of the lights or the armor overlay", "Grey"
+	StaticText ""
+	Option "Show Armor Overlay", "helm_armorlay", "OnOff"
+	Slider "Armor Overlay Transparency", "helm_armoralpha", 0, 1, 0.05, 2, "helm_armorlay"
+	Option "Projector Lights", "helm_projectlight", "OnOff"
+	Option "Projector Beams", "helm_projectbeam", "OnOff", "helm_projectlight"
+
+	Option "Show Cracks", "helm_showcracks", "OnOff"
+	Slider "Crack Transparency", "helm_crackalpha", 0, 1, 0.05, 2, "helm_showcracks"
+	StaticText ""
+	Option "Show Displays", "helm_showdisplay", "OnOff"
+	Option "Show Mugshot", "helm_showmugshot", "OnOff", "helm_showdisplay"
+	Option "Show Level Stats", "helm_showstats", "OnOff", "helm_showdisplay"
+	Slider "Display Background Transparency", "helm_backalpha", 0, 1, 0.05, 2, "helm_showdisplay"
+	Option "Low Number Warning Flashes", "helm_warnflash", "OnOff", "helm_showdisplay"
+	StaticText "Note: will not update until you exit the pause menu", "Grey"
+	Option "Swap Ammo Displays", "helm_swapammo", "OnOff", "helm_showdisplay"
+	StaticText "Some mods use ammotype1 for the magazine, others use ammotype2", "Grey"
+	StaticText "This HUD is designed to have the magazine ammo be the top bar, so make sure it's correct", "Grey"
+	StaticText ""
+	Option "Helmet Flickers", "helm_flicker", "OnOff"
+	Option "Helmet Shakes", "helm_shake", "OnOff"
+	StaticText ""
+
+//	Option "Show Cracks", "helm
+}
+/*
