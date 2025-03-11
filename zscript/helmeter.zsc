@@ -55,6 +55,11 @@ class Helmeter : BaseStatusBar
 		Inventory ammotype1, ammotype2;
 		DynamicValueInterpolator WarnFlashInterp;
 		double WarnFlash;
+		const PICKUPMSG_SCROLLTIME = 15; //when new messages are added, the list will scroll for this many tics
+		array<String> pickupMsgStrings; //this will contain every message as it's received
+		array<double> pickupMsgAlpha; //this will track the alpha value for each message to fade them out
+		double pickupMsgScrollTics; //this timer will be updated as new messages appear
+
 		
     override void Init()
     {
@@ -118,6 +123,7 @@ class Helmeter : BaseStatusBar
 		if (state == HUD_StatusBar)
 		{
 			BeginHud();
+			DrawCustomPickupMessage((TopX, TopY + 45), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, 1.0);
 			DrawFullscreenStuff();
 			DrawHudNumberStuff();
 		}
@@ -232,67 +238,29 @@ class Helmeter : BaseStatusBar
 		// \/\/\/ END OF ARMOR STUFF \/\/\/
 }
 		
-	void DrawMinmodeHudStuff()
-	{	
-		if(Cvar.GetCVar("helm_alwayslight", CPlayer).GetInt())
+
+	override bool ProcessNotify(EPrintLevel printlevel, String outline)
+	{
+		if(gamestate != GS_LEVEL || consoleState == c_down) return false;		// if console is open or not in level, do not engage
+		if ((printlevel >= PRINT_LOW || printlevel < PRINT_LOG) && Cvar.GetCVar("helm_customlog", CPlayer).GetInt()) // if not a pickup, death, critical, or chat message, or if this feature is disabled, stop
 		{
-			DrawImage("VDSPLIA", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);
-			DrawImage("VDSPLIA", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
-			if(Cvar.GetCVar("helm_showdisplay", CPlayer).GetInt())
-			{
-				DrawImage("VDSPLIB", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
-				if(Cvar.GetCVar("helm_showmugshot", CPlayer).GetInt())
-				{
-					DrawImage("VDSPLLA", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);
-				}
-				else
-				{
-					DrawImage("VDSPLLB", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);
-				}
-	//			DrawImage("VDSPLID", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
-				if(ammotype1 != null || ammotype2 != null)
-				{
-					DrawImage("VDSPLIB", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
-				}
-				else
-				{
-					DrawImage("VDSPLIC", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
-				}
-				if(Cvar.GetCVar("helm_swapammo", CPlayer).GetInt())
-				{
-					if(ammotype2 != null)
-					{
-						if(ammotype1 == null)
-						{
-							DrawImage("VDSPLRD", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
-						}
-						else
-						{
-							DrawImage("VDSPLRC", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
-						}
-					}
-				}
-				else
-				{
-					if(ammotype1 != null)
-					{
-						if(ammotype2 == null)		//if weapon does not use a magazine and feeds directly from reserve, function like the reseve ammo counter
-						{
-							DrawImage("VDSPLRD", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
-						}
-						else
-						{
-							DrawImage("VDSPLRC", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
-						}
-					}
-				}
-			}
-			else
-			{
-				DrawImage("VDSPLIC", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VDSPLIC", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
-			}
+			// When a new message appears, push it to our
+			// array of strings:
+			pickupMsgStrings.Push(outline);
+			// We'll also push 2.0 to the alpha value for
+			// this new string. We start with 2.0, so that
+			// the message is printed opaque first, then
+			// gradually starts fading out:
+			pickupMsgAlpha.Push(2.0);
+			// To be absolutely safe, make sure the two arrays
+			// are of the same size:
+			pickupMsgAlpha.Resize(pickupMsgStrings.Size());
+			// Update the scroll timer:
+			pickupMsgScrollTics = PICKUPMSG_SCROLLTIME;
+			// Disable default pickup message printing:
+			return true;
 		}
+		return false;
 	}
 	void DrawHudNumberStuff()
 	{
@@ -688,6 +656,63 @@ class Helmeter : BaseStatusBar
 		else
 		{
 			WarnFlash = 0.0;
+		}
+		if (pickupMsgStrings.Size() > 0)
+		{
+			// Update the alpha values of each message.
+			bool shouldclear = true;
+			for (int i = 0; i < pickupMsgAlpha.Size(); i++)
+			{
+				pickupMsgAlpha[i] = max(pickupMsgAlpha[i] - 0.025, 0.0);
+				if (pickupMsgAlpha[i] > 0)
+				{
+					// If at least a single message's alpha is
+					// above zero, do not clear them.
+					shouldclear = false;
+				}
+			}
+			// If ALL messages' alpha is zero, clear arrays:
+			if (shouldclear)
+			{
+				pickupMsgStrings.Clear();
+				pickupMsgAlpha.Clear();
+			}
+			// Otherwise update scroll timer:
+			else if (pickupMsgScrollTics > 0)
+			{
+				pickupMsgScrollTics--;
+			}
+		}
+	}
+	void DrawCustomPickupMessage(Vector2 pos, int flags, double scale = 1.0)
+	{
+		int msgcount = pickupMsgStrings.Size();
+		if (msgcount <= 0) return;
+		
+		// Get the height of the font (we will use this for vertical
+		// spacing):
+		double stringHeight = enlFont.mFont.GetHeight() * scale;
+		// If there's more than 1 message in the queue, offset each
+		// message to create an effect of them scrolling:
+//		if (msgcount > 1)
+//		{
+		pos.y -= stringheight * (double(pickupMsgScrollTics) / PICKUPMSG_SCROLLTIME);
+//		}
+		// Finally, draw all messages, starting from the newest one:
+		for (int i = msgcount - 1; i >= 0; i--)
+		{
+			DrawString(enlFont, 
+				pickupMsgStrings[i],
+				pos,
+				flags: flags,
+				translation: Font.CR_White,
+				// Pass the alpha value from the alpha values array.
+				// Don't forget to clamp it  to 1.0 here, since it
+				// starts at 2.0:
+				alpha: (min(pickupMsgAlpha[i], 1.0)) * DisplayFlicker,
+				scale: (scale, scale));
+			// move up for the next message:
+			pos.y += stringheight;
 		}
 	}
 }
