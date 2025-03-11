@@ -20,6 +20,7 @@ OptionMenu "HELM_SETTINGS" {
 	Option "Show Cracks", "helm_showcracks", "OnOff"
 	Slider "Crack Transparency", "helm_crackalpha", 0, 1, 0.05, 2, "helm_showcracks"
 	StaticText ""
+	Option "Custom Message Display", "helm_customlog", "OnOff"
 	Option "Show Displays", "helm_showdisplay", "OnOff"
 	Option "Show Mugshot", "helm_showmugshot", "OnOff", "helm_showdisplay"
 	Option "Show Level Stats", "helm_showstats", "OnOff", "helm_showdisplay"
