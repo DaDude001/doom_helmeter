@@ -14,3 +14,4 @@ user bool helm_projectlight = true;
 user bool helm_projectbeam = true;
 user bool helm_armorlay = true;
 user float helm_armoralpha = 1.0;
+user bool helm_customlog = true;
