@@ -262,6 +262,7 @@ class Helmeter : BaseStatusBar
 		}
 		return false;
 	}
+	
 	void DrawHudNumberStuff()
 	{
 		
@@ -699,17 +700,17 @@ class Helmeter : BaseStatusBar
 		pos.y -= stringheight * (double(pickupMsgScrollTics) / PICKUPMSG_SCROLLTIME);
 //		}
 		// Finally, draw all messages, starting from the newest one:
-		for (int i = msgcount - 1; i >= 0; i--)
+		for (int j = msgcount - 1; j >= 0; j--)
 		{
 			DrawString(enlFont, 
-				pickupMsgStrings[i],
+				pickupMsgStrings[j],
 				pos,
 				flags: flags,
 				translation: Font.CR_White,
 				// Pass the alpha value from the alpha values array.
 				// Don't forget to clamp it  to 1.0 here, since it
 				// starts at 2.0:
-				alpha: (min(pickupMsgAlpha[i], 1.0)) * DisplayFlicker,
+				alpha: (min(pickupMsgAlpha[j], 1.0)) * DisplayFlicker,
 				scale: (scale, scale));
 			// move up for the next message:
 			pos.y += stringheight;
