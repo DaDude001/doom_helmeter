@@ -54,6 +54,8 @@ class Helmeter : BaseStatusBar
 		HUDFont enlFont;
 		Inventory ammotype1, ammotype2;
 		DynamicValueInterpolator WarnFlashInterp;
+		DynamicValueInterpolator HPInterp;
+		DynamicValueInterpolator APInterp;
 		double WarnFlash;
 		const PICKUPMSG_SCROLLTIME = 15; //when new messages are added, the list will scroll for this many tics
 		array<String> pickupMsgStrings; //this will contain every message as it's received
@@ -97,6 +99,8 @@ class Helmeter : BaseStatusBar
 		CrackAlpha = 1;
 		WarnFlashInterp = DynamicValueInterpolator.Create(80, 0.1, 1, 10);
 		WarnFlash = 1.0;
+		HPInterp = DynamicValueInterpolator.Create(500, 0.1, 1, 50);
+		APInterp = DynamicValueInterpolator.Create(500, 0.1, 1, 50);
 		Font fnt = "04FONT"; //obtain the font named "MYHUDFNT"
         mIndexFont = HUDFont.Create(fnt);
 		Font fnt2 = "04FONTOL"; //obtain the font named "MYHUDFNT"
@@ -347,6 +351,10 @@ class Helmeter : BaseStatusBar
 			}
 			DrawImage("PHBARBKH", (BLCX + 25, BLCY - 45), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
 			DrawImage("HPICON", (BLCX + 49, BLCY - 71), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, HealthIconAlpha);
+			if(Cvar.GetCVar("helm_showchips", CPlayer).GetInt())
+			{
+				DrawBar("PHBARHP5", "PHBARHP2", HPInterp.GetValue() / 5, 100, (BLCX + 43, BLCY - 57), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
+			}
 			DrawBar("PHBARHP", "PHBARHP2", HealthPoints, 100, (BLCX + 43, BLCY - 57), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
 			if(CheckInventory("PowerStrength", 1))
 			{
@@ -367,6 +375,10 @@ class Helmeter : BaseStatusBar
 			}
 			DrawImage("PHBARBKA", (BLCX + 38, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
 			DrawImage("APICON", (BLCX + 62, BLCY - 34), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, ArmorIconAlpha);
+			if(Cvar.GetCVar("helm_showchips", CPlayer).GetInt())
+			{
+				DrawBar("PHBARAP5", "PHBARAP2", APInterp.GetValue() / 5, 100, (BLCX + 56, BLCY - 20), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
+			}
 			DrawBar("PHBARAP", "PHBARAP2", ArmorValue, 100, (BLCX + 56, BLCY - 20), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
 			if(ArmorValue >= 101)
 			{
@@ -611,6 +623,14 @@ class Helmeter : BaseStatusBar
 			MegaArmorAlpha = ((ArmorValue - 100) / 100.0) * DisplayFlicker;
 		}
 		HealthPoints = CPlayer.Health;
+		if((HPInterp.GetValue() / 5)!= HealthPoints)
+		{
+			HPInterp.Update(HealthPoints * 5);
+		}
+		if((APInterp.GetValue() / 5) != ArmorValue)
+		{
+			APInterp.Update(ArmorValue * 5);
+		}
 		[ammotype1, ammotype2] = GetCurrentAmmo();
 		HealthIconAlpha = (HealthPoints / 100.0) * DisplayFlicker;
 		if (HealthPoints >= 101)
