@@ -21,11 +21,14 @@ Visor cracks reset upon loading save
 Low warning flashes only update when exiting the menu, unlike all the other options
 Low warning flashes may not initially appear at full opacity
 	This is because the animation is always being played in the background, unless the feature is disabled
-
+HUD messages have the % (percent) and & (ampersand) symbols swapped
+	This is an error with the font itself
+	
 CREDITS
-HUD Code and Display Graphics by DaCat001
+HUD Code and Display Graphics by DaCat001, with liberal amounts of help from the ZDoom Wiki
 Originally based on a hud by Mithriak and Mike12, although barely any of that remains
 Visor graphics by DaCat001, based on NekosHud
+A single line of code for the HUD messages taken from Project Brutality
 
 Visor crack sounds from various Valve games (generic Source glass bullet impact sfx)
 Big font: NoughtPointFour by Jimmy, based on a design by id Software
