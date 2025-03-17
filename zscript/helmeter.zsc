@@ -107,6 +107,8 @@ class Helmeter : BaseStatusBar
         mHudFont = HUDFont.Create(fnt2);
 		Font fnt3 = "ESFONT"; //obtain the font named "MYHUDFNT"
         enlFont = HUDFont.Create(fnt3);
+//		Font fnt4 = "BOLO"; //obtain the font named "MYHUDFNT"
+ //       enlFont = HUDFont.Create(fnt4);
 //		OffsetXInterp;
         // This function is called once, when the
         // HUD is first created. Here you can
@@ -460,6 +462,10 @@ class Helmeter : BaseStatusBar
 					DrawString(mHUDFont, FormatNumber(ammotype2.Amount, 1, 4), (BRCX - 84, BRCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Yellow, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 				}
 			}
+			/// OTHER MOD STUFF
+//			if{CheckInventory("HandGrenades", 1)
+//			{
+				
 			/// LEVEL STATS
 //			DrawString(mIndexFont, "TIME", (TopX, TopY + 12), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker, scale: (0.5, 0.5));
 			if(Cvar.GetCVar("helm_showstats", CPlayer).GetInt())
@@ -530,8 +536,8 @@ class Helmeter : BaseStatusBar
 		{
 			DrawImage("VDSPLIA", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);
 			DrawImage("VDSPLIA", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
-			DrawImage("VDSPLIA", (TopX - 98.5, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
-			DrawImage("VDSPLIA", (TopX + 100.5, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
+			DrawImage("VDSPLIA", (TopX - 98, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
+			DrawImage("VDSPLIA", (TopX + 100, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
 			if(Cvar.GetCVar("helm_showdisplay", CPlayer).GetInt())
 			{
 				DrawImage("VDSPLIB", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
@@ -545,23 +551,23 @@ class Helmeter : BaseStatusBar
 				}
 				if(Cvar.GetCVar("helm_showstats", CPlayer).GetInt())
 				{
-					DrawImage("VDSPLIB", (TopX - 98.5, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
-					DrawImage("VDSPLIB", (TopX + 100.5, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
+					DrawImage("VDSPLIB", (TopX - 98, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
+					DrawImage("VDSPLIB", (TopX + 100, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
 				}
 				else
 				{
-					DrawImage("VDSPLIC", (TopX - 98.5, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
-					DrawImage("VDSPLIC", (TopX + 100.5, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
+					DrawImage("VDSPLIC", (TopX - 98, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
+					DrawImage("VDSPLIC", (TopX + 100, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
 				}
 				if(Cvar.GetCVar("helm_projectbeam", CPlayer).GetInt())
 				{
 					if(Cvar.GetCVar("helm_showmugshot", CPlayer).GetInt())
 					{
-						DrawImage("VDSPLLA", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);
+						DrawImage("VDSPLLA", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HudBackAlpha);
 					}
 					else
 					{
-						DrawImage("VDSPLLB", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);
+						DrawImage("VDSPLLB", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HudBackAlpha);
 					}
 		//			DrawImage("VDSPLID", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
 					
@@ -571,11 +577,11 @@ class Helmeter : BaseStatusBar
 						{
 							if(ammotype1 == null)
 							{
-								DrawImage("VDSPLRD", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
+								DrawImage("VDSPLRD", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
 							}
 							else
 							{
-								DrawImage("VDSPLRC", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
+								DrawImage("VDSPLRC", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
 							}
 						}
 					}
@@ -585,17 +591,17 @@ class Helmeter : BaseStatusBar
 						{
 							if(ammotype2 == null)		//if weapon does not use a magazine and feeds directly from reserve, function like the reseve ammo counter
 							{
-								DrawImage("VDSPLRD", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
+								DrawImage("VDSPLRD", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
 							}
 							else
 							{
-								DrawImage("VDSPLRC", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
+								DrawImage("VDSPLRC", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
 							}
 						}
 					}
 					if(Cvar.GetCVar("helm_showstats", CPlayer).GetInt())
 					{
-						DrawImage("VDSPLTA", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, DisplayFlicker);
+						DrawImage("VDSPLTA", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HudBackAlpha);
 					}
 				}
 			}
@@ -603,8 +609,8 @@ class Helmeter : BaseStatusBar
 			{
 				DrawImage("VDSPLIC", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VDSPLIC", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VDSPLIC", (TopX - 98.5, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
-				DrawImage("VDSPLIC", (TopX + 100.5, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
+				DrawImage("VDSPLIC", (TopX - 98, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
+				DrawImage("VDSPLIC", (TopX + 100, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
 			}
 		}
 	}

@@ -2,7 +2,8 @@ INFO
 This is yet another visor HUD, but this time it actually uses zscript instead an excessive amount of ACS hackery (*cough* UDV *cough cough*)
 I made it to try zscript HUDs, and to make a more "modern" visor HUD.
 Should be compatible with most gameplay mods that are compatible with any custom HUD, although a minor amount of configuration is needed
-Tested and proven to work in vanilla, Brutal Doom v22, Rust and Bones,
+Tested and proven to work in vanilla, Brutal Doom v22, Rust and Bones, and Gunslinger Set
+	Although, several elements are disabled due to this HUD not supporting them yet (eg. BD stamina, GS' weapon fire modes, etc)
 Note: Display graphics are kinda ugly. I am not a sprite artist, but I tried my best. 
 	If you wish to contribute some better looking graphics, go ahead
 Features:
@@ -29,6 +30,7 @@ HUD Code and Display Graphics by DaCat001, with liberal amounts of help from the
 Originally based on a hud by Mithriak and Mike12, although barely any of that remains
 Visor graphics by DaCat001, based on NekosHud
 A single line of code for the HUD messages taken from Project Brutality
+Option tooltip code by ToxicFrog
 
 Visor crack sounds from various Valve games (generic Source glass bullet impact sfx)
 Big font: NoughtPointFour by Jimmy, based on a design by id Software
