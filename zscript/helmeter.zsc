@@ -49,6 +49,7 @@ class Helmeter : BaseStatusBar
 		double HudBackAlpha;
 		double HelmLightFlicker;
 		double HLFlickerTrue;
+		bool AmmoExtra1;
 		HUDFont mIndexFont;
 		HUDFont mHudFont;
 		HUDFont enlFont;
@@ -99,6 +100,7 @@ class Helmeter : BaseStatusBar
 		CrackAlpha = 1;
 		WarnFlashInterp = DynamicValueInterpolator.Create(80, 0.1, 1, 10);
 		WarnFlash = 1.0;
+		AmmoExtra1 = false;
 		HPInterp = DynamicValueInterpolator.Create(500, 0.1, 1, 50);
 		APInterp = DynamicValueInterpolator.Create(500, 0.1, 1, 50);
 		Font fnt = "04FONT"; //obtain the font named "MYHUDFNT"
@@ -407,7 +409,7 @@ class Helmeter : BaseStatusBar
 					}
 					else if(ammotype2.Amount <= (ammotype2.MaxAmount / 4))
 					{
-							DrawImage("PHWARNR", (BRCX - 68, BRCY - 60), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, WarnFlash);
+						DrawImage("PHWARNR", (BRCX - 68, BRCY - 60), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, WarnFlash);
 					}
 					DrawImage("PHBARBKM", (BLCX - 25, BLCY - 45), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
 					DrawImage("MGICON", (BLCX - 49, BLCY - 71), DI_ITEM_CENTER | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
@@ -463,9 +465,27 @@ class Helmeter : BaseStatusBar
 				}
 			}
 			/// OTHER MOD STUFF
-//			if{CheckInventory("HandGrenades", 1)
-//			{
+			// Brutal Doom v22 & any other mods that use the same actor names
+			if(CheckInventory("IGotNades", 1))
+			{
+				AmmoExtra1 = true;
+				int NumNades = GetAmount("DummyGrenadeAmmo");
+				if((ammotype1 == null && !Cvar.GetCVar("helm_swapammo", CPlayer).GetInt()) || (ammotype2 == null && Cvar.GetCVar("helm_swapammo", CPlayer).GetInt()))
+				{
+					DrawImage("PHGRNBK2", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
+				}
+				else
+				{
+					DrawImage("PHGRNBK", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
+				}
 				
+				DrawString(enlFont, FormatNumber(NumNades, 1, 4), (BRCX - 44, BRCY - 92), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker);
+			
+			}
+			else
+			{
+				AmmoExtra1 = false;
+			}
 			/// LEVEL STATS
 //			DrawString(mIndexFont, "TIME", (TopX, TopY + 12), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker, scale: (0.5, 0.5));
 			if(Cvar.GetCVar("helm_showstats", CPlayer).GetInt())
@@ -570,18 +590,46 @@ class Helmeter : BaseStatusBar
 						DrawImage("VDSPLLB", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HudBackAlpha);
 					}
 		//			DrawImage("VDSPLID", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
-					
+//					if((ammotype1 == null && ammotype2 == null) && AmmoExtra1 == true)
+//					{
+//						DrawImage("VDSPLRF", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+//					}
 					if(Cvar.GetCVar("helm_swapammo", CPlayer).GetInt())
-					{
+					{					//My most sincere apologies for this dogshit
 						if(ammotype2 != null)
 						{
-							if(ammotype1 == null)
+							if(AmmoExtra1 == true)
 							{
-								DrawImage("VDSPLRD", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+								if(ammotype1 == null)
+								{
+									DrawImage("VDSPLRE", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+								}
+								else
+								{
+									DrawImage("VDSPLRB", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+								}
 							}
 							else
 							{
-								DrawImage("VDSPLRC", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+								if(ammotype1 == null)
+								{
+									DrawImage("VDSPLRD", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+								}
+								else
+								{
+									DrawImage("VDSPLRC", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+								}
+							}
+						}
+						else
+						{		// "Finally, some good fucking food"
+							if(AmmoExtra1 == true)
+							{
+								DrawImage("VDSPLRF", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+							}
+							if(ammotype1 != null)
+							{
+								DrawImage("VDSPLRG", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
 							}
 						}
 					}
@@ -589,13 +637,38 @@ class Helmeter : BaseStatusBar
 					{
 						if(ammotype1 != null)
 						{
-							if(ammotype2 == null)		//if weapon does not use a magazine and feeds directly from reserve, function like the reseve ammo counter
+							if(AmmoExtra1 == true)
 							{
-								DrawImage("VDSPLRD", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+								if(ammotype2 == null)
+								{
+									DrawImage("VDSPLRE", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+								}
+								else
+								{
+									DrawImage("VDSPLRB", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+								}
 							}
 							else
 							{
-								DrawImage("VDSPLRC", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+								if(ammotype2 == null)
+								{
+									DrawImage("VDSPLRD", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+								}
+								else
+								{
+									DrawImage("VDSPLRC", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+								}
+							}
+						}
+						else
+						{
+							if(AmmoExtra1 == true)
+							{
+								DrawImage("VDSPLRF", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+							}
+							if(ammotype2 != null)
+							{
+								DrawImage("VDSPLRG", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
 							}
 						}
 					}
@@ -756,7 +829,7 @@ class PainHandler : EventHandler
 	{
 		if (e.thing && e.thing is "PlayerPawn")
 		{
-			if (e.DamageFlags == DMG_EXPLOSION || e.Damage >= 21)
+			if ((e.DamageFlags == DMG_EXPLOSION && e.Damage > 5) || e.Damage >= 21)
 			{
 //				e.thing.A_GiveInventory("CrackNumber", 1);
 				EventHandler.SendInterfaceEvent(e.thing.PlayerNumber(), "HUDEVENT_PlayerDamaged");
@@ -847,6 +920,21 @@ class OuchMore : Inventory
 //		Inventory.MaxAmount 1;
 //	}
 //}
+class IGotNades: Inventory
+{
+	Default
+	{
+		Inventory.MaxAmount 1;
+	}
+}
+class DummyGrenadeAmmo: Inventory
+{
+	Default
+	{
+		Inventory.MaxAmount 10;
+	}
+}
+
 class HelmShaker : Inventory
 {
 	Default

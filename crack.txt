@@ -17,41 +17,20 @@ script "helmquake" (void)
 	TakeInventory("OuchMore", 1);
 }
 
-script "YesThisWorks" (void)
+script "IGotNades" ENTER	
 {
-	int id=10;
-	HudMessage(s:"Yes, that script works"; HUDMSG_TYPEON, 1, CR_FIRE, -0.13, 0.7, 2.0, 0.05, 2.6);
+	if (CheckClass("HandGrenades") && CheckClass("GrenadeAmmo"))		//do we have BDv22's grenade swep (or one with the same name)?
+    {
+		GiveInventory("IGotNades", 1);
+		if(CheckInventory("DummyGrenadeAmmo") > CheckInventory("GrenadeAmmo"))
+		{
+			TakeInventory("DummyGrenadeAmmo", 1);
+		}
+		else if(CheckInventory("DummyGrenadeAmmo") < CheckInventory("GrenadeAmmo"))
+		{
+			GiveInventory("DummyGrenadeAmmo", 1);
+		}
+		Delay(1);
+		restart;		// this probably isn't a good idea...
+    }
 }
-
-/*
-
-script "CRACK" DEATH
-{
-	sethudsize(428, 200, false);
-	SetFont("VBRKA0");
-	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
-	Delay(1);
-	SetFont("VBRKB0");
-	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
-	Delay(1);
-	SetFont("VBRKC0");
-	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
-	Delay(1);
-	SetFont("VBRKD0");
-	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
-	Delay(1);
-	SetFont("VBRKE0");
-	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
-	Delay(1);
-	SetFont("VBRKF0");
-	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
-	Delay(1);
-	SetFont("VBRKG0");
-	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 1);
-	Delay(1);
-	SetFont("VBRKH0");
-	HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_LAYER_UNDERHUD, 42, 0, 214.0, 100.0, 999999);
-	Delay(1);
-
-}
-*/
