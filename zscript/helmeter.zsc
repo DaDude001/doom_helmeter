@@ -499,7 +499,7 @@ class Helmeter : BaseStatusBar
 			else
 			{
 				AmmoExtra1 = false;
-				AmmoExtra2 = 0;
+				AmmoExtra2 = 1;
 			}
 			/// LEVEL STATS
 //			DrawString(mIndexFont, "TIME", (TopX, TopY + 12), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker, scale: (0.5, 0.5));
