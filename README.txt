@@ -34,4 +34,4 @@ Option tooltip code by ToxicFrog
 
 Visor crack sounds from various Valve games (generic Source glass bullet impact sfx)
 Big font: NoughtPointFour by Jimmy, based on a design by id Software
-Small font: Enlightening Small also by Jimmy, from Darkening E2
+Small font: Cyberfonter Small by TerminusEst13, edited by DaCat001
