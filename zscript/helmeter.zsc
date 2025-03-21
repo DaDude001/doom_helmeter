@@ -14,6 +14,7 @@ class Helmeter : BaseStatusBar
 		double GlassY;
 		double ShakeOffsetX;
 		double ShakeOffsetY;
+		double HelmLightLevel;
 		double HelmetAlpha;
 		int CrackCount;
 //		double Crack1Alpha;
@@ -107,6 +108,7 @@ class Helmeter : BaseStatusBar
 		WarnFlashInterp = DynamicValueInterpolator.Create(80, 0.1, 1, 10);
 		WarnFlash = 1.0;
 		AmmoExtra1 = false;
+		HelmLightLevel = 1.0;
 		AmmoExtra2 = 0;
 		HPInterp = DynamicValueInterpolator.Create(500, 0.1, 1, 50);
 		APInterp = DynamicValueInterpolator.Create(500, 0.1, 1, 50);
@@ -210,9 +212,25 @@ class Helmeter : BaseStatusBar
 */
 		HelmetAlpha = Clamp(Cvar.GetCVar("helm_helmetalpha", CPlayer).GetFloat(), 0, 1);
 		HLFlickerTrue = HelmLightFlicker * Clamp(Cvar.GetCVar("helm_armoralpha", CPlayer).GetFloat(), 0, 1);
-		DrawImage("VSRBLA", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmetAlpha);
-		DrawImage("VSRBRA", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
-		DrawImage("VSRTPA", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
+		DrawImage("VSRBLC", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmetAlpha);
+		DrawImage("VSRBRC", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
+		DrawImage("VSRTPC", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
+		if(Cvar.GetCVar("helm_darkness", CPlayer).GetInt())
+		{
+			HelmLightLevel = HelmetAlpha * (cplayer.mo.cursector.lightlevel / 255.0);
+			DrawImage("VSRBLB", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmetAlpha);
+			DrawImage("VSRBRB", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
+			DrawImage("VSRTPB", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
+			DrawImage("VSRBLA", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmLightLevel);
+			DrawImage("VSRBRA", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmLightLevel);
+			DrawImage("VSRTPA", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmLightLevel);	
+		}
+		else
+		{
+			DrawImage("VSRBLA", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmetAlpha);
+			DrawImage("VSRBRA", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
+			DrawImage("VSRTPA", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
+		}
 //		if(Cvar.GetCVar("helm_projectlight", CPlayer).GetInt())
 //		{
 //			DrawImage("VDSPLIA", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);

@@ -16,3 +16,5 @@ user bool helm_armorlay = true;
 user float helm_armoralpha = 1.0;
 user bool helm_customlog = true;
 user bool helm_showchips = true;
+user float helm_msgscl = 0.75;
+user bool helm_darkness = true;
