@@ -495,7 +495,7 @@ class Helmeter : BaseStatusBar
 				{
 					DrawImage("PHGRNBK", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
 				}
-				
+				DrawImage("PHGRNBK3", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
 				DrawString(enlFont, FormatNumber(NumNades, 1, 4), (BRCX - 43, BRCY - 91.5), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker, scale: (0.75, 0.75));
 			
 			}
@@ -503,6 +503,12 @@ class Helmeter : BaseStatusBar
 			{
 				AmmoExtra1 = false;
 				AmmoExtra2 = 1;
+			}
+			if(CheckInventory("ITactic", 1))
+			{
+				DrawImage("PHSTMBK", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
+				DrawImage("PHSTMIC", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+				DrawBar("PSTMBR1", "PSTMBR2", (100 - GetAmount("DummyStamina")), 100, (BLCX + 115, BLCY - 18), 0, SHADER_VERT | SHADER_REVERSE, DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
 			}
 			/// LEVEL STATS
 //			DrawString(mIndexFont, "TIME", (TopX, TopY + 12), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker, scale: (0.5, 0.5));
@@ -911,6 +917,20 @@ class DummyGrenadeAmmo: Inventory
 	Default
 	{
 		Inventory.MaxAmount 10;
+	}
+}
+class ITactic: Inventory
+{
+	Default
+	{
+		Inventory.MaxAmount 1;
+	}
+}
+class DummyStamina: Inventory
+{
+	Default
+	{
+		Inventory.MaxAmount 100;
 	}
 }
 
