@@ -18,3 +18,5 @@ user bool helm_customlog = true;
 user bool helm_showchips = true;
 user float helm_msgscl = 0.75;
 user bool helm_darkness = true;
+user bool helm_blood = true;
+user float helm_bloodalpha = 0.75;

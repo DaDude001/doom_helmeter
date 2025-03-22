@@ -14,6 +14,7 @@ class Helmeter : BaseStatusBar
 		double GlassY;
 		double ShakeOffsetX;
 		double ShakeOffsetY;
+		int FlickerTics;
 		double HelmLightLevel;
 		double HelmetAlpha;
 		int CrackCount;
@@ -43,6 +44,8 @@ class Helmeter : BaseStatusBar
 		double msgscl;
 		int priLight;
 		bool locks[6];
+		int HurtLevel;
+		double BloodAlpha;
 		int i;
 		String image;
 		double HealthIconAlpha;
@@ -94,6 +97,7 @@ class Helmeter : BaseStatusBar
 //		TrueTopX = 0;
 //		TrueTopY = 0;
 		ArmorValue = 0;
+		FlickerTics = 100;
 		OverhealthAlpha = 0;
 		DisplayFlicker = 1.0;
 		HelmLightFlicker = 1.0;
@@ -110,6 +114,8 @@ class Helmeter : BaseStatusBar
 		AmmoExtra1 = false;
 		HelmLightLevel = 1.0;
 		AmmoExtra2 = 0;
+		HurtLevel = 0;
+		BloodAlpha = 0.75;
 		HPInterp = DynamicValueInterpolator.Create(500, 0.1, 1, 50);
 		APInterp = DynamicValueInterpolator.Create(500, 0.1, 1, 50);
 		Font fnt = "04FONT"; //obtain the font named "MYHUDFNT"
@@ -140,15 +146,15 @@ class Helmeter : BaseStatusBar
 		if (state == HUD_StatusBar)
 		{
 			BeginHud();
-			DrawCustomPickupMessage((TopX, TopY + 45), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);
 			DrawFullscreenStuff();
+			DrawCustomPickupMessage((TopX, TopY + 45), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);
 			DrawHudNumberStuff();
 		}
 		if (state == HUD_Fullscreen)
 		{
 			BeginHud();
-			DrawHudNumberStuff();
 			DrawCustomPickupMessage((TopX, TopY + 45), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);
+			DrawHudNumberStuff();
 //			DrawMinmodeHudStuff();
 		}		
 		
@@ -236,7 +242,7 @@ class Helmeter : BaseStatusBar
 //			DrawImage("VDSPLIA", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);
 //			DrawImage("VDSPLIA", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
 //		}
-		if(ArmorValue >= 1 && Cvar.GetCVar("helm_armorlay", CPlayer).GetInt())		// sorry about the YandereDev ass coding...
+		if(ArmorValue >= 1 && Cvar.GetCVar("helm_armorlay", CPlayer).GetInt())		// sorry about the YandereDev ass coding, not sure how I could adapt this into switch/case
 		{
 			if(ArmorValue <= 25)
 			{
@@ -269,8 +275,49 @@ class Helmeter : BaseStatusBar
 				DrawImage("VSLTPE", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 			}
 		}
-		// \/\/\/ END OF ARMOR STUFF \/\/\/
-}
+		if(Cvar.GetCVar("helm_blood", CPlayer).GetInt())
+		{
+			HurtLevel = (HealthPoints + 15) / 15;
+			BloodAlpha = Clamp(Cvar.GetCVar("helm_bloodalpha", CPlayer).GetFloat(), 0, 1);
+//			DrawString(enlFont, FormatNumber(HurtLevel, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+			switch(HurtLevel)
+			{
+			case 6:
+				DrawImage("VSBLD6", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
+				break;
+			case 5:
+				DrawImage("VSBLD6", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
+				DrawImage("VSBLD5", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
+				break;
+			case 4:
+				DrawImage("VSBLD6", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
+				DrawImage("VSBLD5", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
+				DrawImage("VSBLD4", (GlassX + 30, GlassY - 30), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, BloodAlpha);
+				break;
+			case 3:
+				DrawImage("VSBLD6", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
+				DrawImage("VSBLD5", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
+				DrawImage("VSBLD4", (GlassX + 30, GlassY - 30), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, BloodAlpha);
+				DrawImage("VSBLD3", (GlassX, GlassY - 20), DI_SCREEN_CENTER_BOTTOM | DI_ITEM_CENTER | DI_ITEM_BOTTOM, BloodAlpha);
+				break;
+			case 2:
+				DrawImage("VSBLD6", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
+				DrawImage("VSBLD5", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
+				DrawImage("VSBLD4", (GlassX + 30, GlassY - 30), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, BloodAlpha);
+				DrawImage("VSBLD3", (GlassX, GlassY - 20), DI_SCREEN_CENTER_BOTTOM | DI_ITEM_CENTER | DI_ITEM_BOTTOM, BloodAlpha);
+				DrawImage("VSBLD2", (GlassX - 20, GlassY - 30), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_BOTTOM, BloodAlpha);
+				break;
+			case 1:
+				DrawImage("VSBLD6", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
+				DrawImage("VSBLD5", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
+				DrawImage("VSBLD4", (GlassX + 30, GlassY - 30), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, BloodAlpha);
+				DrawImage("VSBLD3", (GlassX, GlassY - 20), DI_SCREEN_CENTER_BOTTOM | DI_ITEM_CENTER | DI_ITEM_BOTTOM, BloodAlpha);
+				DrawImage("VSBLD2", (GlassX - 20, GlassY - 30), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_BOTTOM, BloodAlpha);
+				DrawImage("VSBLD1", (GlassX, GlassY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, BloodAlpha);
+				break;
+			}
+		}
+	}
 		
 
 	override bool ProcessNotify(EPrintLevel printlevel, String outline)
@@ -326,17 +373,28 @@ class Helmeter : BaseStatusBar
 		}	
 		if(CPlayer.Health <= 0)
 		{
-			HelmLightOutInterp.Update(0);
-//			HelmLightOut = HelmLightOutInterp;
-			if(Cvar.GetCVar("helm_flicker", CPlayer).GetInt())
+			if(FlickerTics > 0)
 			{
-				HelmLightFlicker = frandom(0.0, (HelmLightOutInterp.GetValue() / 100.0));
-				DisplayFlicker = frandom(0.0, (HelmLightOutInterp.GetValue() / 100.0));
+				if(Cvar.GetCVar("helm_flicker", CPlayer).GetInt())
+				{
+					HelmLightFlicker = frandom(((FlickerTics / 100.0) * 2), 1.0);
+					DisplayFlicker = frandom(((FlickerTics / 100.0) * 2), 1.0);
+				}
 			}
 			else
 			{
-				HelmLightFlicker = HelmLightOutInterp.GetValue() / 100.0;
-				DisplayFlicker = HelmLightOutInterp.GetValue() / 100.0;
+				HelmLightOutInterp.Update(0);
+	//			HelmLightOut = HelmLightOutInterp;
+				if(Cvar.GetCVar("helm_flicker", CPlayer).GetInt())
+				{
+					HelmLightFlicker = frandom(0.0, (HelmLightOutInterp.GetValue() / 100.0));
+					DisplayFlicker = frandom(0.0, (HelmLightOutInterp.GetValue() / 100.0));
+				}
+				else
+				{
+					HelmLightFlicker = HelmLightOutInterp.GetValue() / 100.0;
+					DisplayFlicker = HelmLightOutInterp.GetValue() / 100.0;
+				}
 			}
 		}
 		if(Cvar.GetCVar("helm_shake", CPlayer).GetInt())
@@ -696,6 +754,10 @@ class Helmeter : BaseStatusBar
 		Super.Tick();
 		ArmorValue = GetArmorAmount();
 		ArmorIconAlpha = (ArmorValue / 100.0) * DisplayFlicker;
+		if (HealthPoints <= 0 && FlickerTics > 0)
+		{
+			FlickerTics--;
+		}
 		if (ArmorValue >= 1)
 		{	
 			ArmorProtection = GetArmorSavePercent();
@@ -766,7 +828,10 @@ class Helmeter : BaseStatusBar
 			bool shouldclear = true;
 			for (int i = 0; i < pickupMsgAlpha.Size(); i++)
 			{
-				pickupMsgAlpha[i] = max(pickupMsgAlpha[i] - 0.025, 0.0);
+				if(HealthPoints > 0)
+				{
+					pickupMsgAlpha[i] = max(pickupMsgAlpha[i] - 0.025, 0.0);
+				}
 				if (pickupMsgAlpha[i] > 0)
 				{
 					// If at least a single message's alpha is

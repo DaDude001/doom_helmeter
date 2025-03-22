@@ -26,6 +26,11 @@ OptionMenu "HELM_SETTINGS" {
 	Tooltip "Show/hide the cracks that appear when taking heavy damage."
 	Slider "Crack Transparency", "helm_crackalpha", 0, 1, 0.05, 2, "helm_showcracks"
 	Tooltip "Transparency of the cracks, if they are a bit too intrusive."
+	Option "Show Blood", "helm_blood", "OnOff"
+	Tooltip "Show/hide the blood splats on the visor when injured."
+	Slider "Blood Transparency", "helm_bloodalpha", 0, 1, 0.05, 2, "helm_showbloox"
+	Tooltip "Transparency of the blood splatters, if they obstruct too much of your precious view."
+	
 	StaticText ""
 	StaticText "=====HUD Displays====="
 	StaticText ""
