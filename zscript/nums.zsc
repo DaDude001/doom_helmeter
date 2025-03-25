@@ -1,0 +1,187 @@
+//This is the overflow for the other hud code.
+//Everything in here is just insanely repetitive or not important
+
+extend class Helmeter
+{
+	string Garbage1;
+	string Garbage2;
+	string Garbage3;
+	
+	void DoGarbage()		// Generates the random strings that appear when the numbers glitch out. It's meant to look like it's outputting garbage data
+	{
+		if(CorruptNum == true)
+		{
+			switch(random(1,18))
+			{
+				case 1:
+				Garbage1 = "1";
+				break;
+				case 2:
+				Garbage1 = "2";
+				break;
+				case 3:
+				Garbage1 = "3";
+				break;
+				case 4:
+				Garbage1 = "4";
+				break;
+				case 5:
+				Garbage1 = "5";
+				break;
+				case 6:
+				Garbage1 = "6";
+				break;
+				case 7:
+				Garbage1 = "7";
+				break;
+				case 8:
+				Garbage1 = "8";
+				break;
+				case 9:
+				Garbage1 = "9";
+				break;
+				case 10:
+				Garbage1 = "0";
+				break;
+				case 11:
+				Garbage1 = "P";
+				break;
+				case 12:
+				Garbage1 = "@";
+				break;
+				case 13:
+				Garbage1 = "O";
+				break;
+				case 14:
+				Garbage1 = "C";
+				break;
+				case 15:
+				Garbage1 = "a";
+				break;
+				case 16:
+				Garbage1 = "=";
+				break;
+				case 17:
+				Garbage1 = "F";
+				break;
+				case 18:
+				Garbage1 = "\"";
+				break;
+			}
+			switch(random(1,18))
+			{
+				case 1:
+				Garbage2 = "1";
+				break;
+				case 2:
+				Garbage2 = "2";
+				break;
+				case 3:
+				Garbage2 = "3";
+				break;
+				case 4:
+				Garbage2 = "4";
+				break;
+				case 5:
+				Garbage2 = "5";
+				break;
+				case 6:
+				Garbage2 = "6";
+				break;
+				case 7:
+				Garbage2 = "7";
+				break;
+				case 8:
+				Garbage2 = "8";
+				break;
+				case 9:
+				Garbage2 = "9";
+				break;
+				case 10:
+				Garbage2 = "0";
+				break;
+				case 11:
+				Garbage2 = "K";
+				break;
+				case 12:
+				Garbage2 = "@";
+				break;
+				case 13:
+				Garbage2 = "r";
+				break;
+				case 14:
+				Garbage2 = "R";
+				break;
+				case 15:
+				Garbage2 = "d";
+				break;
+				case 16:
+				Garbage2 = "=";
+				break;
+				case 17:
+				Garbage2 = "O";
+				break;
+				case 18:
+				Garbage2 = "\"";
+				break;
+			}
+			switch(random(1,18))
+			{
+				case 1:
+				Garbage3 = "1";
+				break;
+				case 2:
+				Garbage3 = "2";
+				break;
+				case 3:
+				Garbage3 = "3";
+				break;
+				case 4:
+				Garbage3 = "4";
+				break;
+				case 5:
+				Garbage3 = "5";
+				break;
+				case 6:
+				Garbage3 = "6";
+				break;
+				case 7:
+				Garbage3 = "7";
+				break;
+				case 8:
+				Garbage3 = "8";
+				break;
+				case 9:
+				Garbage3 = "9";
+				break;
+				case 10:
+				Garbage3 = "0";
+				break;
+				case 11:
+				Garbage3 = "E";
+				break;
+				case 12:
+				Garbage3 = "@";
+				break;
+				case 13:
+				Garbage3 = "P";
+				break;
+				case 14:
+				Garbage3 = "X";
+				break;
+				case 15:
+				Garbage3 = "h";
+				break;
+				case 16:
+				Garbage3 = "=";
+				break;
+				case 17:
+				Garbage3 = "F";
+				break;
+				case 18:
+				Garbage3 = "\"";
+				break;
+			}
+		}
+	}
+}

@@ -1,0 +1,103 @@
+TEXTURE PRHCR1
+	random
+	pic PRHCR1 tics 3
+	pic PRHCR2 tics 1
+	pic PRHCR3 tics 2
+	pic PRHCR4 tics 4
+	pic PRHCR5 tics 3
+	pic PRHCR6 tics 1
+	pic PRHCR7 tics 3
+	pic PRHCR8 tics 2
+
+TEXTURE PRACR1
+	random
+	pic PRACR1 tics 3
+	pic PRACR2 tics 1
+	pic PRACR3 tics 2
+	pic PRACR4 tics 3
+	pic PRACR5 tics 1
+	pic PRACR6 tics 2
+	pic PRACR7 tics 1
+	pic PRACR8 tics 2
+	
+TEXTURE PRMCR1
+	random
+	pic PRMCR1 tics 3
+	pic PRMCR2 tics 1
+	pic PRMCR3 tics 2
+	pic PRMCR4 tics 3
+	pic PRMCR5 tics 1
+	pic PRMCR6 tics 2
+	pic PRMCR7 tics 1
+	pic PRMCR8 tics 2
+
+TEXTURE PRRCR1
+	random
+	pic PRRCR1 tics 3
+	pic PRRCR2 tics 1
+	pic PRRCR3 tics 2
+	pic PRRCR4 tics 3
+	pic PRRCR5 tics 1
+	pic PRRCR6 tics 2
+	pic PRRCR7 tics 1
+	pic PRRCR8 tics 2
+
+TEXTURE PMUGL1
+	random
+	pic PMUGL1 tics 1
+	pic PMUGL2 tics 2
+	pic PMUGL3 tics 3
+	pic PMUGL4 tics 1
+	pic PMUGL5 tics 4
+	pic PMUGL6 tics 2
+	pic PMUGL7 tics 3
+	pic PMUGL8 tics 1
+	
+TEXTURE PKEYC1
+	random
+	pic PKEYC1 tics 1
+	pic PKEYC2 tics 2
+	pic PKEYC3 tics 3
+	pic PKEYC4 tics 1
+	pic PKEYC5 tics 4
+	pic PKEYC6 tics 2
+	
+TEXTURE PK3YC1
+	random
+	pic PK3YC1 tics 1
+	pic PK3YC2 tics 2
+	pic PK3YC3 tics 3
+	pic PK3YC4 tics 1
+	pic PK3YC5 tics 4
+	pic PK3YC6 tics 2
+	
+TEXTURE PGRNR1
+	random
+	pic PGRNR1 tics 1
+	pic PGRNR2 tics 2
+	pic PGRNR3 tics 3
+	pic PGRNR4 tics 1
+	pic PGRNR5 tics 4
+
+TEXTURE PSTAC1
+	random
+	pic PSTAC1 tics 1
+	pic PSTAC2 tics 2
+	pic PSTAC3 tics 3
+	pic PSTAC4 tics 1
+	pic PSTAC5 tics 4
+	pic PSTAC6 tics 2
+	pic PSTAC7 tics 3
+	pic PSTAC8 tics 1
+	pic PSTAC9 tics 2
+	pic PSTAC10 tics 1
+	
+TEXTURE PSTMR1
+	random
+	pic PSTMR1 tics 3
+	pic PSTMR2 tics 1
+	pic PSTMR3 tics 2
+	pic PSTMR4 tics 3
+	pic PSTMR5 tics 1
+	pic PSTMR6 tics 2
+	pic PSTMR7 tics 1
