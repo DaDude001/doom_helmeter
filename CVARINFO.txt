@@ -22,3 +22,4 @@ user bool helm_blood = true;
 user float helm_bloodalpha = 0.75;
 user bool helm_corrupt = true;
 user bool helm_corruptnum = true;
+user bool helm_dispdamage = true;

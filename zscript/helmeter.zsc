@@ -27,6 +27,7 @@ class Helmeter : BaseStatusBar
 		double CrackAlpha;
 		double CrackCVarAlpha;
 		double HelmLightOut;
+//		double 
 		bool Hurting;
 		int FaultySpamTics;
 //		double TrueBLCX;
@@ -47,6 +48,8 @@ class Helmeter : BaseStatusBar
 		bool locks[6];
 		bool CorruptDisp;
 		bool CorruptNum;
+//		bool randomcorrupt;
+		int randomcorrupt;
 		int HurtLevel;
 		double BloodAlpha;
 		int i;
@@ -371,7 +374,7 @@ class Helmeter : BaseStatusBar
 			{
 				HelmLightFlicker = frandom((ArmorValue / 200.0), 1.0);
 			}
-			else if(CheckInventory("OuchMore", 1))
+			else if(CheckInventory("OuchMore", 1) || randomcorrupt != 0)
 			{
 				HelmLightFlicker = frandom((ArmorValue / 200.0), 1.0);		//the lower armor you have, the more intense the flicker is
 				DisplayFlicker = frandom(0.67, 1.0);
@@ -442,7 +445,7 @@ class Helmeter : BaseStatusBar
 				GlassY = 0;
 			}
 		}
-		if(Cvar.GetCVar("helm_corrupt", CPlayer).GetInt() && (CheckInventory("HelmShaker", 1) || ((FlickerTics < flcval1 && FlickerTics > flcval2) || (FlickerTics < flcval3 && FlickerTics > flcval4)) || FlickerTics <= 35))			
+		if(randomcorrupt != 0 || (Cvar.GetCVar("helm_corrupt", CPlayer).GetInt() && (CheckInventory("HelmShaker", 1) || ((FlickerTics < flcval1 && FlickerTics > flcval2) || (FlickerTics < flcval3 && FlickerTics > flcval4)) || FlickerTics <= 35)))			
 		{
 			CorruptDisp = true;
 		}
@@ -450,7 +453,7 @@ class Helmeter : BaseStatusBar
 		{
 			CorruptDisp = false;
 		}
-		if(Cvar.GetCVar("helm_corruptnum", CPlayer).GetInt() && (CheckInventory("HelmShaker", 1) || ((FlickerTics < flcval1 && FlickerTics > flcval2) || (FlickerTics < flcval3 && FlickerTics > flcval4)) || FlickerTics <= 35))			
+		if(randomcorrupt != 0 || (Cvar.GetCVar("helm_corruptnum", CPlayer).GetInt() && (CheckInventory("HelmShaker", 1) || ((FlickerTics < flcval1 && FlickerTics > flcval2) || (FlickerTics < flcval3 && FlickerTics > flcval4)) || FlickerTics <= 35)))			
 		{
 			CorruptNum = true;
 		}
@@ -717,7 +720,14 @@ class Helmeter : BaseStatusBar
 					DrawImage("PHGRNBK", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
 				}
 				DrawImage("PHGRNBK3", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
-				DrawString(enlFont, FormatNumber(NumNades, 1, 4), (BRCX - 43, BRCY - 91.5), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker, scale: (0.75, 0.75));
+				if(CorruptNum == true)
+				{
+						DrawString(enlFont, Garbage2, (BRCX - 43, BRCY - 91.5), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker, scale: (0.75, 0.75));
+				}
+				else
+				{
+						DrawString(enlFont, FormatNumber(NumNades, 1, 4), (BRCX - 43, BRCY - 91.5), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker, scale: (0.75, 0.75));
+				}
 			
 			}
 			else
@@ -840,6 +850,15 @@ class Helmeter : BaseStatusBar
     {
 		Super.Tick();
 		ArmorValue = GetArmorAmount();
+		if(Cvar.GetCVar("helm_dispdamage", CPlayer).GetInt() && (CrackCount != 0 && random(1,(100 - (CrackCount - 1)* 4)) <= 1))
+		{
+			randomcorrupt = random(4,4 + (CrackCount * 4));
+			S_StartSound("displaycorrupt", CHAN_7, 0, 0.8);
+		}
+		if(randomcorrupt != 0)
+		{
+			randomcorrupt--;
+		}
 		if(FaultySpamTics != 0)
 		{
 			FaultySpamTics--;
