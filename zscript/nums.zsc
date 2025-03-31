@@ -1,11 +1,189 @@
-//This is the overflow for the other hud code.
-//Everything in here is just insanely repetitive or not important
-
 extend class Helmeter
 {
 	string Garbage1;
 	string Garbage2;
 	string Garbage3;
+	int Startuper;
+	int StartupDelayAmount;
+	bool StartedUpOut;
+	bool StartSpamStopper;
+	static const String StartupSequenceText[] =
+	{
+			"UAC OFFENSIVE HELMET OS v0.7a ONLINE",
+			"Copyright(C) 2025-2032 Union Aerospace Corporation. All rights reserved.",
+			"BEGIN STARTUP SEQUENCE...",
+			" ",
+			"Augumented reality display INITIALIZED",
+			"Holographic information panels INTITIALIZED",
+			"Vital link INITIALIZED",
+			"Shield system ACTIVE",
+			"Ammunition monitor INITIALIZED",
+			"Repair nexus ACTIVE",
+			"Area scanner ENABLED",
+			"UACNet warning: Network not found. Please contact UAC for support.",
+			"Item acquisition messages ENABLED",
+			" ",
+			"UOH-OS: Init successful. Have a nice day :)",
+			" "
+	};
+	static const String LoadBar[] =
+	{
+			"[#__________________________]",
+			"[##_________________________]",
+			"[#####______________________]",
+			"[######_____________________]",
+			"[#######____________________]",
+			"[#########__________________]",
+			"[############_______________]",
+			"[#############______________]",
+			"[#############______________]",
+			"[##############_____________]",
+			"[#################__________]",
+			"[##################_________]",
+			"[#####################______]",
+			"[#######################____]",
+			"[##########################_]",
+			"[###########################]",
+			"[###########################]"
+	};
+	void DoARThings()
+	{
+		if(!CheckInventory("StartupCompleted", 1))
+		{
+			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (1.0 - ((StartupTics + 10.0) * 0.01)), (-1, -1), (2, ((100 - (StartupTics + 5)) * 0.1)), STYLE_Subtract);
+			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (clamp((1.0 - ((StartupTics + 30) * 0.05)), 0.0, 1.0)), (-1, -1), (2, (exp(((StartupTics + 50.0) * 0.1)) * 0.1)), STYLE_Translucent);
+			DrawImage("STRTVR3", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (1.0 - ((StartupTics + 50) * 0.1)), (-1, -1), (2, 2), STYLE_Translucent);
+		}
+	}
+	// WARNING: TERRIBLE, VILE, DESPICABLE, REPUGNANT, ABYSMAL, HORRENDOUS, REPULSIVE, DOGSHIT CODE AHEAD 
+	void DoStartupSequence()
+	{
+		switch(Startuper)
+		{
+			case 0:
+			StartupDelayAmount = 5;
+			break;
+			case 1:
+			StartupDelayAmount = 7;
+			break;
+			case 2:
+			StartupDelayAmount = 5;
+			break;
+			case 3:
+			StartupDelayAmount = 3;
+			break;
+			case 4:
+			StartupDelayAmount = 23;
+			break;
+			case 5:
+			StartupDelayAmount = 22;
+			break;
+			case 6:
+			StartupDelayAmount = 25;
+			EventHandler.SendNetworkEvent("gimmethe:VitalsOn");
+			if(!StartSpamStopper)
+			{
+				S_StartSound("VBEEP2", CHAN_7, 0, 0.8);
+				StartSpamStopper = true;
+			}
+//			VitalsOn = true;
+			break;
+			case 7:
+			StartupDelayAmount = 23;
+			StartSpamStopper = false;
+			break;
+			case 8:
+			StartupDelayAmount = 21;
+			break;
+			case 9:
+			StartupDelayAmount = 20;
+			EventHandler.SendNetworkEvent("gimmethe:AmmoOn");
+			if(!StartSpamStopper)
+			{
+				S_StartSound("VBEEP3", CHAN_7, 0, 0.8);
+				StartSpamStopper = true;
+			}			break;
+			case 10:
+			StartupDelayAmount = 20;
+			StartSpamStopper = false;
+			break;
+			case 11:
+			StartupDelayAmount = 16;
+			EventHandler.SendNetworkEvent("gimmethe:StatsOn");
+			if(!StartSpamStopper)
+			{
+				S_StartSound("VBEEP1", CHAN_7, 0, 0.8);
+				StartSpamStopper = true;
+			}			
+			break;
+			case 12:
+			StartSpamStopper = false;
+			EventHandler.SendNetworkEvent("gimmethe:MessageOn");
+			break;
+			case 13:
+			StartSpamStopper = false;
+			break;
+
+		}	
+		StartupTextFade = (StartextFadeInterp.GetValue() / 200.0) * DisplayFlicker;
+		if(!CheckInventory("StartupCompleted", 1))
+		{
+			if(StartupTics == -69)
+			{
+				S_StartSound("HDDSTRT", CHAN_AUTO, 0, 0.8);
+			}
+			if(StartupTics == -49)
+			{
+				S_StartSound("DSPON", CHAN_AUTO, 0, 0.9);
+			}
+		}
+		
+		if(StartupTics < 0)
+		{
+			StartupTics++;
+		}
+		else
+		{
+			if(!CheckInventory("StartupCompleted", 1))
+			{
+	//			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (100 - StartupTics), (-1, -1), (1, ((100 - StartupTics) * 0.1)), STYLE_Subtract);
+				StartupTics++;
+				if(Startuper < StartupSequenceText.Size())
+				{
+					StartedUp = false;
+					if(StartupTics % StartupDelayAmount == 0)
+					{
+						Startuper++;
+						S_StartSound("logmessage", CHAN_AUTO, 0, 0.2);
+					}
+				}
+				else
+				{
+					StartedUp = true;
+				}
+				int StartupSpace;
+				DrawString(enlFont, LoadBar[Startuper], (TopX + 20, TopY + 10), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_GREY, Alpha: StartupTextFade);
+				for(int k = 0; k < Startuper; k++)
+				{
+					DrawString(enlFont, StartupSequenceText[k], (TopX + 20, StartupSpace + (TopY + 30)), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_GREY, Alpha: StartupTextFade);
+					StartupSpace += 10;
+				}
+			}
+		}
+		if(StartedUp)
+		{
+			if(StartupTextFade >= 0.01)
+			{
+				StartextFadeInterp.Update(0);
+			}
+			else if (!CheckInventory("StartupCompleted", 1))
+			{
+				EventHandler.SendNetworkEvent("gimmethe:StartupCompleted");
+			}
+		}
+		
+	}		
+	// No, this doesn't get any better either. I should never be allowed to code again...
 	
 	void DoGarbage()		// Generates the random strings that appear when the numbers glitch out. It's meant to look like it's outputting garbage data
 	{

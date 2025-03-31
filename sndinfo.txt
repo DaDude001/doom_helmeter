@@ -1,25 +1,31 @@
-$random visorcrack { GLSCRK1 GLSCRK2 GLSCRK3 GLSCRK4 }
+$random visorcrack { GLSCRK1 GLSCRK2 GLSCRK3 GLSCRK4 }					// Generic Valve source engine glass bullet impact sounds
 GLSCRK1 GLSCRK1
 GLSCRK2 GLSCRK2
 GLSCRK3 GLSCRK3
 GLSCRK4 GLSCRK4
 
-$random logmessage { LOGSND1 LOGSND2 LOGSND3 }
+$random logmessage { LOGSND1 LOGSND2 LOGSND3 }							//Draedon's talking sounds from Calamity. Probably will replace later
 LOGSND1 LOGSND1
 LOGSND2 LOGSND2
 LOGSND3 LOGSND3
 
-DSPON DSPON
-DSPFLTY DSPFLTY
+DSPON DSPON																//Stock sound used in ULTRAKILL
+DSPFLTY DSPFLTY															// ^^^
 $pitchset DSPFLTY "0.95" "1.1"
 
-DSHTDN DSHTDN
-DSPCRPT DSPCRPT
+DSHTDN DSHTDN															//Mixture of a bunch of stock sounds
+DSPCRPT DSPCRPT															//Stock sound
 
-$random displaycorrupt { DCRPT1 DCRPT2 DCRPT3 DCRPT4 DCRPT5 DCRPT6 }
+$random displaycorrupt { DCRPT1 DCRPT2 DCRPT3 DCRPT4 DCRPT5 DCRPT6 }	// Some stock sound effects off freesound
 DCRPT1 DCRPT1
 DCRPT2 DCRPT2
 DCRPT3 DCRPT3
 DCRPT4 DCRPT4
 DCRPT5 DCRPT5
 DCRPT6 DCRPT6
+
+VBEEP1 VBEEP1															//MICA Team - Girls' Frontline
+VBEEP2 VBEEP2															//^^^
+VBEEP3 VBEEP3															//^^^
+
+HDDSTRT HDDSTRT															//Again, more stock audio

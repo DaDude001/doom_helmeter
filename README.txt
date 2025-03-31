@@ -33,7 +33,7 @@ CREDITS
 HUD Code and Display Graphics by DaCat001, with liberal amounts of help from the ZDoom Wiki
 Originally based on a hud by Mithriak and Mike12, although barely any of that remains
 Visor graphics by DaCat001, based on NekosHud
-A single line of code each for the helmet brightness and the HUD messages taken from Project Brutality
+Many of the more advanced features' code was made while taking peeks at Project Brutality's HUD, by generic name guy
 Option tooltip code by ToxicFrog
 
 Visor crack sounds from various Valve games (generic Source glass bullet impact sfx)

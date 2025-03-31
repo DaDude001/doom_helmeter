@@ -1,5 +1,5 @@
 Gameinfo 
 {
 	StatusBarClass = "Helmeter"
-	AddEventHandlers = "PainHandler"//"armor_EventHandler"
+	AddEventHandlers = "PainHandler", "StartupEventHandler"
 }
