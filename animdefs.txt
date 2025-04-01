@@ -101,3 +101,41 @@ TEXTURE PSTMR1
 	pic PSTMR5 tics 1
 	pic PSTMR6 tics 2
 	pic PSTMR7 tics 1
+	
+TEXTURE BRKNAR2
+	random
+	pic BRKNAR1 tics 10
+	pic BRKNAR2 tics 1
+	pic BRKNAR3 tics 2
+	pic BRKNAR4 tics 3
+	pic BRKNAR5 tics 2
+	pic BRKNAR6 tics 3
+	pic BRKNAR7 tics 2
+	pic BRKNAR8 tics 1
+	pic BRKNAR9 tics 1
+	pic BRKNAR10 tics 3
+	pic BRKNAR11 tics 2
+	pic BRKNAR12 tics 1
+	pic BRKNAR13 tics 1
+	pic BRKNAR14 tics 2
+	pic BRKNAR15 tics 3
+//	pic BRKNAR16 tics 2
+TEXTURE BRKNAR16
+	random
+	pic BRKNAR1 tics 2
+	pic BRKNAR2 tics 1
+	pic BRKNAR3 tics 2
+	pic BRKNAR4 tics 3
+	pic BRKNAR5 tics 2
+	pic BRKNAR6 tics 3
+	pic BRKNAR7 tics 2
+	pic BRKNAR8 tics 1
+	pic BRKNAR16 tics 12
+	pic BRKNAR9 tics 1
+	pic BRKNAR10 tics 3
+	pic BRKNAR11 tics 2
+	pic BRKNAR12 tics 1
+	pic BRKNAR13 tics 1
+	pic BRKNAR14 tics 2
+	pic BRKNAR15 tics 3
+	pic BRKNAR16 tics 10

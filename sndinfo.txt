@@ -10,6 +10,7 @@ LOGSND2 LOGSND2
 LOGSND3 LOGSND3
 
 DSPON DSPON																//Stock sound used in ULTRAKILL
+$limit DSPON "1"														
 DSPFLTY DSPFLTY															// ^^^
 $pitchset DSPFLTY "0.95" "1.1"
 
@@ -29,3 +30,4 @@ VBEEP2 VBEEP2															//^^^
 VBEEP3 VBEEP3															//^^^
 
 HDDSTRT HDDSTRT															//Again, more stock audio
+$limit HDDSTRT "1"

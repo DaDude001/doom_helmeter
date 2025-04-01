@@ -57,7 +57,7 @@ script "Staminas" ENTER
 	}
 }
 
-script "DeathShit" DEATH
+script "DeathShit" (void)
 {
 	log(s:"User vital signs lost");
 	PlaySound(0,"logmessage", CHAN_AUTO, 0.2);

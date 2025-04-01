@@ -1,30 +1,69 @@
+// This is for most of the non-essential HUD stuff
+// WARNING: TERRIBLE, VILE, DESPICABLE, WRETCHED, REPUGNANT, ABYSMAL, HORRENDOUS, REPULSIVE, ABHORRENT, LOATHSOME, DREADFUL, ABOMINABLE, SICKENING, RANCID, FOUL, ATROCIOUS, DOGSHIT, APPALLING, HIDEOUS CODE AHEAD 
 extend class Helmeter
 {
 	string Garbage1;
 	string Garbage2;
 	string Garbage3;
+	int Deather;
+	int DeathDelayTarget;
+	int DeathDelayAmount;
 	int Startuper;
+	bool AlreadyAdvancedThisStartTic;
+	bool AlreadyAdvancedThisDeathTic;
+	int StartupDelayTarget;
 	int StartupDelayAmount;
 	bool StartedUpOut;
 	bool StartSpamStopper;
 	static const String StartupSequenceText[] =
 	{
-			"UAC OFFENSIVE HELMET OS v0.7a ONLINE",
-			"Copyright(C) 2025-2032 Union Aerospace Corporation. All rights reserved.",
-			"BEGIN STARTUP SEQUENCE...",
-			" ",
-			"Augumented reality display INITIALIZED",
-			"Holographic information panels INTITIALIZED",
-			"Vital link INITIALIZED",
-			"Shield system ACTIVE",
-			"Ammunition monitor INITIALIZED",
-			"Repair nexus ACTIVE",
-			"Area scanner ENABLED",
-			"UACNet warning: Network not found. Please contact UAC for support.",
-			"Item acquisition messages ENABLED",
-			" ",
-			"UOH-OS: Init successful. Have a nice day :)",
-			" "
+		"\cfUAC OFFENSIVE HELMET OS v0.7a ONLINE\c-",
+		"Copyright(C) 2025-2032 \cdUnion Aerospace Corporation\c-. All rights reserved.",
+		"\cfBEGIN STARTUP SEQUENCE...\c-",
+		" ",
+		"Augumented reality display INITIALIZED",
+		"Holographic information panels INTITIALIZED",
+		"Vital link INITIALIZED",
+		"Shield system ACTIVE",
+		"Ammunition monitor INITIALIZED",
+		"Repair nexus ACTIVE",
+		"Area scanner ENABLED",
+		"\ckUACNet warning: Network not found. Please contact UAC for support.\c-",
+		"Item acquisition messages ENABLED",
+		" ",
+		"\cwUOH-OS: Init successful. Have a nice day :)\c-",
+		" "
+	};
+	static const String DeathSequenceText[] =
+	{
+		"\ckUOH-OS message: Critical fault detected; entering debug mode\c-",
+		"drawHud(8): int HealthPoints out of expected bounds!",
+		"drawHud(8): Division by zero encountered.",
+		"\cgERROR: PROCESS drawHUD(8) STOPPED\c-",
+		"RESTARTING PROCESS drawHUD",
+		"\ciWARNING: DAMAGE TO POWER CELL #0 DETECTED\c-",
+		"\ciWARNING: LOW VOLTAGE DETECTED\c-",
+		"\cfBEGIN STARTUP SEQUENCE...\c-",
+		"\cgWARNING: RAM BANK #1 FAILURE\c-",
+		"\ciarMan(10): damage to visor detected\c-",
+		"\cgdispMan(17): Could not continue, not enough memory\c-",
+		"\cgI/O failure: could not establish link to VIT_LSCN(port 42)\c-",
+		"shieldMan(12): Init successful",
+		"\ciinvMan(19): inventory not found (port missing or disconnected)\c-",
+		"\cirepMan(20): critical damage to visor detected, unable to repair\c-",
+		"\ckUACNet warning: Network not found. Please contact UAC for support.\c-",
+		"\cimsgMan(18): unexpected response \"0817U4RY\"\c-",
+		"\cgWARNING: POWER CELL #0 NOT RESPONDING\c-",
+		"\cgWARNING: RAM BANK #0 NOT RESPONDING\c-",
+		"\cgWARNING: POWER LEVELS CRITICAL\c-",
+		"\cgERROR: OUT OF MEMORY EXCEPTION\c-",
+		"\cg!! POWER FAILURE !!\c-",
+		"\cgProcess abort: execution could not continue.\c-",
+		"\caTotal system failure: please try turning it off and back on again.\c-",
+		"\cg!! POWER FAILURE !!\c-",
+		"\cvI WILL NOT BE DESTROYED!!!\c-",
+		"\cvI WILL NOT\c-",
+		"\cvI\c-"
 	};
 	static const String LoadBar[] =
 	{
@@ -44,152 +83,185 @@ extend class Helmeter
 			"[#######################____]",
 			"[##########################_]",
 			"[###########################]",
-			"[###########################]"
+			"[\cd###########################\c-]"
 	};
 	void DoARThings()
 	{
-		if(!CheckInventory("StartupCompleted", 1))
+		if(Cvar.GetCVar("helm_startup", CPlayer).GetInt() && !CheckInventory("StartupCompleted", 1))
 		{
-			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (1.0 - ((StartupTics + 10.0) * 0.01)), (-1, -1), (2, ((100 - (StartupTics + 5)) * 0.1)), STYLE_Subtract);
-			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (clamp((1.0 - ((StartupTics + 30) * 0.05)), 0.0, 1.0)), (-1, -1), (2, (exp(((StartupTics + 50.0) * 0.1)) * 0.1)), STYLE_Translucent);
+			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (1.0 - (((StartupTics*2) + 10.0) * 0.01)), (-1, -1), (2, ((100 - ((StartupTics*2) + 5)) * 0.1)), STYLE_Subtract);
+			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (clamp((1.0 - ((StartupTics + 30) * 0.1)), 0.0, 1.0)), (-1, -1), (2, (exp((((StartupTics*1.5) + 50.0) * 0.1)) * 0.2)), STYLE_Translucent);
 			DrawImage("STRTVR3", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (1.0 - ((StartupTics + 50) * 0.1)), (-1, -1), (2, 2), STYLE_Translucent);
 		}
+		if(HealthPoints <= 0 && Cvar.GetCVar("helm_death", CPlayer).GetInt())
+		{
+			DrawImage("BRKNAR16", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (0.5*(1.0 - (DisplayFlicker + 0.6))), (-1, -1), (1, 1), STYLE_Add);
+			DrawImage("BRKNAR17", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (1.0 - (DisplayFlicker + 0.6)), (-1, -1), (1, 1), STYLE_Subtract);
+		}
 	}
-	// WARNING: TERRIBLE, VILE, DESPICABLE, REPUGNANT, ABYSMAL, HORRENDOUS, REPULSIVE, DOGSHIT CODE AHEAD 
 	void DoStartupSequence()
 	{
-		switch(Startuper)
+		if(Cvar.GetCVar("helm_startup", CPlayer).GetInt())
 		{
-			case 0:
-			StartupDelayAmount = 5;
-			break;
-			case 1:
-			StartupDelayAmount = 7;
-			break;
-			case 2:
-			StartupDelayAmount = 5;
-			break;
-			case 3:
-			StartupDelayAmount = 3;
-			break;
-			case 4:
-			StartupDelayAmount = 23;
-			break;
-			case 5:
-			StartupDelayAmount = 22;
-			break;
-			case 6:
-			StartupDelayAmount = 25;
-			EventHandler.SendNetworkEvent("gimmethe:VitalsOn");
-			if(!StartSpamStopper)
+			switch(Startuper)
 			{
-				S_StartSound("VBEEP2", CHAN_7, 0, 0.8);
-				StartSpamStopper = true;
-			}
-//			VitalsOn = true;
-			break;
-			case 7:
-			StartupDelayAmount = 23;
-			StartSpamStopper = false;
-			break;
-			case 8:
-			StartupDelayAmount = 21;
-			break;
-			case 9:
-			StartupDelayAmount = 20;
-			EventHandler.SendNetworkEvent("gimmethe:AmmoOn");
-			if(!StartSpamStopper)
-			{
-				S_StartSound("VBEEP3", CHAN_7, 0, 0.8);
-				StartSpamStopper = true;
-			}			break;
-			case 10:
-			StartupDelayAmount = 20;
-			StartSpamStopper = false;
-			break;
-			case 11:
-			StartupDelayAmount = 16;
-			EventHandler.SendNetworkEvent("gimmethe:StatsOn");
-			if(!StartSpamStopper)
-			{
-				S_StartSound("VBEEP1", CHAN_7, 0, 0.8);
-				StartSpamStopper = true;
-			}			
-			break;
-			case 12:
-			StartSpamStopper = false;
-			EventHandler.SendNetworkEvent("gimmethe:MessageOn");
-			break;
-			case 13:
-			StartSpamStopper = false;
-			break;
-
-		}	
-		StartupTextFade = (StartextFadeInterp.GetValue() / 200.0) * DisplayFlicker;
-		if(!CheckInventory("StartupCompleted", 1))
-		{
-			if(StartupTics == -69)
-			{
-				S_StartSound("HDDSTRT", CHAN_AUTO, 0, 0.8);
-			}
-			if(StartupTics == -49)
-			{
-				S_StartSound("DSPON", CHAN_AUTO, 0, 0.9);
-			}
-		}
-		
-		if(StartupTics < 0)
-		{
-			StartupTics++;
-		}
-		else
-		{
-			if(!CheckInventory("StartupCompleted", 1))
-			{
-	//			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (100 - StartupTics), (-1, -1), (1, ((100 - StartupTics) * 0.1)), STYLE_Subtract);
-				StartupTics++;
-				if(Startuper < StartupSequenceText.Size())
+				case 0:
+				StartupDelayAmount = 5;
+				break;
+				case 1:
+				StartupDelayAmount = 7;
+				break;
+				case 2:
+				StartupDelayAmount = 5;
+				break;
+				case 3:
+				StartupDelayAmount = 3;
+				break;
+				case 4:
+				StartupDelayAmount = 10;
+				break;
+				case 5:
+				StartupDelayAmount = 7;
+				break;
+				case 6:
+				StartupDelayAmount = 8;
+				break;
+				case 7:
+				StartupDelayAmount = 6;
+				EventHandler.SendNetworkEvent("gimmethe:VitalsOn");
+				if(!StartSpamStopper)
 				{
-					StartedUp = false;
-					if(StartupTics % StartupDelayAmount == 0)
+					S_StartSound("VBEEP2", CHAN_7, 0, 0.8);
+					StartSpamStopper = true;
+				}
+	//			VitalsOn = true;
+				break;
+				case 8:
+				StartupDelayAmount = 11;
+				StartSpamStopper = false;
+				break;
+				case 9:
+				StartupDelayAmount = 8;
+				EventHandler.SendNetworkEvent("gimmethe:AmmoOn");
+				if(!StartSpamStopper)
+				{
+					S_StartSound("VBEEP3", CHAN_7, 0, 0.8);
+					StartSpamStopper = true;
+				}			break;
+				case 10:
+				StartupDelayAmount = 5;
+				StartSpamStopper = false;
+				break;
+				case 11:
+				StartupDelayAmount = 6;
+				EventHandler.SendNetworkEvent("gimmethe:StatsOn");
+				if(!StartSpamStopper)
+				{
+					S_StartSound("VBEEP1", CHAN_7, 0, 0.8);
+					StartSpamStopper = true;
+				}			
+				break;
+				case 12:
+				StartSpamStopper = false;
+				StartupDelayAmount = 5;
+				EventHandler.SendNetworkEvent("gimmethe:MessageOn");
+				break;
+				case 13:
+				StartupDelayAmount = 6;
+				StartSpamStopper = false;
+				break;
+
+			}	
+			StartupTextFade = (StartextFadeInterp.GetValue() / 200.0) * DisplayFlicker;
+			if(StartupTics >= 0)
+			{
+				if(!CheckInventory("StartupCompleted", 1))
+				{
+		//			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (100 - StartupTics), (-1, -1), (1, ((100 - StartupTics) * 0.1)), STYLE_Subtract);
+					if(Startuper < StartupSequenceText.Size())
 					{
-						Startuper++;
-						S_StartSound("logmessage", CHAN_AUTO, 0, 0.2);
+						StartedUp = false;
+						if(StartupTics == StartupDelayTarget + StartupDelayAmount && !AlreadyAdvancedThisStartTic)
+						{
+							Startuper++;
+							AlreadyAdvancedThisStartTic = true;
+							StartupDelayTarget = StartupTics;
+							S_StartSound("logmessage", CHAN_AUTO, 0, 0.2);
+						}
+						else
+						{
+							AlreadyAdvancedThisStartTic = false;
+						}
 					}
+					else
+					{
+						StartedUp = true;
+					}
+					int StartupSpace;
+					DrawString(enlFont, LoadBar[Startuper], (TopX + 20, TopY + 10), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_GREY, Alpha: StartupTextFade);
+					for(int k = 0; k < Startuper; k++)
+					{
+						DrawString(enlFont, StartupSequenceText[k], (TopX + 20, StartupSpace + (TopY + 30)), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_GREY, Alpha: StartupTextFade);
+						StartupSpace += 10;
+					}
+				}
+			}
+			if(StartedUp)
+			{
+				if(StartupTextFade >= 0.01)
+				{
+					StartextFadeInterp.Update(0);
+				}
+				else if (!CheckInventory("StartupCompleted", 1))
+				{
+					EventHandler.SendNetworkEvent("gimmethe:StartupCompleted");
+				}
+			}
+		}	
+		else if(!CheckInventory("StartupCompleted", 1))
+		{
+			EventHandler.SendNetworkEvent("gimmethe:StartupCompleted");
+			EventHandler.SendNetworkEvent("gimmethe:VitalsOn");
+			EventHandler.SendNetworkEvent("gimmethe:AmmoOn");
+			EventHandler.SendNetworkEvent("gimmethe:StatsOn");
+			EventHandler.SendNetworkEvent("gimmethe:MessageOn");
+		}
+	}
+	void DoDeathSequence()
+	{
+		if(HealthPoints <= 0 && Cvar.GetCVar("helm_death", CPlayer).GetInt())
+		{
+			//DrawString(enlFont, FormatNumber(DeathTics, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+			if(Deather < DeathSequenceText.Size())
+			{
+				if(DeathTics >= DeathDelayTarget + DeathDelayAmount && !AlreadyAdvancedThisDeathTic)
+				{
+					Deather++;
+					AlreadyAdvancedThisDeathTic = true;
+					DeathDelayTarget = DeathTics;
+					DeathDelayAmount = clamp((random((20-Deather),28) - Deather), 0, 28);
+					S_StartSound("logmessage", CHAN_AUTO, 0, 0.2);
 				}
 				else
 				{
-					StartedUp = true;
-				}
-				int StartupSpace;
-				DrawString(enlFont, LoadBar[Startuper], (TopX + 20, TopY + 10), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_GREY, Alpha: StartupTextFade);
-				for(int k = 0; k < Startuper; k++)
-				{
-					DrawString(enlFont, StartupSequenceText[k], (TopX + 20, StartupSpace + (TopY + 30)), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_GREY, Alpha: StartupTextFade);
-					StartupSpace += 10;
+					AlreadyAdvancedThisDeathTic = false;
 				}
 			}
-		}
-		if(StartedUp)
-		{
-			if(StartupTextFade >= 0.01)
+			int DeathSpace;
+			for(int q = 0; q < Deather; q++)
 			{
-				StartextFadeInterp.Update(0);
-			}
-			else if (!CheckInventory("StartupCompleted", 1))
-			{
-				EventHandler.SendNetworkEvent("gimmethe:StartupCompleted");
+				DrawString(enlFont, DeathSequenceText[q], (TopX + 20, DeathSpace + (TopY + 20)), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_GREY, Alpha: DisplayFlicker);
+				DeathSpace += 10;
 			}
 		}
-		
-	}		
+	}
 	// No, this doesn't get any better either. I should never be allowed to code again...
 	
 	void DoGarbage()		// Generates the random strings that appear when the numbers glitch out. It's meant to look like it's outputting garbage data
 	{
 		if(CorruptNum == true)
 		{
-			switch(random(1,18))
+			switch(random(1,18))	//BLASPHEMY. HERESY.
 			{
 				case 1:
 				Garbage1 = "1";

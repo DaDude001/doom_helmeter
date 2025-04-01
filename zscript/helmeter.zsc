@@ -159,6 +159,7 @@ class Helmeter : BaseStatusBar
 		int randomcorrupt;
 		int HurtLevel;
 		int StartupTics;
+		int DeathTics;
 		bool StartedUp;
 		double BloodAlpha;
 		int i;
@@ -170,6 +171,7 @@ class Helmeter : BaseStatusBar
 //		int MaxHP;
 		double DisplayFlicker;
 		double HudBackAlpha;
+		bool IsDead;
 		double HelmLightFlicker;
 		double HLFlickerTrue;
 		bool AmmoExtra1;
@@ -213,6 +215,8 @@ class Helmeter : BaseStatusBar
 		msgscl = 0.75;
 		Hurting = false;
 		StartupTics = -70;
+		IsDead = false;
+		DeathTics = 1;
 //		TrueBLCX = 0;
 //		TrueBLCY = 0;
 //		TrueBRCX = 0;
@@ -281,6 +285,7 @@ class Helmeter : BaseStatusBar
 			DrawCustomPickupMessage((TopX, TopY + 45), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);	// Handles the custom status messages.
 			DrawHudNumberStuff();		// Handles the actual displays; the HUD part of this HUD.
 			DoStartupSequence();		// Handles the startup sequence text. Vile code lies here.
+			DoDeathSequence();			// Similar to the startup sequence. Less vile, but still not pretty.
 		}
 		if (state == HUD_Fullscreen)
 		{
@@ -290,6 +295,7 @@ class Helmeter : BaseStatusBar
 			DrawCustomPickupMessage((TopX, TopY + 45), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);
 			DrawHudNumberStuff();
 			DoStartupSequence();
+			DoDeathSequence();			
 //			DrawMinmodeHudStuff();
 		}		
 		
@@ -319,7 +325,7 @@ class Helmeter : BaseStatusBar
 				{
 					CrackCount = event.NumCracks;
 				}
-			if (CrackCount >= 1 && CPlayer.Health >= 1)
+			if (CrackCount >= 1)// && CPlayer.Health >= 1)
 			{
 				
 				CrackCVarAlpha = CrackAlpha * Clamp(Cvar.GetCVar("helm_crackalpha", CPlayer).GetFloat(), 0, 1);
@@ -334,9 +340,9 @@ class Helmeter : BaseStatusBar
 				case 4:
 					DrawImage("VSRCRK1", (GlassX - 50, GlassY + 50), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, CrackCvarAlpha);
 				case 3:
-					DrawImage("VSRCRK4", (GlassX + 100,GlassY - 80), DI_SCREEN_RIGHT_TOP | DI_ITEM_RIGHT_TOP, CrackCVarAlpha);
+					DrawImage("VSRCRK4", (GlassX + 100,GlassY - 100), DI_SCREEN_RIGHT_TOP | DI_ITEM_RIGHT_TOP, CrackCVarAlpha);
 				case 2:
-					DrawImage("VSRCRK2", (GlassX + 20,GlassY + 80), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, CrackCVarAlpha);
+					DrawImage("VSRCRK2", (GlassX + 40,GlassY + 80), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, CrackCVarAlpha);
 				case 1:
 					DrawImage("VSRCRK7", (GlassX, GlassY), DI_SCREEN_LEFT_TOP | DI_ITEM_LEFT_TOP, CrackCVarAlpha);
 				case 0:
@@ -406,6 +412,43 @@ class Helmeter : BaseStatusBar
 //		}
 		if(ArmorValue >= 1 && Cvar.GetCVar("helm_armorlay", CPlayer).GetInt())		// sorry about the YandereDev ass coding, not sure how I could adapt this into switch/case
 		{
+			int ArmorColor = ((ArmorValue - 1) / 25);
+			switch (ArmorColor)
+			{
+				case 0:
+				DrawImage("VSLBLA", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBRA", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLTPA", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				break;
+				case 1:
+				DrawImage("VSLBLB", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBRB", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLTPB", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				break;
+				case 2:
+				case 3:
+				DrawImage("VSLBLC", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBRC", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLTPC", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);			
+				break;
+				case 4:
+				case 5:
+				DrawImage("VSLBLD", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBRD", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLTPD", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				break;
+				case 6:
+				case 7:
+				case 8:
+				case 9:
+				case 10:
+				case 11:
+				DrawImage("VSLBLE", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBRE", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLTPE", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				break;
+			}
+/*
 			if(ArmorValue <= 25)
 			{
 				DrawImage("VSLBLA", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
@@ -436,7 +479,9 @@ class Helmeter : BaseStatusBar
 				DrawImage("VSLBRE", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLTPE", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 			}
+			*/
 		}
+
 		if(Cvar.GetCVar("helm_blood", CPlayer).GetInt())
 		{
 			HurtLevel = (HealthPoints + 15) / 15;
@@ -535,6 +580,7 @@ class Helmeter : BaseStatusBar
 		}	
 		if(CPlayer.Health <= 0)
 		{
+			IsDead = true;
 			if(FlickerTics > 0)
 			{
 				if(Cvar.GetCVar("helm_flicker", CPlayer).GetInt())
@@ -1026,9 +1072,39 @@ class Helmeter : BaseStatusBar
 	
     override void Tick()
     {
+		if(Cvar.GetCVar("helm_startup", CPlayer).GetInt() && !CheckInventory("StartupCompleted", 1))
+		{
+		if(StartupTics < 0)
+			{
+				StartupTics++;
+			}
+			else
+			{
+				if(!CheckInventory("StartupCompleted", 1))
+				{
+		//			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (100 - StartupTics), (-1, -1), (1, ((100 - StartupTics) * 0.1)), STYLE_Subtract);
+					StartupTics++;
+				}
+			}
+		}
+		if(!CheckInventory("StartupCompleted", 1))
+		{
+			if(StartupTics == -69)
+			{
+				S_StartSound("HDDSTRT", CHAN_AUTO, 0, 0.8);
+			}
+			if(StartupTics == -49)
+			{
+				S_StartSound("DSPON", CHAN_AUTO, 0, 0.9);
+			}
+		}
+		if(HealthPoints <= 0 && Cvar.GetCVar("helm_death", CPlayer).GetInt())
+		{
+			DeathTics+= 2;
+		}
 		Super.Tick();
 		ArmorValue = GetArmorAmount();
-		if(Cvar.GetCVar("helm_dispdamage", CPlayer).GetInt() && (CrackCount != 0 && random(1,(100 - (CrackCount - 1)* 6)) <= 1))
+		if(Cvar.GetCVar("helm_dispdamage", CPlayer).GetInt() && (CrackCount != 0 && random(1,(150 - ((CrackCount - 1)* 10))) <= 1))
 		{
 			randomcorrupt = random(4,4 + (CrackCount * 4));
 			S_StartSound("displaycorrupt", CHAN_7, 0, 0.8);

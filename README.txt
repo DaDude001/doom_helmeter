@@ -26,6 +26,7 @@ Many features are customizable; you can disable the displays, the damage effects
 Supports HUD scaling (mostly), but I developed and tested this mod with a scale factor of 3 on a 1080p monitor, so that's what I think it looks best at
 
 KNOWN BUGS/ODDITIES
+Armor overlay will disappear if you have a very high amount of armor (>3	00)
 Low warning flashes may not initially appear at full opacity
 	This is because the animation is always being played in the background, unless the feature is disabled
 
