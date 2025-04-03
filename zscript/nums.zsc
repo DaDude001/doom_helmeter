@@ -15,6 +15,8 @@ extend class Helmeter
 	int StartupDelayAmount;
 	bool StartedUpOut;
 	bool StartSpamStopper;
+	String StartupSequenceText[18];
+	/*
 	static const String StartupSequenceText[] =
 	{
 		"\cfUAC OFFENSIVE HELMET OS v0.7a ONLINE\c-",
@@ -29,11 +31,12 @@ extend class Helmeter
 		"Repair nexus ACTIVE",
 		"Area scanner ENABLED",
 		"\ckUACNet warning: Network not found. Please contact UAC for support.\c-",
-		"Item acquisition messages ENABLED",
+		"Item acquisition messages"..MessageEnabled,
 		" ",
 		"\cwUOH-OS: Init successful. Have a nice day :)\c-",
 		" "
 	};
+	*/
 	static const String DeathSequenceText[] =
 	{
 		"\ckUOH-OS message: Critical fault detected; entering debug mode\c-",
@@ -47,9 +50,9 @@ extend class Helmeter
 		"\cgWARNING: RAM BANK #1 FAILURE\c-",
 		"\ciarMan(10): damage to visor detected\c-",
 		"\cgdispMan(17): Could not continue, not enough memory\c-",
-		"\cgI/O failure: could not establish link to VIT_LSCN(port 42)\c-",
+		"\cgVTL-SC error: Vital signal not found (med chip missing or damaged)\c-",
 		"shieldMan(12): Init successful",
-		"\ciinvMan(19): inventory not found (port missing or disconnected)\c-",
+		"\ciI/O failure: could not establish link to MON_HMRSPC(port 42)\c-",
 		"\cirepMan(20): critical damage to visor detected, unable to repair\c-",
 		"\ckUACNet warning: Network not found. Please contact UAC for support.\c-",
 		"\cimsgMan(18): unexpected response \"0817U4RY\"\c-",
@@ -57,10 +60,10 @@ extend class Helmeter
 		"\cgWARNING: RAM BANK #0 NOT RESPONDING\c-",
 		"\cgWARNING: POWER LEVELS CRITICAL\c-",
 		"\cgERROR: OUT OF MEMORY EXCEPTION\c-",
-		"\cg!! POWER FAILURE !!\c-",
+		"\cr!! POWER FAILURE !!\c-",
 		"\cgProcess abort: execution could not continue.\c-",
 		"\caTotal system failure: please try turning it off and back on again.\c-",
-		"\cg!! POWER FAILURE !!\c-",
+		"\cr!! POWER FAILURE !!\c-",
 		"\cvI WILL NOT BE DESTROYED!!!\c-",
 		"\cvI WILL NOT\c-",
 		"\cvI\c-"
@@ -90,7 +93,7 @@ extend class Helmeter
 		if(Cvar.GetCVar("helm_startup", CPlayer).GetInt() && !CheckInventory("StartupCompleted", 1))
 		{
 			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (1.0 - (((StartupTics*2) + 10.0) * 0.01)), (-1, -1), (2, ((100 - ((StartupTics*2) + 5)) * 0.1)), STYLE_Subtract);
-			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (clamp((1.0 - ((StartupTics + 30) * 0.1)), 0.0, 1.0)), (-1, -1), (2, (exp((((StartupTics*1.5) + 50.0) * 0.1)) * 0.2)), STYLE_Translucent);
+			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (clamp((1.0 - ((StartupTics + 35) * 0.1)), 0.0, 1.0)), (-1, -1), (2, (exp((((StartupTics*1.5) + 70.0) * 0.1)) * 0.2)), STYLE_Translucent);
 			DrawImage("STRTVR3", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (1.0 - ((StartupTics + 50) * 0.1)), (-1, -1), (2, 2), STYLE_Translucent);
 		}
 		if(HealthPoints <= 0 && Cvar.GetCVar("helm_death", CPlayer).GetInt())
@@ -99,8 +102,51 @@ extend class Helmeter
 			DrawImage("BRKNAR17", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (1.0 - (DisplayFlicker + 0.6)), (-1, -1), (1, 1), STYLE_Subtract);
 		}
 	}
+	void FigureOutStartup()	// set the array for the startup text and make it different depending on your config, like in UDV
+	{
+		StartupSequenceText[0] = "\cfUAC OFFENSIVE HELMET OS v0.7c ONLINE\c-";
+		StartupSequenceText[1] = "Copyright(C) 2025-2032 \cdUnion Aerospace Corporation\c-. All rights reserved.";
+		StartupSequenceText[2] = "UAC User ID \""..CPlayer.GetUserName().. "\" VERIFIED";
+		StartupSequenceText[3] = "\cfBEGIN STARTUP SEQUENCE...\c-";
+		StartupSequenceText[4] = "\n";
+		StartupSequenceText[5] = "Augumented reality display INITIALIZED";
+		if(Cvar.GetCVar("helm_showdisplay", CPlayer).GetInt())
+		{
+		StartupSequenceText[6] = "Holographic information panels ENABLED";
+		}
+		else 
+		StartupSequenceText[6] = "Holographic information panels DISABLED";
+		
+		StartupSequenceText[7] = "Vital link INITIALIZED";
+		StartupSequenceText[8] = "Shield system ACTIVE";
+		StartupSequenceText[9] = "Inventory monitor INITIALIZED";
+		StartupSequenceText[10] = "Repair nexus ACTIVE";
+		
+		if(Cvar.GetCVar("helm_showstats", CPlayer).GetInt())
+		{
+		StartupSequenceText[11] = "Area scanner ENABLED";
+		}
+		else 
+		StartupSequenceText[11] = "Area scanner DISABLED";	
+		
+		StartupSequenceText[12] = "\ckUACNet warning: Network not found. Please contact UAC for support.\c-";
+		
+		if(Cvar.GetCVar("helm_customlog", CPlayer).GetInt())
+		{
+		StartupSequenceText[13] = "Item acquisition messages ENABLED";
+		}
+		else 
+		StartupSequenceText[13] = "Item acquisition messages DISABLED";
+		
+		StartupSequenceText[14] = "\n";
+		StartupSequenceText[15] = "\cwUOH-OS: Init successful. Have a nice day :)\c-";
+		StartupSequenceText[16] = "\n";
+		StartupSequenceText[17] = "\n";
+	}
 	void DoStartupSequence()
 	{
+
+		
 		if(Cvar.GetCVar("helm_startup", CPlayer).GetInt())
 		{
 			switch(Startuper)
@@ -118,15 +164,18 @@ extend class Helmeter
 				StartupDelayAmount = 3;
 				break;
 				case 4:
-				StartupDelayAmount = 10;
+				StartupDelayAmount = 6;
 				break;
 				case 5:
-				StartupDelayAmount = 7;
+				StartupDelayAmount = 10;
 				break;
 				case 6:
-				StartupDelayAmount = 8;
+				StartupDelayAmount = 7;
 				break;
 				case 7:
+				StartupDelayAmount = 8;
+				break;
+				case 8:
 				StartupDelayAmount = 6;
 				EventHandler.SendNetworkEvent("gimmethe:VitalsOn");
 				if(!StartSpamStopper)
@@ -136,11 +185,11 @@ extend class Helmeter
 				}
 	//			VitalsOn = true;
 				break;
-				case 8:
+				case 9:
 				StartupDelayAmount = 11;
 				StartSpamStopper = false;
 				break;
-				case 9:
+				case 10:
 				StartupDelayAmount = 8;
 				EventHandler.SendNetworkEvent("gimmethe:AmmoOn");
 				if(!StartSpamStopper)
@@ -148,11 +197,11 @@ extend class Helmeter
 					S_StartSound("VBEEP3", CHAN_7, 0, 0.8);
 					StartSpamStopper = true;
 				}			break;
-				case 10:
+				case 11:
 				StartupDelayAmount = 5;
 				StartSpamStopper = false;
 				break;
-				case 11:
+				case 12:
 				StartupDelayAmount = 6;
 				EventHandler.SendNetworkEvent("gimmethe:StatsOn");
 				if(!StartSpamStopper)
@@ -161,16 +210,18 @@ extend class Helmeter
 					StartSpamStopper = true;
 				}			
 				break;
-				case 12:
-				StartSpamStopper = false;
-				StartupDelayAmount = 5;
-				EventHandler.SendNetworkEvent("gimmethe:MessageOn");
-				break;
 				case 13:
 				StartupDelayAmount = 6;
 				StartSpamStopper = false;
 				break;
-
+				case 14:
+				StartSpamStopper = false;
+				StartupDelayAmount = 5;
+				EventHandler.SendNetworkEvent("gimmethe:MessageOn");
+				break;
+				case 15:
+				StartupDelayAmount = 6;
+				break;
 			}	
 			StartupTextFade = (StartextFadeInterp.GetValue() / 200.0) * DisplayFlicker;
 			if(StartupTics >= 0)
@@ -178,7 +229,7 @@ extend class Helmeter
 				if(!CheckInventory("StartupCompleted", 1))
 				{
 		//			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (100 - StartupTics), (-1, -1), (1, ((100 - StartupTics) * 0.1)), STYLE_Subtract);
-					if(Startuper < StartupSequenceText.Size())
+					if(Startuper < (StartupSequenceText.Size() - 2))		// -2 because for some fucking reason it returns out of bounds otherwise ???
 					{
 						StartedUp = false;
 						if(StartupTics == StartupDelayTarget + StartupDelayAmount && !AlreadyAdvancedThisStartTic)
@@ -206,7 +257,7 @@ extend class Helmeter
 					}
 				}
 			}
-			if(StartedUp)
+			if(StartedUp && StartupTics >= StartupDelayTarget + (5 * StartupDelayAmount))
 			{
 				if(StartupTextFade >= 0.01)
 				{

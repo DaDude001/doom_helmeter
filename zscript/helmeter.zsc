@@ -7,6 +7,17 @@ class PainHandler : EventHandler
 //		e.thing.A_TakeInventory("Ouchies", 1);
 //	}
 	int NumCracks;
+/*
+	override void WorldLoaded(WorldEvent e)
+	{
+		for (int i = 0; i < MAXPLAYERS; i++)
+		{
+			if (PlayerInGame[i] && players[i].mo)
+			{
+				
+			}
+		}
+*/
 	override void WorldThingDamaged(WorldEvent e)
 	{
 		if (e.thing && e.thing is "PlayerPawn")
@@ -119,6 +130,7 @@ class Helmeter : BaseStatusBar
 		double GlassX;
 		double GlassY;
 		double ShakeOffsetX;
+		int statoffset;
 		double ShakeOffsetY;
 		int FlickerTics;
 		double HelmLightLevel;
@@ -214,7 +226,7 @@ class Helmeter : BaseStatusBar
 		ShakeOffsetY = 0;
 		msgscl = 0.75;
 		Hurting = false;
-		StartupTics = -70;
+		StartupTics = -75;
 		IsDead = false;
 		DeathTics = 1;
 //		TrueBLCX = 0;
@@ -282,7 +294,7 @@ class Helmeter : BaseStatusBar
 			DoARThings();				// Handles the screen overlay stuff during the bootup sequence.
 			DrawFullscreenStuff();		// Handles the helmet and visor effects.
 			DoGarbage();				// Only exists to generate random characters when the displays glitch out. Evil code lies here.
-			DrawCustomPickupMessage((TopX, TopY + 45), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);	// Handles the custom status messages.
+			DrawCustomPickupMessage((TopX, TopY + statoffset), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);	// Handles the custom status messages.
 			DrawHudNumberStuff();		// Handles the actual displays; the HUD part of this HUD.
 			DoStartupSequence();		// Handles the startup sequence text. Vile code lies here.
 			DoDeathSequence();			// Similar to the startup sequence. Less vile, but still not pretty.
@@ -292,7 +304,7 @@ class Helmeter : BaseStatusBar
 			BeginHud();
 			DoARThings();
 			DoGarbage();
-			DrawCustomPickupMessage((TopX, TopY + 45), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);
+			DrawCustomPickupMessage((TopX, TopY + statoffset), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);
 			DrawHudNumberStuff();
 			DoStartupSequence();
 			DoDeathSequence();			
@@ -1091,6 +1103,7 @@ class Helmeter : BaseStatusBar
 		{
 			if(StartupTics == -69)
 			{
+				FigureOutStartup();
 				S_StartSound("HDDSTRT", CHAN_AUTO, 0, 0.8);
 			}
 			if(StartupTics == -49)
@@ -1190,6 +1203,14 @@ class Helmeter : BaseStatusBar
 			CrackAlpha = CrackAlphaInterp.GetValue() / 100.0;
 			}
 		}
+		if (Cvar.GetCVar("helm_showstats", CPlayer).GetInt())
+		{
+			statoffset = 45;
+		}
+		else 
+		{
+			statoffset = 15;
+		}
 		if(Cvar.GetCVar("helm_warnflash", CPlayer).GetInt())
 		{	
 			if(WarnFlashInterp.GetValue() >= 21)
@@ -1240,7 +1261,6 @@ class Helmeter : BaseStatusBar
 	{
 		int msgcount = pickupMsgStrings.Size();
 		if (msgcount <= 0) return;
-		
 		// Get the height of the font (we will use this for vertical
 		// spacing):
 		double stringHeight = enlFont.mFont.GetHeight() * scale;
@@ -1248,7 +1268,7 @@ class Helmeter : BaseStatusBar
 		// message to create an effect of them scrolling:
 //		if (msgcount > 1)
 //		{
-		pos.y -= stringheight * (double(pickupMsgScrollTics) / PICKUPMSG_SCROLLTIME);
+//		pos.y -= stringheight * (double(pickupMsgScrollTics) / PICKUPMSG_SCROLLTIME);
 //		}
 		// Finally, draw all messages, starting from the newest one:
 		for (int j = msgcount - 1; j >= 0; j--)

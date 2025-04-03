@@ -29,7 +29,7 @@ OptionMenu "HELM_SETTINGS" {
 	Tooltip "Transparency of the cracks, if they are a bit too intrusive."
 	Option "Show Blood", "helm_blood", "YesNo"
 	Tooltip "Show/hide the blood splats on the visor when injured."
-	Slider "Blood Transparency", "helm_bloodalpha", 0, 1, 0.05, 2, "helm_showblood"
+	Slider "Blood Transparency", "helm_bloodalpha", 0, 1, 0.05, 2, "helm_blood"
 	Tooltip "Transparency of the blood splatters, if they obstruct too much of your precious view."
 	
 	StaticText ""
