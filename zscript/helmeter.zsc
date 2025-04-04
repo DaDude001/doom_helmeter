@@ -148,6 +148,7 @@ class Helmeter : BaseStatusBar
 		double HelmLightOut;
 //		double 
 		bool Hurting;
+		int ArmorColor;
 		int FaultySpamTics;
 //		double TrueBLCX;
 //		double TrueBLCY;
@@ -424,7 +425,14 @@ class Helmeter : BaseStatusBar
 //		}
 		if(ArmorValue >= 1 && Cvar.GetCVar("helm_armorlay", CPlayer).GetInt())		// sorry about the YandereDev ass coding, not sure how I could adapt this into switch/case
 		{
-			int ArmorColor = ((ArmorValue - 1) / 25);
+			if(ArmorValue > 200)
+			{
+				ArmorColor = 7;
+			}
+			else
+			{
+				ArmorColor = ((ArmorValue - 1) / 25);
+			}
 			switch (ArmorColor)
 			{
 				case 0:
@@ -451,10 +459,6 @@ class Helmeter : BaseStatusBar
 				break;
 				case 6:
 				case 7:
-				case 8:
-				case 9:
-				case 10:
-				case 11:
 				DrawImage("VSLBLE", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLBRE", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLTPE", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
@@ -830,7 +834,7 @@ class Helmeter : BaseStatusBar
 				}
 				else
 				{
-					DrawString(mHUDFont, FormatNumber(HealthPoints, 1, 4), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					DrawString(mHUDFont, FormatNumber(HealthPoints, 1, 3), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 				}
 				/// ARMOR
 				if(ArmorValue >= 1 && ArmorValue <= 25)			// start flashing at 25%, but don't flash if you have none
@@ -858,7 +862,7 @@ class Helmeter : BaseStatusBar
 				}
 				if(ArmorValue >= 1)
 				{
-					DrawString(mIndexFont, FormatNumber(ArmorProtection, 1, 4), (BLCX + 61.5, BLCY - 38), DI_TEXT_ALIGN_CENTER | DI_SCREEN_LEFT_BOTTOM, font.CR_WHITE, Alpha: DisplayFlicker, scale: (0.80, 0.8));
+					DrawString(mIndexFont, FormatNumber(ArmorProtection, 1, 3), (BLCX + 61.5, BLCY - 38), DI_TEXT_ALIGN_CENTER | DI_SCREEN_LEFT_BOTTOM, font.CR_WHITE, Alpha: DisplayFlicker, scale: (0.80, 0.8));
 				}
 				DrawString(mHUDFont, "000", (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));
 				if(CorruptNum == true)
@@ -867,7 +871,7 @@ class Helmeter : BaseStatusBar
 				}
 				else
 				{
-					DrawString(mHUDFont, FormatNumber(ArmorValue, 1, 4), (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					DrawString(mHUDFont, FormatNumber(ArmorValue, 1, 3), (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 				}
 				
 				/// KEYS
@@ -979,7 +983,7 @@ class Helmeter : BaseStatusBar
 					}
 					else
 					{
-						DrawString(mHUDFont, FormatNumber(ammotype1.Amount, 1, 4), (BRCX - 71, BRCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Gold, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+						DrawString(mHUDFont, FormatNumber(ammotype1.Amount, 1, 3), (BRCX - 71, BRCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Gold, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 					}
 					priLight = 2;
 				}
@@ -1007,7 +1011,7 @@ class Helmeter : BaseStatusBar
 					}
 					else
 					{
-						DrawString(mHUDFont, FormatNumber(ammotype2.Amount, 1, 4), (BRCX - 84, BRCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Yellow, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+						DrawString(mHUDFont, FormatNumber(ammotype2.Amount, 1, 3), (BRCX - 84, BRCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Yellow, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 					}
 					resLight = 1;
 				}

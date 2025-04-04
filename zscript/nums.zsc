@@ -98,8 +98,12 @@ extend class Helmeter
 		}
 		if(HealthPoints <= 0 && Cvar.GetCVar("helm_death", CPlayer).GetInt())
 		{
+//			DrawImage("BRKNAR16", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (0.5*(1.0 - (DisplayFlicker + 0.6))), (-1, -1), (1, 1), STYLE_Add);
+//			DrawImage("BRKNAR17", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (1.0 - (DisplayFlicker + 0.6)), (-1, -1), (1, 1), STYLE_Subtract);
+//			DrawImage("BRKNAR2", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, DisplayFlicker - 0.4, (-1, -1), (1, 1), STYLE_Subtract);
 			DrawImage("BRKNAR16", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (0.5*(1.0 - (DisplayFlicker + 0.6))), (-1, -1), (1, 1), STYLE_Add);
 			DrawImage("BRKNAR17", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (1.0 - (DisplayFlicker + 0.6)), (-1, -1), (1, 1), STYLE_Subtract);
+
 		}
 	}
 	void FigureOutStartup()	// set the array for the startup text and make it different depending on your config, like in UDV
@@ -232,7 +236,7 @@ extend class Helmeter
 					if(Startuper < (StartupSequenceText.Size() - 2))		// -2 because for some fucking reason it returns out of bounds otherwise ???
 					{
 						StartedUp = false;
-						if(StartupTics == StartupDelayTarget + StartupDelayAmount && !AlreadyAdvancedThisStartTic)
+						if(StartupTics >= StartupDelayTarget + StartupDelayAmount && !AlreadyAdvancedThisStartTic)
 						{
 							Startuper++;
 							AlreadyAdvancedThisStartTic = true;
