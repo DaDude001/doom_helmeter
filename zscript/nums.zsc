@@ -16,6 +16,9 @@ extend class Helmeter
 	bool StartedUpOut;
 	bool StartSpamStopper;
 	String StartupSequenceText[18];
+	double SwayOffX;
+	double SwayOffY;
+
 	/*
 	static const String StartupSequenceText[] =
 	{
@@ -39,14 +42,14 @@ extend class Helmeter
 	*/
 	static const String DeathSequenceText[] =
 	{
-		"\ckUOH-OS message: Critical fault detected; entering debug mode\c-",
+		"\ckUOH-OS message: Critical fault detected - begin log\c-",
 		"drawHud(8): int HealthPoints out of expected bounds!",
 		"drawHud(8): Division by zero encountered.",
 		"\cgERROR: PROCESS drawHUD(8) STOPPED\c-",
 		"RESTARTING PROCESS drawHUD",
 		"\ciWARNING: DAMAGE TO POWER CELL #0 DETECTED\c-",
-		"\ciWARNING: LOW VOLTAGE DETECTED\c-",
-		"\cfBEGIN STARTUP SEQUENCE...\c-",
+		"\ciWARNING: VOLTAGE LEVELS DROPPING\c-",
+		"Process drawHUD(25) started",
 		"\cgWARNING: RAM BANK #1 FAILURE\c-",
 		"\ciarMan(10): damage to visor detected\c-",
 		"\cgdispMan(17): Could not continue, not enough memory\c-",
@@ -56,15 +59,14 @@ extend class Helmeter
 		"\cirepMan(20): critical damage to visor detected, unable to repair\c-",
 		"\ckUACNet warning: Network not found. Please contact UAC for support.\c-",
 		"\cimsgMan(18): unexpected response \"0817U4RY\"\c-",
-		"\cgWARNING: POWER CELL #0 NOT RESPONDING\c-",
 		"\cgWARNING: RAM BANK #0 NOT RESPONDING\c-",
 		"\cgWARNING: POWER LEVELS CRITICAL\c-",
 		"\cgERROR: OUT OF MEMORY EXCEPTION\c-",
-		"\cr!! POWER FAILURE !!\c-",
 		"\cgProcess abort: execution could not continue.\c-",
 		"\caTotal system failure: please try turning it off and back on again.\c-",
 		"\cr!! POWER FAILURE !!\c-",
-		"\cvI WILL NOT BE DESTROYED!!!\c-",
+		"\cr!! POWER FAILURE !!\c-",
+		"\cvI WILL NOT BE DESTROYED!!!\c-",				//mfw 157 attempts on Infernum DoG
 		"\cvI WILL NOT\c-",
 		"\cvI\c-"
 	};
@@ -299,7 +301,7 @@ extend class Helmeter
 				}
 				else
 				{
-					AlreadyAdvancedThisDeathTic = false;
+					AlreadyAdvancedThisDeathTic = false;		// this is stupid and ugly and lame but it's a workaround because you can't draw things from Tick()
 				}
 			}
 			int DeathSpace;
@@ -309,6 +311,67 @@ extend class Helmeter
 				DeathSpace += 10;
 			}
 		}
+	}
+	void DoSwayStuff()
+	{
+		// This is basically a worse version of how Project Brutality's HUD does it
+		if(Cvar.GetCVar("helm_sway", CPlayer).GetInt())
+		{
+			BobAmount = CPlayer.ViewZ - (CPlayer.mo.pos.Z + CPlayer.ViewHeight);
+			vector2 SpeedBase = CPlayer.mo.vel.xy;
+			SpeedAmount = abs(CPlayer.mo.vel.X) + abs(CPlayer.mo.vel.Y);
+			Vector2 relVel = Actor.RotateVector(CPlayer.mo.vel.xy, -CPlayer.mo.angle);
+			double MaxSwayX = Clamp(Cvar.GetCVar("helm_maxswayx", CPlayer).GetFloat(), 0, 10);
+			double MaxSwayY = Clamp(Cvar.GetCVar("helm_maxswayy", CPlayer).GetFloat(), 0, 10);
+			double SwayMult = Clamp(Cvar.GetCVar("helm_swaymult", CPlayer).GetFloat(), 0, 1); 
+			DynSwayX.Update(((0.5 * relVel.y) + ((BobAmount * 0.25) + (CPlayer.mo.angle - PrevAngle))) * 60.0);
+			DynSwayY.Update(((abs(BobAmount) * (0.03 * abs(relVel.y))) + (sin(0 + ((0.1 * relVel.x) * abs(BobAmount))) * 30) -(CPlayer.mo.pitch - PrevPitch)) * 60.0);
+//			MoveSwayX = CPlayer.mo.vel
+			SwayOffX = SwayMult * (Clamp((DynSwayX.GetValue() / 60.0), -MaxSwayX, MaxSwayX));
+			SwayOffY = SwayMult * (Clamp((DynSwayY.GetValue() / 60.0), -MaxSwayY, MaxSwayY));
+//			double SpeedAmount = CPlayer.
+			//get what it was last frame
+			PrevAngle = CPlayer.mo.angle;
+			PrevPitch = CPlayer.mo.pitch;
+			OldSwayOffX = SwayOffX;
+			OldSwayOffY = SwayOffY;
+		}
+		else
+		{
+			SwayOffX = 0;
+			SwayOffY = 0;
+			OldSwayOffX = 0;
+			OldSwayOffY = 0;
+
+		}
+		if(Cvar.GetCVar("helm_shake", CPlayer).GetInt())
+		{
+			if(CheckInventory("HelmShaker", 1))
+			{
+				ShakeOffsetX = frandom(-3, 3);
+				ShakeOffsetY = frandom(-3, 3);
+				BLCX = ShakeOffsetX;
+				BLCY = ShakeOffsetY;
+				BRCX = ShakeOffsetX;
+				BRCY = ShakeOffsetY;
+				TopX = ShakeOffsetX;
+				TopY = ShakeOffsetY;
+				GlassX = ShakeOffsetX;
+				GlassY = ShakeOffsetY;
+			}
+			else
+			{
+				BLCX = (SwayOffX + OldSwayOffX) / 2;	// Average these two out to prevent jitter
+				BLCY = (SwayOffY + OldSwayOffY) / 2;
+				BRCX = (SwayOffX + OldSwayOffX) / 2;
+				BRCY = (SwayOffY + OldSwayOffY) / 2;
+				TopX = (SwayOffX + OldSwayOffX) / 2;
+				TopY = (SwayOffY + OldSwayOffY) / 2;
+				GlassX = (SwayOffX + OldSwayOffX) / 2;
+				GlassY = (SwayOffY + OldSwayOffY) / 2;
+			}
+		}
+
 	}
 	// No, this doesn't get any better either. I should never be allowed to code again...
 	

@@ -17,21 +17,23 @@ Features:
 	Displays can become glitchy and faulty when the visor is damaged
 	Displays flash orange if the number in question is low	
 	Helmet that changes brightness with the sector light level
+	Blood stains that appear on the visor as your health gets lower
 	Cool and definitely-not-stolen death sequence
 	
 Many features are customizable; you can disable the displays, the damage effects, etc, along with the opacity of several things
 
 + and - show and hide the visor, you can hide the displays in the options if you want "immersion"
 
-Supports HUD scaling (mostly), but I developed and tested this mod with a scale factor of 3 on a 1080p monitor, so that's what I think it looks best at
-
+Supports HUD scaling*, but I developed and tested this mod with a scale factor of 3 on a 1080p monitor, so that's what I think it looks best at
+		* broken visor effect that appears on death appears cut off at smaller sizes
+		
 KNOWN BUGS/ODDITIES
-Visor cracks disappear when loading a save from a different level than where the crack occurred
+Visor cracks do not persist through different levels
 Low warning flashes may not initially appear at full opacity
 	This is because the animation is always being played in the background, unless the feature is disabled
 
 CREDITS
-HUD Code and Display Graphics b	y DaCat001, with liberal amounts of help from the ZDoom Wiki
+HUD Code and Display Graphics by DaCat001, with liberal amounts of help from the ZDoom Wiki
 Originally based on a hud by Mithriak and Mike12, although barely any of that remains
 Visor graphics by DaCat001, based on NekosHud
 Many of the more advanced features' code was made while taking peeks at Project Brutality's HUD, by generic name guy

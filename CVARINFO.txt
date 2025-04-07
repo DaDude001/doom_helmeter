@@ -25,3 +25,7 @@ user bool helm_corruptnum = true;
 user bool helm_dispdamage = true;
 user bool helm_startup = true;
 user bool helm_death = true;
+user bool helm_sway = true;
+user float helm_maxswayx = 10.0;
+user float helm_maxswayy = 10.0;
+user float helm_swaymult = 1.0;

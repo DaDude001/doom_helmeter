@@ -207,6 +207,17 @@ class Helmeter : BaseStatusBar
 		int flcval2;
 		int flcval3;
 		int flcval4;
+		DynamicValueInterpolator DynSwayX;
+		DynamicValueInterpolator DynSwayY;
+		double PrevPitch;
+		double PrevSway;
+		double PrevAngle;
+		double OldSwayOffX;
+		double OldSwayOffY;
+		double BobAmount;
+		double SpeedAmount;
+//		double ForwardSpeed;
+//		vector2 speedRel;
 //		int Garbage2;
 //		int Garbage3;
 		
@@ -278,6 +289,8 @@ class Helmeter : BaseStatusBar
 		flcval4 = random(40,50);
 		CorruptDisp = false;
 		CorruptNum = false;
+		DynSwayX = DynamicValueInterpolator.Create(0, 0.25, 1, 50);
+		DynSwayY = DynamicValueInterpolator.Create(0, 0.25, 1, 50);
     }
 
     override void Draw(int state, double ticFrac)
@@ -299,6 +312,7 @@ class Helmeter : BaseStatusBar
 			DrawHudNumberStuff();		// Handles the actual displays; the HUD part of this HUD.
 			DoStartupSequence();		// Handles the startup sequence text. Vile code lies here.
 			DoDeathSequence();			// Similar to the startup sequence. Less vile, but still not pretty.
+			// A couple more functions are called in Tick() too
 		}
 		if (state == HUD_Fullscreen)
 		{
@@ -327,6 +341,15 @@ class Helmeter : BaseStatusBar
 
 	void DrawFullscreenStuff()
 	{
+//		DrawString(enlFont, FormatNumber(BobAmount, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+//		DrawString(enlFont, FormatNumber(SpeedAmount, 1, 4), (TopX - 1, TopY + 69), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+//		DrawString(enlFont, FormatNumber((sin(SpeedAmount + BobAmount) * 50), 1, 4), (TopX - 1, TopY + 79), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+/*
+		DrawString(enlFont, FormatNumber(SwayOffX * 100, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+		DrawString(enlFont, FormatNumber(SwayOffY * 100, 1, 4), (TopX - 1, TopY + 69), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+		DrawString(enlFont, FormatNumber(ForwardSpeed, 1, 4), (TopX - 1, TopY + 79), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+		DrawString(enlFont, FormatNumber(Actor.Normalize180(CPlayer.mo.angle), 1, 4), (TopX - 1, TopY + 89), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+*/
 		if(CPlayer.Health <= 0)
 		{
 			DrawImage("VSRDCRK", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, 1.0);
@@ -497,7 +520,6 @@ class Helmeter : BaseStatusBar
 			}
 			*/
 		}
-
 		if(Cvar.GetCVar("helm_blood", CPlayer).GetInt())
 		{
 			HurtLevel = (HealthPoints + 15) / 15;
@@ -621,33 +643,7 @@ class Helmeter : BaseStatusBar
 				}
 			}
 		}
-		if(Cvar.GetCVar("helm_shake", CPlayer).GetInt())
-		{
-			if(CheckInventory("HelmShaker", 1))
-			{
-				ShakeOffsetX = frandom(-3, 3);
-				ShakeOffsetY = frandom(-3, 3);
-				BLCX = ShakeOffsetX;
-				BLCY = ShakeOffsetY;
-				BRCX = ShakeOffsetX;
-				BRCY = ShakeOffsetY;
-				TopX = ShakeOffsetX;
-				TopY = ShakeOffsetY;
-				GlassX = ShakeOffsetX;
-				GlassY = ShakeOffsetY;
-			}
-			else
-			{
-				BLCX = 0;
-				BLCY = 0;
-				BRCX = 0;
-				BRCY = 0;
-				TopX = 0;
-				TopY = 0;
-				GlassX = 0;
-				GlassY = 0;
-			}
-		}
+		
 		if((Cvar.GetCVar("helm_corrupt", CPlayer).GetInt() && randomcorrupt != 0) || (Cvar.GetCVar("helm_corrupt", CPlayer).GetInt() && (CheckInventory("HelmShaker", 1) || ((FlickerTics < flcval1 && FlickerTics > flcval2) || (FlickerTics < flcval3 && FlickerTics > flcval4)) || FlickerTics <= 35)))			
 		{
 			CorruptDisp = true;
@@ -1088,6 +1084,7 @@ class Helmeter : BaseStatusBar
 	
     override void Tick()
     {
+		DoSwayStuff(); // Handles the HUD swaying around and shaking
 		if(Cvar.GetCVar("helm_startup", CPlayer).GetInt() && !CheckInventory("StartupCompleted", 1))
 		{
 		if(StartupTics < 0)
@@ -1107,7 +1104,7 @@ class Helmeter : BaseStatusBar
 		{
 			if(StartupTics == -69)
 			{
-				FigureOutStartup();
+				FigureOutStartup();	// only call this once at the beginning of the startup sequence
 				S_StartSound("HDDSTRT", CHAN_AUTO, 0, 0.8);
 			}
 			if(StartupTics == -49)
