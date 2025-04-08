@@ -19,6 +19,7 @@ Features:
 	Helmet that changes brightness with the sector light level
 	Blood stains that appear on the visor as your health gets lower
 	Cool and definitely-not-stolen death sequence
+	HUD sways around as you move and turn
 	
 Many features are customizable; you can disable the displays, the damage effects, etc, along with the opacity of several things
 

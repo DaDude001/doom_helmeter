@@ -127,8 +127,16 @@ class Helmeter : BaseStatusBar
 		double BRCY;
 		double TopX;
 		double TopY;
+		double HelmBLCX;
+		double HelmBLCY;
+		double HelmBRCX;
+		double HelmBRCY;
+		double HelmTopX;
+		double HelmTopY;
 		double GlassX;
 		double GlassY;
+		double TrueGlassX;
+		double TrueGlassY;
 		double ShakeOffsetX;
 		int statoffset;
 		double ShakeOffsetY;
@@ -212,10 +220,14 @@ class Helmeter : BaseStatusBar
 		double PrevPitch;
 		double PrevSway;
 		double PrevAngle;
+		double PrevZ;
 		double OldSwayOffX;
 		double OldSwayOffY;
 		double BobAmount;
 		double SpeedAmount;
+		Vector2 relVel;
+		DynamicValueInterpolator DynFallAnim;
+		double SwayParallax;
 //		double ForwardSpeed;
 //		vector2 speedRel;
 //		int Garbage2;
@@ -291,6 +303,8 @@ class Helmeter : BaseStatusBar
 		CorruptNum = false;
 		DynSwayX = DynamicValueInterpolator.Create(0, 0.25, 1, 50);
 		DynSwayY = DynamicValueInterpolator.Create(0, 0.25, 1, 50);
+		DynFallAnim = DynamicValueInterpolator.Create(0, 0.75, 1, 300);
+
     }
 
     override void Draw(int state, double ticFrac)
@@ -305,7 +319,7 @@ class Helmeter : BaseStatusBar
 		if (state == HUD_StatusBar)
 		{
 			BeginHud();					// IDK what this actually does, but you need it
-			DoARThings();				// Handles the screen overlay stuff during the bootup sequence.
+			DoARThings();				// Handles the screen overlay stuff during the bootup and death sequences.
 			DrawFullscreenStuff();		// Handles the helmet and visor effects.
 			DoGarbage();				// Only exists to generate random characters when the displays glitch out. Evil code lies here.
 			DrawCustomPickupMessage((TopX, TopY + statoffset), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);	// Handles the custom status messages.
@@ -347,8 +361,8 @@ class Helmeter : BaseStatusBar
 /*
 		DrawString(enlFont, FormatNumber(SwayOffX * 100, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 		DrawString(enlFont, FormatNumber(SwayOffY * 100, 1, 4), (TopX - 1, TopY + 69), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
-		DrawString(enlFont, FormatNumber(ForwardSpeed, 1, 4), (TopX - 1, TopY + 79), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
-		DrawString(enlFont, FormatNumber(Actor.Normalize180(CPlayer.mo.angle), 1, 4), (TopX - 1, TopY + 89), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+		DrawString(enlFont, FormatNumber(relVel.X, 1, 4), (TopX - 1, TopY + 79), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+		DrawString(enlFont, FormatNumber(relVel.Y, 1, 4), (TopX - 1, TopY + 89), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 */
 		if(CPlayer.Health <= 0)
 		{
@@ -422,24 +436,24 @@ class Helmeter : BaseStatusBar
 */
 		HelmetAlpha = Clamp(Cvar.GetCVar("helm_helmetalpha", CPlayer).GetFloat(), 0, 1);
 		HLFlickerTrue = HelmLightFlicker * Clamp(Cvar.GetCVar("helm_armoralpha", CPlayer).GetFloat(), 0, 1);
-		DrawImage("VSRBLC", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmetAlpha);
-		DrawImage("VSRBRC", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
-		DrawImage("VSRTPC", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
+		DrawImage("VSRBLC", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmetAlpha);
+		DrawImage("VSRBRC", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
+		DrawImage("VSRTPC", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
 		if(Cvar.GetCVar("helm_darkness", CPlayer).GetInt())
 		{
 			HelmLightLevel = HelmetAlpha * (cplayer.mo.cursector.lightlevel / 255.0);
-			DrawImage("VSRBLB", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmetAlpha);
-			DrawImage("VSRBRB", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
-			DrawImage("VSRTPB", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
-			DrawImage("VSRBLA", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmLightLevel);
-			DrawImage("VSRBRA", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmLightLevel);
-			DrawImage("VSRTPA", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmLightLevel);	
+			DrawImage("VSRBLB", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmetAlpha);
+			DrawImage("VSRBRB", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
+			DrawImage("VSRTPB", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
+			DrawImage("VSRBLA", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmLightLevel);
+			DrawImage("VSRBRA", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmLightLevel);
+			DrawImage("VSRTPA", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmLightLevel);	
 		}
 		else
 		{
-			DrawImage("VSRBLA", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmetAlpha);
-			DrawImage("VSRBRA", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
-			DrawImage("VSRTPA", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
+			DrawImage("VSRBLA", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmetAlpha);
+			DrawImage("VSRBRA", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
+			DrawImage("VSRTPA", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
 		}
 //		if(Cvar.GetCVar("helm_projectlight", CPlayer).GetInt())
 //		{
@@ -459,32 +473,32 @@ class Helmeter : BaseStatusBar
 			switch (ArmorColor)
 			{
 				case 0:
-				DrawImage("VSLBLA", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLBRA", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLTPA", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBLA", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBRA", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLTPA", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				break;
 				case 1:
-				DrawImage("VSLBLB", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLBRB", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLTPB", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBLB", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBRB", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLTPB", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				break;
 				case 2:
 				case 3:
-				DrawImage("VSLBLC", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLBRC", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLTPC", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);			
+				DrawImage("VSLBLC", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBRC", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLTPC", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);			
 				break;
 				case 4:
 				case 5:
-				DrawImage("VSLBLD", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLBRD", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLTPD", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBLD", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBRD", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLTPD", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				break;
 				case 6:
 				case 7:
-				DrawImage("VSLBLE", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLBRE", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLTPE", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBLE", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLBRE", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DrawImage("VSLTPE", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				break;
 			}
 /*
@@ -591,6 +605,15 @@ class Helmeter : BaseStatusBar
 	
 	void DrawHudNumberStuff()
 	{
+		SwayParallax = Clamp(Cvar.GetCVar("helm_swayparallax", CPlayer).GetFloat(), 0, 1);
+		HelmBLCX = BLCX * SwayParallax;
+		HelmBLCY = BLCY * SwayParallax;
+		HelmBRCX = BRCX * SwayParallax;
+		HelmBRCY = BRCY * SwayParallax;
+		HelmTopX = TopX * SwayParallax;
+		HelmTopY = TopY * SwayParallax;
+		GlassX = TrueGlassX * SwayParallax;
+		GlassY = TrueGlassY * SwayParallax;
 		msgscl = Clamp(Cvar.GetCVar("helm_msgscl", CPlayer).GetFloat(), 0, 1);
 		if(Cvar.GetCVar("helm_flicker", CPlayer).GetInt() && CPlayer.Health >= 1)
 		{
@@ -644,7 +667,7 @@ class Helmeter : BaseStatusBar
 			}
 		}
 		
-		if((Cvar.GetCVar("helm_corrupt", CPlayer).GetInt() && randomcorrupt != 0) || (Cvar.GetCVar("helm_corrupt", CPlayer).GetInt() && (CheckInventory("HelmShaker", 1) || ((FlickerTics < flcval1 && FlickerTics > flcval2) || (FlickerTics < flcval3 && FlickerTics > flcval4)) || FlickerTics <= 35)))			
+		if((Cvar.GetCVar("helm_corrupt", CPlayer).GetInt() && randomcorrupt != 0) || (Cvar.GetCVar("helm_corrupt", CPlayer).GetInt() && (CheckInventory("HelmShaker", 1) || ((FlickerTics < flcval1 && FlickerTics > flcval2) || (FlickerTics < flcval3 && FlickerTics > flcval4)) || FlickerTics <= 35)))	// I like BIG IF STATEMENTS, and I CANNOT LIE		
 		{
 			CorruptDisp = true;
 		}
@@ -666,45 +689,45 @@ class Helmeter : BaseStatusBar
 		{
 			if(CheckInventory("VitalsOn", 1))
 			{
-				DrawImage("VDSPLIA", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);
+				DrawImage("VDSPLIA", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);
 			}
 			if(CheckInventory("AmmoOn", 1))
 			{
-				DrawImage("VDSPLIA", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
+				DrawImage("VDSPLIA", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
 			}
 			if(CheckInventory("StatsOn", 1))
 			{
-				DrawImage("VDSPLIA", (TopX - 98, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
-				DrawImage("VDSPLIA", (TopX + 100, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
+				DrawImage("VDSPLIA", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
+				DrawImage("VDSPLIA", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
 			}
 			if(Cvar.GetCVar("helm_showdisplay", CPlayer).GetInt())
 			{
 				if(CheckInventory("VitalsOn", 1))
 				{
-					DrawImage("VDSPLIB", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
+					DrawImage("VDSPLIB", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
 				}
 				if(CheckInventory("AmmoOn", 1))
 				{
 					if(ammotype1 != null || ammotype2 != null) 
 					{
-						DrawImage("VDSPLIB", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
+						DrawImage("VDSPLIB", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
 					}
 					else
 					{
-						DrawImage("VDSPLIC", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
+						DrawImage("VDSPLIC", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
 					}
 				}
 				if(CheckInventory("StatsOn", 1))
 				{
 					if(Cvar.GetCVar("helm_showstats", CPlayer).GetInt())
 					{
-						DrawImage("VDSPLIB", (TopX - 98, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
-						DrawImage("VDSPLIB", (TopX + 100, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
+						DrawImage("VDSPLIB", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
+						DrawImage("VDSPLIB", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
 					}
 					else
 					{
-						DrawImage("VDSPLIC", (TopX - 98, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
-						DrawImage("VDSPLIC", (TopX + 100, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
+						DrawImage("VDSPLIC", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
+						DrawImage("VDSPLIC", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
 					}
 				}
 				if(Cvar.GetCVar("helm_projectbeam", CPlayer).GetInt())
@@ -764,16 +787,16 @@ class Helmeter : BaseStatusBar
 			{
 				if(CheckInventory("VitalsOn", 1))
 				{
-					DrawImage("VDSPLIC", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
+					DrawImage("VDSPLIC", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
 				}
 				if(CheckInventory("AmmoOn", 1))
 				{
-					DrawImage("VDSPLIC", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
+					DrawImage("VDSPLIC", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
 				}
 				if(CheckInventory("StatsOn", 1))
 				{
-					DrawImage("VDSPLIC", (TopX - 98, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
-					DrawImage("VDSPLIC", (TopX + 100, TopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
+					DrawImage("VDSPLIC", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
+					DrawImage("VDSPLIC", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
 				}
 			}
 		}

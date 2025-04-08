@@ -18,6 +18,10 @@ extend class Helmeter
 	String StartupSequenceText[18];
 	double SwayOffX;
 	double SwayOffY;
+	double ZOffset;
+	double ZOffTrue;
+	double SwayXFormula;
+	double SwayYFormula;
 
 	/*
 	static const String StartupSequenceText[] =
@@ -183,7 +187,7 @@ extend class Helmeter
 				break;
 				case 8:
 				StartupDelayAmount = 6;
-				EventHandler.SendNetworkEvent("gimmethe:VitalsOn");
+				EventHandler.SendNetworkEvent("gimmethe:VitalsOn");		// This is only because booleans don't seem to persist in saves???
 				if(!StartSpamStopper)
 				{
 					S_StartSound("VBEEP2", CHAN_7, 0, 0.8);
@@ -317,24 +321,56 @@ extend class Helmeter
 		// This is basically a worse version of how Project Brutality's HUD does it
 		if(Cvar.GetCVar("helm_sway", CPlayer).GetInt())
 		{
-			BobAmount = CPlayer.ViewZ - (CPlayer.mo.pos.Z + CPlayer.ViewHeight);
-			vector2 SpeedBase = CPlayer.mo.vel.xy;
+			bool IsGrounded = CPlayer.mo.pos.Z <= CPlayer.mo.floorZ;
+			if (IsGrounded)
+			{
+				BobAmount = CPlayer.ViewZ - (CPlayer.mo.pos.Z + CPlayer.ViewHeight);		// unlike PB, I can't get the player's weapon bob amounts, so instead calculate the camera bob
+				ZOffset -= ((ZOffset * -0.4) * PrevZ);	// increase the Z offset by how fast you were falling, simulating a landing anim
+			}
+			else 
+			{	
+				BobAmount = 0;
+				ZOffset = CPlayer.mo.vel.z;
+			}
+			if(IsGrounded && ZOffset != 0.0)
+			{
+				ZOffset*= 0.8;
+			}
+				
 			SpeedAmount = abs(CPlayer.mo.vel.X) + abs(CPlayer.mo.vel.Y);
-			Vector2 relVel = Actor.RotateVector(CPlayer.mo.vel.xy, -CPlayer.mo.angle);
+			relVel = Actor.RotateVector(CPlayer.mo.vel.xy, -CPlayer.mo.angle);	// localize player velocity directions
+			DynFallAnim.Update(ZOffset * 33);
+			if(Cvar.GetCVar("helm_fallsway", CPlayer).GetInt())
+			{
+				ZOffTrue = DynFallAnim.GetValue() / 100.0;
+			}
+			else ZOffTrue = 0;
+
 			double MaxSwayX = Clamp(Cvar.GetCVar("helm_maxswayx", CPlayer).GetFloat(), 0, 10);
 			double MaxSwayY = Clamp(Cvar.GetCVar("helm_maxswayy", CPlayer).GetFloat(), 0, 10);
 			double SwayMult = Clamp(Cvar.GetCVar("helm_swaymult", CPlayer).GetFloat(), 0, 1); 
-			DynSwayX.Update(((0.5 * relVel.y) + ((BobAmount * 0.25) + (CPlayer.mo.angle - PrevAngle))) * 60.0);
-			DynSwayY.Update(((abs(BobAmount) * (0.03 * abs(relVel.y))) + (sin(0 + ((0.1 * relVel.x) * abs(BobAmount))) * 30) -(CPlayer.mo.pitch - PrevPitch)) * 60.0);
-//			MoveSwayX = CPlayer.mo.vel
+			
+			if(Cvar.GetCVar("helm_movesway", CPlayer).GetInt())
+			{
+				SwayXFormula = ((0.5 * relVel.y) + ((BobAmount * 0.25) + (CPlayer.mo.angle - PrevAngle))) * 60.0;
+				SwayYFormula = ((abs(BobAmount) * (0.03 * abs(relVel.y))) + (sin(0 + ((0.1 * relVel.x) * abs(BobAmount))) * 30) -(CPlayer.mo.pitch - PrevPitch)) * 60.0;
+			}
+			else
+			{
+				SwayXFormula = (CPlayer.mo.angle - PrevAngle) * 60.0;
+				SwayYFormula = -(CPlayer.mo.pitch - PrevPitch) * 60.0; 
+			}
+			DynSwayX.Update(Clamp(SwayXFormula, -MaxSwayX * 60, MaxSwayX * 60));
+			DynSwayY.Update(Clamp(SwayYFormula, -MaxSwayY * 60, MaxSwayY * 60)); 
 			SwayOffX = SwayMult * (Clamp((DynSwayX.GetValue() / 60.0), -MaxSwayX, MaxSwayX));
-			SwayOffY = SwayMult * (Clamp((DynSwayY.GetValue() / 60.0), -MaxSwayY, MaxSwayY));
-//			double SpeedAmount = CPlayer.
+			SwayOffY = SwayMult * (Clamp((ZOffTrue + (DynSwayY.GetValue() / 60.0)), -MaxSwayY, MaxSwayY));	//clamping again because the fall anim is independent from the move and sway anims
+			
 			//get what it was last frame
 			PrevAngle = CPlayer.mo.angle;
 			PrevPitch = CPlayer.mo.pitch;
 			OldSwayOffX = SwayOffX;
 			OldSwayOffY = SwayOffY;
+			PrevZ = CPlayer.mo.vel.Z;
 		}
 		else
 		{
@@ -342,7 +378,6 @@ extend class Helmeter
 			SwayOffY = 0;
 			OldSwayOffX = 0;
 			OldSwayOffY = 0;
-
 		}
 		if(Cvar.GetCVar("helm_shake", CPlayer).GetInt())
 		{
@@ -361,19 +396,19 @@ extend class Helmeter
 			}
 			else
 			{
-				BLCX = (SwayOffX + OldSwayOffX) / 2;	// Average these two out to prevent jitter
+				BLCX = (SwayOffX + OldSwayOffX) / 2;	// Average these two out to (help) prevent jitter
 				BLCY = (SwayOffY + OldSwayOffY) / 2;
 				BRCX = (SwayOffX + OldSwayOffX) / 2;
 				BRCY = (SwayOffY + OldSwayOffY) / 2;
 				TopX = (SwayOffX + OldSwayOffX) / 2;
 				TopY = (SwayOffY + OldSwayOffY) / 2;
-				GlassX = (SwayOffX + OldSwayOffX) / 2;
-				GlassY = (SwayOffY + OldSwayOffY) / 2;
+				TrueGlassX = (SwayOffX + OldSwayOffX) / 2;
+				TrueGlassY = (SwayOffY + OldSwayOffY) / 2;
 			}
 		}
 
 	}
-	// No, this doesn't get any better either. I should never be allowed to code again...
+	// ... and we're right back into trash-tier code
 	
 	void DoGarbage()		// Generates the random strings that appear when the numbers glitch out. It's meant to look like it's outputting garbage data
 	{
