@@ -144,3 +144,4 @@ TEXTURE BRKNAR16
 	pic BRKNAR18 tics 1
 	pic BRKNAR19 tics 2
 	pic BRKNAR20 tics 2
+	pic BRKNAR21 tics 1

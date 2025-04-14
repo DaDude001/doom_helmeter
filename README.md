@@ -31,7 +31,8 @@ Supports HUD scaling[^exception], but I developed and tested this mod with a sca
 Should be compatible with most gameplay mods that are compatible with any custom HUD, although a minor amount of configuration is needed
 This has explicit support for Brutal Doom v22.
 
-Tested and proven to work in Rust and Bones, Hellrider v0.9, and Gunslinger Set.
+Tested and proven to work in Rust and Bones, Hellrider v0.9, Beautiful Doom, and Gunslinger Set.
+
 Although, several elements are disabled due to this HUD not supporting them yet (eg. Hellrider's grenades, GS' weapon fire modes, etc)
 
 You are free to make your own versions with compatibilty; I myself will make a Project Brutality-compatible version soon
