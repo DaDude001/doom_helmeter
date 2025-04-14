@@ -13,22 +13,22 @@ OptionMenu "HELM_SETTINGS" {
 	StaticText ""
 	Submenu "Helmet Settings", "HELM_HELMOPT"
 	Tooltip ""
-	StaticText "The helmet overlay. All of these options are hidden when in screenblock 11 or 12.", "Grey"
+	StaticText "The helmet overlay. All of these options are hidden when in screenblock 11 or 12.", "Red"
 	StaticText ""
 
 	Submenu "HUD Display Settings", "HELM_HUDOPT"
 	Tooltip ""
-	StaticText "The actual HUD. You can customize it here to your liking.", "Grey"
+	StaticText "The actual HUD. You can customize it here to your liking.", "Yellow"
 	StaticText ""
 	
 	Submenu "Sway Settings", "HELM_SWAYOPT"
 	Tooltip ""
-	StaticText "The dynamic swaying of the HUD. You can mess with (and disable) it here.", "Grey"
+	StaticText "The dynamic swaying of the HUD. You can mess with (and disable) it here.", "Green"
 	StaticText ""
 
 	Submenu "Misc. Settings", "HELM_MISCOPT"
 	Tooltip ""
-	StaticText "These options are for some of the more intrusive effects that may cause issues in some", "Grey"
+	StaticText "These options are for some of the more intrusive effects that may cause issues in some", "Blue"
 	StaticText ""
 //	Option "Show Cracks", "helm
 }

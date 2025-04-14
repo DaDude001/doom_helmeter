@@ -114,7 +114,7 @@ extend class Helmeter
 	}
 	void FigureOutStartup()	// set the array for the startup text and make it different depending on your config, like in UDV
 	{
-		StartupSequenceText[0] = "\cfUAC OFFENSIVE HELMET OS v0.7c ONLINE\c-";
+		StartupSequenceText[0] = "\cfUAC OFFENSIVE HELMET OS v0.8b ONLINE\c-";
 		StartupSequenceText[1] = "Copyright(C) 2025-2032 \cdUnion Aerospace Corporation\c-. All rights reserved.";
 		StartupSequenceText[2] = "UAC User ID \""..CPlayer.GetUserName().. "\" VERIFIED";
 		StartupSequenceText[3] = "\cfBEGIN STARTUP SEQUENCE...\c-";
@@ -316,6 +316,7 @@ extend class Helmeter
 			}
 		}
 	}
+	// time for a brief reprieve; this is actually kinda clean
 	void DoSwayStuff()
 	{
 		// This is basically a worse version of how Project Brutality's HUD does it
@@ -412,9 +413,7 @@ extend class Helmeter
 	
 	void DoGarbage()		// Generates the random strings that appear when the numbers glitch out. It's meant to look like it's outputting garbage data
 	{
-		if(CorruptNum == true)
-		{
-			switch(random(1,18))	//BLASPHEMY. HERESY.
+		switch(random(1,18))	//BLASPHEMY. HERESY.
 			{
 				case 1:
 				Garbage1 = "1";
@@ -585,6 +584,5 @@ extend class Helmeter
 				Garbage3 = "\"";
 				break;
 			}
-		}
 	}
 }

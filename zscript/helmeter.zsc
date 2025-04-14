@@ -33,6 +33,15 @@ class PainHandler : EventHandler
 				}
 				e.thing.ACS_NamedExecute("helmquake", 0, 0, 0, 0);				// I know this could be better done but whatever
 			}														// at least it's better than UDV using like 8000 ACS scripts
+			else if (e.thing.health <= 0)
+			{
+				e.thing.A_PlaySound("visorcrack", CHAN_AUTO, 0.8);
+				if(NumCracks < 4)
+				{
+					NumCracks++;
+				}
+				e.thing.ACS_NamedExecute("helmquake", 0, 0, 0, 0);				// I know this could be better done but whatever
+			}
 			else
 			{
 			e.thing.ACS_NamedExecute("ourch", 0, 0, 0, 0);	
@@ -321,7 +330,6 @@ class Helmeter : BaseStatusBar
 			BeginHud();					// IDK what this actually does, but you need it
 			DoARThings();				// Handles the screen overlay stuff during the bootup and death sequences.
 			DrawFullscreenStuff();		// Handles the helmet and visor effects.
-			DoGarbage();				// Only exists to generate random characters when the displays glitch out. Evil code lies here.
 			DrawCustomPickupMessage((TopX, TopY + statoffset), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);	// Handles the custom status messages.
 			DrawHudNumberStuff();		// Handles the actual displays; the HUD part of this HUD.
 			DoStartupSequence();		// Handles the startup sequence text. Vile code lies here.
@@ -332,7 +340,6 @@ class Helmeter : BaseStatusBar
 		{
 			BeginHud();
 			DoARThings();
-			DoGarbage();
 			DrawCustomPickupMessage((TopX, TopY + statoffset), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);
 			DrawHudNumberStuff();
 			DoStartupSequence();
@@ -364,6 +371,9 @@ class Helmeter : BaseStatusBar
 		DrawString(enlFont, FormatNumber(relVel.X, 1, 4), (TopX - 1, TopY + 79), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 		DrawString(enlFont, FormatNumber(relVel.Y, 1, 4), (TopX - 1, TopY + 89), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 */
+//		String testString = ;
+//		DrawString(enlFont, testString, (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+
 		if(CPlayer.Health <= 0)
 		{
 			DrawImage("VSRDCRK", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, 1.0);
@@ -539,6 +549,7 @@ class Helmeter : BaseStatusBar
 			HurtLevel = (HealthPoints + 15) / 15;
 			BloodAlpha = Clamp(Cvar.GetCVar("helm_bloodalpha", CPlayer).GetFloat(), 0, 1);
 //			DrawString(enlFont, FormatNumber(HurtLevel, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+			//DrawImage("VSBLD4", (GlassX + 30, GlassY - 30), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, BloodAlpha);
 			switch(HurtLevel)
 			{
 			case 6:
@@ -551,28 +562,28 @@ class Helmeter : BaseStatusBar
 			case 4:
 				DrawImage("VSBLD6", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
 				DrawImage("VSBLD5", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
-				DrawImage("VSBLD4", (GlassX + 30, GlassY - 30), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, BloodAlpha);
+				DrawImage("VSBLD3", (GlassX, GlassY - 20), DI_SCREEN_CENTER_BOTTOM | DI_ITEM_CENTER | DI_ITEM_BOTTOM, BloodAlpha);
 				break;
 			case 3:
 				DrawImage("VSBLD6", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
 				DrawImage("VSBLD5", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
-				DrawImage("VSBLD4", (GlassX + 30, GlassY - 30), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, BloodAlpha);
 				DrawImage("VSBLD3", (GlassX, GlassY - 20), DI_SCREEN_CENTER_BOTTOM | DI_ITEM_CENTER | DI_ITEM_BOTTOM, BloodAlpha);
+				DrawImage("VSBLD1", (GlassX, GlassY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, BloodAlpha);
 				break;
 			case 2:
 				DrawImage("VSBLD6", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
 				DrawImage("VSBLD5", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
-				DrawImage("VSBLD4", (GlassX + 30, GlassY - 30), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, BloodAlpha);
 				DrawImage("VSBLD3", (GlassX, GlassY - 20), DI_SCREEN_CENTER_BOTTOM | DI_ITEM_CENTER | DI_ITEM_BOTTOM, BloodAlpha);
-				DrawImage("VSBLD2", (GlassX - 20, GlassY - 30), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_BOTTOM, BloodAlpha);
+				DrawImage("VSBLD1", (GlassX, GlassY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, BloodAlpha);
+				DrawImage("VSBLD4", (GlassX + 30, GlassY - 30), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, BloodAlpha);
 				break;
 			case 1:
 				DrawImage("VSBLD6", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
 				DrawImage("VSBLD5", (GlassX, GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, BloodAlpha);
-				DrawImage("VSBLD4", (GlassX + 30, GlassY - 30), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, BloodAlpha);
 				DrawImage("VSBLD3", (GlassX, GlassY - 20), DI_SCREEN_CENTER_BOTTOM | DI_ITEM_CENTER | DI_ITEM_BOTTOM, BloodAlpha);
-				DrawImage("VSBLD2", (GlassX - 20, GlassY - 30), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_BOTTOM, BloodAlpha);
 				DrawImage("VSBLD1", (GlassX, GlassY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, BloodAlpha);
+				DrawImage("VSBLD4", (GlassX + 30, GlassY - 30), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, BloodAlpha);
+				DrawImage("VSBLD2", (GlassX - 20, GlassY - 30), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_BOTTOM, BloodAlpha);
 				break;
 			}
 		}
@@ -1107,6 +1118,11 @@ class Helmeter : BaseStatusBar
 	
     override void Tick()
     {
+		Super.Tick();
+		if(CorruptNum == true)
+		{
+			DoGarbage();				// Only exists to generate random characters when the displays glitch out. Evil code lies here.
+		}
 		DoSwayStuff(); // Handles the HUD swaying around and shaking
 		if(Cvar.GetCVar("helm_startup", CPlayer).GetInt() && !CheckInventory("StartupCompleted", 1))
 		{
@@ -1139,9 +1155,8 @@ class Helmeter : BaseStatusBar
 		{
 			DeathTics+= 2;
 		}
-		Super.Tick();
 		ArmorValue = GetArmorAmount();
-		if(Cvar.GetCVar("helm_dispdamage", CPlayer).GetInt() && (CrackCount != 0 && random(1,(150 - ((CrackCount - 1)* 10))) <= 1))
+		if(Cvar.GetCVar("helm_dispdamage", CPlayer).GetInt() && (CrackCount != 0 && random(1,(200 - ((CrackCount - 1)* 10))) <= 1))
 		{
 			randomcorrupt = random(4,4 + (CrackCount * 4));
 			S_StartSound("displaycorrupt", CHAN_7, 0, 0.8);
