@@ -2,9 +2,9 @@
 // WARNING: TERRIBLE, VILE, DESPICABLE, WRETCHED, REPUGNANT, ABYSMAL, HORRENDOUS, REPULSIVE, ABHORRENT, LOATHSOME, DREADFUL, ABOMINABLE, SICKENING, RANCID, FOUL, ATROCIOUS, DOGSHIT, APPALLING, HIDEOUS CODE AHEAD 
 extend class Helmeter
 {
-	string Garbage1;
-	string Garbage2;
-	string Garbage3;
+	int Garbage1;
+	int Garbage2;
+	int Garbage3;
 	int Deather;
 	int DeathDelayTarget;
 	int DeathDelayAmount;
@@ -114,7 +114,7 @@ extend class Helmeter
 	}
 	void FigureOutStartup()	// set the array for the startup text and make it different depending on your config, like in UDV
 	{
-		StartupSequenceText[0] = "\cfUAC OFFENSIVE HELMET OS v0.8b ONLINE\c-";
+		StartupSequenceText[0] = "\cfUAC OFFENSIVE HELMET OS v0.9 ONLINE\c-";
 		StartupSequenceText[1] = "Copyright(C) 2025-2032 \cdUnion Aerospace Corporation\c-. All rights reserved.";
 		StartupSequenceText[2] = "UAC User ID \""..CPlayer.GetUserName().. "\" VERIFIED";
 		StartupSequenceText[3] = "\cfBEGIN STARTUP SEQUENCE...\c-";
@@ -247,7 +247,7 @@ extend class Helmeter
 							Startuper++;
 							AlreadyAdvancedThisStartTic = true;
 							StartupDelayTarget = StartupTics;
-							S_StartSound("logmessage", CHAN_AUTO, 0, 0.2);
+							S_StartSound("logmessage", CHAN_AUTO, 0, 0.8);
 						}
 						else
 						{
@@ -301,7 +301,7 @@ extend class Helmeter
 					AlreadyAdvancedThisDeathTic = true;
 					DeathDelayTarget = DeathTics;
 					DeathDelayAmount = clamp((random((20-Deather),28) - Deather), 0, 28);
-					S_StartSound("logmessage", CHAN_AUTO, 0, 0.2);
+					S_StartSound("logmessage", CHAN_AUTO, 0, 0.8);
 				}
 				else
 				{
@@ -316,7 +316,7 @@ extend class Helmeter
 			}
 		}
 	}
-	// time for a brief reprieve; this is actually kinda clean
+		// from here on out it gets better, don't worry
 	void DoSwayStuff()
 	{
 		// This is basically a worse version of how Project Brutality's HUD does it
@@ -409,180 +409,11 @@ extend class Helmeter
 		}
 
 	}
-	// ... and we're right back into trash-tier code
-	
+		
 	void DoGarbage()		// Generates the random strings that appear when the numbers glitch out. It's meant to look like it's outputting garbage data
 	{
-		switch(random(1,18))	//BLASPHEMY. HERESY.
-			{
-				case 1:
-				Garbage1 = "1";
-				break;
-				case 2:
-				Garbage1 = "2";
-				break;
-				case 3:
-				Garbage1 = "3";
-				break;
-				case 4:
-				Garbage1 = "4";
-				break;
-				case 5:
-				Garbage1 = "5";
-				break;
-				case 6:
-				Garbage1 = "6";
-				break;
-				case 7:
-				Garbage1 = "7";
-				break;
-				case 8:
-				Garbage1 = "8";
-				break;
-				case 9:
-				Garbage1 = "9";
-				break;
-				case 10:
-				Garbage1 = "0";
-				break;
-				case 11:
-				Garbage1 = "P";
-				break;
-				case 12:
-				Garbage1 = "@";
-				break;
-				case 13:
-				Garbage1 = "O";
-				break;
-				case 14:
-				Garbage1 = "C";
-				break;
-				case 15:
-				Garbage1 = "a";
-				break;
-				case 16:
-				Garbage1 = "=";
-				break;
-				case 17:
-				Garbage1 = "F";
-				break;
-				case 18:
-				Garbage1 = "\"";
-				break;
-			}
-			switch(random(1,18))
-			{
-				case 1:
-				Garbage2 = "1";
-				break;
-				case 2:
-				Garbage2 = "2";
-				break;
-				case 3:
-				Garbage2 = "3";
-				break;
-				case 4:
-				Garbage2 = "4";
-				break;
-				case 5:
-				Garbage2 = "5";
-				break;
-				case 6:
-				Garbage2 = "6";
-				break;
-				case 7:
-				Garbage2 = "7";
-				break;
-				case 8:
-				Garbage2 = "8";
-				break;
-				case 9:
-				Garbage2 = "9";
-				break;
-				case 10:
-				Garbage2 = "0";
-				break;
-				case 11:
-				Garbage2 = "K";
-				break;
-				case 12:
-				Garbage2 = "@";
-				break;
-				case 13:
-				Garbage2 = "r";
-				break;
-				case 14:
-				Garbage2 = "R";
-				break;
-				case 15:
-				Garbage2 = "d";
-				break;
-				case 16:
-				Garbage2 = "=";
-				break;
-				case 17:
-				Garbage2 = "O";
-				break;
-				case 18:
-				Garbage2 = "\"";
-				break;
-			}
-			switch(random(1,18))
-			{
-				case 1:
-				Garbage3 = "1";
-				break;
-				case 2:
-				Garbage3 = "2";
-				break;
-				case 3:
-				Garbage3 = "3";
-				break;
-				case 4:
-				Garbage3 = "4";
-				break;
-				case 5:
-				Garbage3 = "5";
-				break;
-				case 6:
-				Garbage3 = "6";
-				break;
-				case 7:
-				Garbage3 = "7";
-				break;
-				case 8:
-				Garbage3 = "8";
-				break;
-				case 9:
-				Garbage3 = "9";
-				break;
-				case 10:
-				Garbage3 = "0";
-				break;
-				case 11:
-				Garbage3 = "E";
-				break;
-				case 12:
-				Garbage3 = "@";
-				break;
-				case 13:
-				Garbage3 = "P";
-				break;
-				case 14:
-				Garbage3 = "X";
-				break;
-				case 15:
-				Garbage3 = "h";
-				break;
-				case 16:
-				Garbage3 = "=";
-				break;
-				case 17:
-				Garbage3 = "F";
-				break;
-				case 18:
-				Garbage3 = "\"";
-				break;
-			}
+		Garbage1 = randompick(34, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 61, 64, 65, 66, 67, 68, 69, 70, 97, 98, 99, 100, 101, 102);	//These numbers are the ASCII index for the character that's going to be printed
+		Garbage2 = randompick(34, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 61, 64, 65, 66, 67, 68, 69, 70, 97, 98, 99, 100, 101, 102);	//Fun fact: this code was originally a vile stack of switch/case statements
+		Garbage3 = randompick(34, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 61, 64, 65, 66, 67, 68, 69, 70, 97, 98, 99, 100, 101, 102);
 	}
 }

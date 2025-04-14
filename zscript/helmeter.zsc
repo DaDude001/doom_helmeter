@@ -371,8 +371,8 @@ class Helmeter : BaseStatusBar
 		DrawString(enlFont, FormatNumber(relVel.X, 1, 4), (TopX - 1, TopY + 79), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 		DrawString(enlFont, FormatNumber(relVel.Y, 1, 4), (TopX - 1, TopY + 89), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 */
-//		String testString = ;
-//		DrawString(enlFont, testString, (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+//		int testInt = randompick(34, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 61, 64, 65, 66, 67, 68, 69, 70, 97, 98, 99, 100, 101, 102);
+//		DrawString(mHudFont, String.Format("%c",testInt)..String.Format("%c",testInt), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 
 		if(CPlayer.Health <= 0)
 		{
@@ -860,7 +860,7 @@ class Helmeter : BaseStatusBar
 				
 				if(CorruptNum == true)
 				{
-					DrawString(mHUDFont, Garbage1..Garbage2..Garbage3, (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					DrawString(mHUDFont, String.Format("%c",Garbage1)..String.Format("%c",Garbage2)..String.Format("%c",Garbage3), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 				}
 				else
 				{
@@ -897,7 +897,7 @@ class Helmeter : BaseStatusBar
 				DrawString(mHUDFont, "000", (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));
 				if(CorruptNum == true)
 				{
-					DrawString(mHUDFont, Garbage1..Garbage3..Garbage2, (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					DrawString(mHUDFont, String.Format("%c",Garbage1)..String.Format("%c",Garbage3)..String.Format("%c",Garbage2), (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 				}
 				else
 				{
@@ -953,19 +953,19 @@ class Helmeter : BaseStatusBar
 					else if (locks[1]) image = "STKEYS0";
 					else if (locks[4]) image = "STKEYS3";
 					else image = "";
-					DrawImage(image, (BLCX + 36.5, BLCY - 88.5), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+					DrawImage(image, (BLCX + 31.5, BLCY - 88.5), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
 					// key 2
 					if (locks[2] && locks[5]) image = "STKEYS7";
 					else if (locks[2]) image = "STKEYS1";
 					else if (locks[5]) image = "STKEYS4";
 					else image = "";
-					DrawImage(image, (BLCX + 46.5, BLCY - 88.5), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+					DrawImage(image, (BLCX + 41.5, BLCY - 88.5), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
 					// key 3
 					if (locks[0] && locks[3]) image = "STKEYS8";
 					else if (locks[0]) image = "STKEYS2";
 					else if (locks[3]) image = "STKEYS5";
 					else image = "";
-					DrawImage(image, (BLCX + 56.5, BLCY - 88.5), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+					DrawImage(image, (BLCX + 51.5, BLCY - 88.5), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
 				}
 				if(CheckInventory("ITactic", 1))
 				{
@@ -1009,7 +1009,7 @@ class Helmeter : BaseStatusBar
 					DrawString(mHUDFont, "000", (BRCX - 71, BRCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));		
 					if(CorruptNum == true)
 					{
-						DrawString(mHUDFont, Garbage3..Garbage2..Garbage1, (BRCX - 71, BRCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Gold, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+						DrawString(mHUDFont, String.Format("%c",Garbage3)..String.Format("%c",Garbage2)..String.Format("%c",Garbage1), (BRCX - 71, BRCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Gold, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 					}
 					else
 					{
@@ -1037,7 +1037,7 @@ class Helmeter : BaseStatusBar
 					DrawString(mHUDFont, "000", (BRCX - 84, BRCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));
 					if(CorruptNum == true)
 					{
-						DrawString(mHUDFont, Garbage2..Garbage1..Garbage3, (BRCX - 84, BRCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Yellow, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+						DrawString(mHUDFont, String.Format("%c",Garbage2)..String.Format("%c",Garbage1)..String.Format("%c",Garbage3), (BRCX - 84, BRCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Yellow, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 					}
 					else
 					{
@@ -1068,7 +1068,7 @@ class Helmeter : BaseStatusBar
 					DrawImage("PHGRNBK3", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
 					if(CorruptNum == true)
 					{
-							DrawString(enlFont, Garbage2, (BRCX - 43, BRCY - 91.5), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker, scale: (0.75, 0.75));
+							DrawString(enlFont, String.Format("%c",Garbage2), (BRCX - 43, BRCY - 91.5), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker, scale: (0.75, 0.75));
 					}
 					else
 					{
@@ -1121,7 +1121,7 @@ class Helmeter : BaseStatusBar
 		Super.Tick();
 		if(CorruptNum == true)
 		{
-			DoGarbage();				// Only exists to generate random characters when the displays glitch out. Evil code lies here.
+			DoGarbage();	
 		}
 		DoSwayStuff(); // Handles the HUD swaying around and shaking
 		if(Cvar.GetCVar("helm_startup", CPlayer).GetInt() && !CheckInventory("StartupCompleted", 1))
@@ -1159,7 +1159,7 @@ class Helmeter : BaseStatusBar
 		if(Cvar.GetCVar("helm_dispdamage", CPlayer).GetInt() && (CrackCount != 0 && random(1,(200 - ((CrackCount - 1)* 10))) <= 1))
 		{
 			randomcorrupt = random(4,4 + (CrackCount * 4));
-			S_StartSound("displaycorrupt", CHAN_7, 0, 0.8);
+			S_StartSound("displaycorrupt", CHAN_7, 0, (HelmLightOutInterp.GetValue() / 100.0));
 		}
 		if(randomcorrupt != 0)
 		{

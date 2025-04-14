@@ -122,9 +122,11 @@ TEXTURE BRKNAR2
 //	pic BRKNAR16 tics 2
 TEXTURE BRKNAR16
 	random
+	pic BRKNAR16 tics 8
 	pic BRKNAR1 tics 2
 	pic BRKNAR2 tics 1
 	pic BRKNAR3 tics 2
+	pic BRKNAR16 tics 15	
 	pic BRKNAR4 tics 3
 	pic BRKNAR5 tics 2
 	pic BRKNAR6 tics 3
@@ -139,3 +141,6 @@ TEXTURE BRKNAR16
 	pic BRKNAR14 tics 2
 	pic BRKNAR15 tics 3
 	pic BRKNAR16 tics 10
+	pic BRKNAR18 tics 1
+	pic BRKNAR19 tics 2
+	pic BRKNAR20 tics 2
