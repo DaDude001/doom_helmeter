@@ -1,0 +1,18 @@
+Full List of Changes (from newest to oldest)
+
+=====v1.1.0 // T/BB/AAAA=====
+-Added a 5th crack to the visor
+-Fixed helmet top graphic using an outdated design without holes for the armor overlay (oops)
+-Added a cool little animation when you are damaged and have armor
+
+=====v1.0.0 // 4/14/2025=====
+-Full Release
+-Added HUD swaying
+-Cracks redesigned to be less intrusive
+-Added blood stains
+-Added startup sequence, and overhauled death sequence to match
+-Changed a handful of sounds to be more original
+
+=====v0.5.0 // 3/25/2025=====
+-Beta Release
+

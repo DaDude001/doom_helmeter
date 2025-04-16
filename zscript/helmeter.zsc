@@ -200,6 +200,7 @@ class Helmeter : BaseStatusBar
 		bool IsDead;
 		double HelmLightFlicker;
 		double HLFlickerTrue;
+		double HLFlickerAlt;
 		bool AmmoExtra1;
 		int AmmoExtra2;
 		HUDFont mIndexFont;
@@ -233,6 +234,9 @@ class Helmeter : BaseStatusBar
 		Vector2 relVel;
 		DynamicValueInterpolator DynFallAnim;
 		double SwayParallax;
+		int DamageAnimTics;
+		int OuchCanceller;
+		int DamageColor;
 //		double ForwardSpeed;
 //		vector2 speedRel;
 //		int Garbage2;
@@ -309,6 +313,7 @@ class Helmeter : BaseStatusBar
 		DynSwayX = DynamicValueInterpolator.Create(0, 0.25, 1, 50);
 		DynSwayY = DynamicValueInterpolator.Create(0, 0.25, 1, 50);
 		DynFallAnim = DynamicValueInterpolator.Create(0, 0.75, 1, 300);
+		DamageAnimTics = 0;
 
     }
 
@@ -370,7 +375,6 @@ class Helmeter : BaseStatusBar
 //		int testInt = randompick(34, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 61, 64, 65, 66, 67, 68, 69, 70, 97, 98, 99, 100, 101, 102);
 //		DrawString(mHudFont, String.Format("%c",testInt)..String.Format("%c",testInt), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 //		DrawString(enlFont, "Dynamic, Reactive Visor HUD", (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
-
 		if(CPlayer.Health <= 0)
 		{
 			DrawImage("VSRDCRK", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, 1.0);
@@ -444,7 +448,26 @@ class Helmeter : BaseStatusBar
 		}
 */
 		HelmetAlpha = Clamp(Cvar.GetCVar("helm_helmetalpha", CPlayer).GetFloat(), 0, 1);
+		HLFlickerAlt = Clamp(Cvar.GetCVar("helm_armoranimalpha", CPlayer).GetFloat(), 0, 1);
 		HLFlickerTrue = HelmLightFlicker * Clamp(Cvar.GetCVar("helm_armoralpha", CPlayer).GetFloat(), 0, 1);
+		
+		String DamageAnimPlaceLeft = "VLLDM";
+		String DamageAnimPlaceRite = "VLRDM";
+		String DamageAnimPlaceTopp = "VLTDM";
+
+		DamageAnimPlaceLeft.AppendCharacter(DamageColor);
+		DamageAnimPlaceRite.AppendCharacter(DamageColor);
+		DamageAnimPlaceTopp.AppendCharacter(DamageColor);
+		DamageAnimPlaceLeft.AppendCharacter(DamageAnimTics + 48);
+		DamageAnimPlaceRite.AppendCharacter(DamageAnimTics + 48);
+		DamageAnimPlaceTopp.AppendCharacter(DamageAnimTics + 48);
+		if((DamageAnimTics != 0 && ArmorValue >= 1) && Cvar.GetCVar("helm_armoranim", CPlayer).GetInt())
+		{
+			DrawImage(DamageAnimPlaceLeft, (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerAlt, (-1, -1), (1,1), STYLE_Add);
+			DrawImage(DamageAnimPlaceRite, (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerAlt, (-1, -1), (1,1), STYLE_Add);
+			DrawImage(DamageAnimPlaceTopp, (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerAlt, (-1, -1), (1,1), STYLE_Add);			
+		}
+
 		DrawImage("VSRBLC", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmetAlpha);
 		DrawImage("VSRBRC", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
 		DrawImage("VSRTPC", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
@@ -469,7 +492,10 @@ class Helmeter : BaseStatusBar
 //			DrawImage("VDSPLIA", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);
 //			DrawImage("VDSPLIA", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
 //		}
-		if(ArmorValue >= 1 && Cvar.GetCVar("helm_armorlay", CPlayer).GetInt())		// sorry about the YandereDev ass coding, not sure how I could adapt this into switch/case
+//		DrawString(enlFont, FormatNumber(DamageAnimTics, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+//		DrawString(enlFont, DamageAnimPlaceLeft, (TopX - 1, TopY + 69), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+
+		if(ArmorValue >= 1 && Cvar.GetCVar("helm_armorlay", CPlayer).GetInt())	
 		{
 			if(ArmorValue > 200)
 			{
@@ -485,63 +511,36 @@ class Helmeter : BaseStatusBar
 				DrawImage("VSLBLA", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLBRA", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLTPA", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DamageColor = "A";
 				break;
 				case 1:
 				DrawImage("VSLBLB", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLBRB", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLTPB", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DamageColor = "B";
 				break;
 				case 2:
 				case 3:
 				DrawImage("VSLBLC", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLBRC", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLTPC", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);			
+				DamageColor = "C";
 				break;
 				case 4:
 				case 5:
 				DrawImage("VSLBLD", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLBRD", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLTPD", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DamageColor = "D";
 				break;
 				case 6:
 				case 7:
 				DrawImage("VSLBLE", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLBRE", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
 				DrawImage("VSLTPE", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
+				DamageColor = "E";
 				break;
 			}
-/*
-			if(ArmorValue <= 25)
-			{
-				DrawImage("VSLBLA", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLBRA", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLTPA", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-			}
-			else if (ArmorValue >=26 && ArmorValue <= 50)
-			{
-				DrawImage("VSLBLB", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLBRB", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLTPB", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-			}
-			else if (ArmorValue >=51 && ArmorValue <= 100)
-			{
-				DrawImage("VSLBLC", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLBRC", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLTPC", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);			
-			}
-			else if (ArmorValue >=101 && ArmorValue <= 150)
-			{
-				DrawImage("VSLBLD", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLBRD", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLTPD", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-			}
-			else if (ArmorValue >=151)
-			{
-				DrawImage("VSLBLE", (BLCX - 10, BLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLBRE", (BRCX + 10, BRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-				DrawImage("VSLTPE", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add);
-			}
-			*/
 		}
 		if(Cvar.GetCVar("helm_blood", CPlayer).GetInt())
 		{
@@ -630,11 +629,20 @@ class Helmeter : BaseStatusBar
 			if(CheckInventory("Ouchies", 1))
 			{
 				HelmLightFlicker = frandom((ArmorValue / 200.0), 1.0);
+				if(DamageAnimTics == 0)
+				{
+					DamageAnimTics++;
+				}
 			}
 			else if(CheckInventory("OuchMore", 1) || randomcorrupt != 0)
 			{
 				HelmLightFlicker = frandom((ArmorValue / 200.0), 1.0);		//the lower armor you have, the more intense the flicker is
 				DisplayFlicker = frandom(0.67, 1.0);
+				if(randomcorrupt == 0 && (DamageAnimTics == 0 && OuchCanceller == 0))
+				{
+					DamageAnimTics++;
+					OuchCanceller = 35;
+				}
 			}
 			else
 			{
@@ -1163,6 +1171,18 @@ class Helmeter : BaseStatusBar
 		if(randomcorrupt != 0)
 		{
 			randomcorrupt--;
+		}
+		if(OuchCanceller != 0)
+		{
+			OuchCanceller--;
+		}
+		if(DamageAnimTics != 0 && DamageAnimTics < 10)
+		{
+			DamageAnimTics++;
+		}
+		else if(DamageAnimTics == 10)
+		{
+			DamageAnimTics = 0;
 		}
 		if(FaultySpamTics != 0)
 		{

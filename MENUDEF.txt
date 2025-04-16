@@ -47,6 +47,11 @@ OptionMenu "HELM_HELMOPT" {
 	Tooltip "Show/hide some glowing bits on the helmet that change color depending on your armor."
 	Slider "Armor Overlay Transparency", "helm_armoralpha", 0, 1, 0.05, 2, "helm_armorlay"
 	Tooltip "Transparency of the armor overlay."
+	Option "Animated Armor Overlay", "helm_armoranim", "OnOff"
+	Tooltip "Shows a brief flash around the helmet when you are damaged and have armor."
+	Slider "Animation Transparency", "helm_armoranimalpha", 0, 1, 0.05, 2, "helm_armoranim"
+	Tooltip "Transparency/intensity of the armor overlay animation."
+
 	StaticText ""
 	Option "Show Cracks", "helm_showcracks", "YesNo"
 	Tooltip "Show/hide the cracks that appear when taking heavy damage."
