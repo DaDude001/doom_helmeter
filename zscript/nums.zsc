@@ -114,7 +114,7 @@ extend class Helmeter
 	}
 	void FigureOutStartup()	// set the array for the startup text and make it different depending on your config, like in UDV
 	{
-		StartupSequenceText[0] = "\cfUAC OFFENSIVE HELMET OS v1.0 ONLINE\c-";
+		StartupSequenceText[0] = "\cfUAC OFFENSIVE HELMET OS v1.0.5 ONLINE\c-";
 		StartupSequenceText[1] = "Copyright(C) 2025-2032 \cdUnion Aerospace Corporation\c-. All rights reserved.";
 		StartupSequenceText[2] = "UAC User ID \""..CPlayer.GetUserName().. "\" VERIFIED";
 		StartupSequenceText[3] = "\cfBEGIN STARTUP SEQUENCE...\c-";
