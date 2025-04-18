@@ -4,6 +4,7 @@ user float helm_helmetalpha = 1.0;
 user bool helm_showmugshot = true;
 user bool helm_showcracks = true;
 user float helm_crackalpha = 1.0;
+user int helm_minrepair = 10;
 user bool helm_flicker = true;
 user bool helm_shake = true;
 user bool helm_swapammo = false;

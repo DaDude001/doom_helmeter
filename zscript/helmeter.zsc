@@ -237,6 +237,7 @@ class Helmeter : BaseStatusBar
 		int DamageAnimTics;
 		int OuchCanceller;
 		int DamageColor;
+		int MinRepairAmount;
 //		double ForwardSpeed;
 //		vector2 speedRel;
 //		int Garbage2;
@@ -386,6 +387,7 @@ class Helmeter : BaseStatusBar
 				{
 					CrackCount = event.NumCracks;
 				}
+			MinRepairAmount = Cvar.GetCVar("helm_minrepair", CPlayer).GetInt();
 			if (CrackCount >= 1)// && CPlayer.Health >= 1)
 			{
 				
@@ -591,7 +593,7 @@ class Helmeter : BaseStatusBar
 	override bool ProcessNotify(EPrintLevel printlevel, String outline)
 	{
 		if(gamestate != GS_LEVEL || consoleState == c_down) return false;		// if console is open or not in level, do not engage
-		if ((printlevel >= PRINT_LOW || printlevel < PRINT_LOG) && Cvar.GetCVar("helm_customlog", CPlayer).GetInt() && CheckInventory("MessageOn", 1)) // if not a pickup, death, critical, or chat message, or if this feature is disabled, stop
+		if ((printlevel >= PRINT_LOW || printlevel < PRINT_LOG) && Cvar.GetCVar("helm_customlog", CPlayer).GetInt()) // if not a pickup, death, critical, or chat message, or if this feature is disabled, stop
 		{
 			// When a new message appears, push it to our
 			// array of strings:
@@ -646,7 +648,7 @@ class Helmeter : BaseStatusBar
 			}
 			else
 			{
-				if(ArmorValue <= 5)
+				if(ArmorValue < MinRepairAmount)
 				{
 					HelmLightFlicker = frandom(0.75, 1.0);	
 				}
@@ -1253,7 +1255,7 @@ class Helmeter : BaseStatusBar
 		{
 			APCol = Font.CR_Green;
 		}
-		if(ArmorValue >= 6)
+		if(ArmorValue >= MinRepairAmount)
 		{
 			if(CrackCount >= 1 || CrackAlphaInterp.GetValue() >= 1)
 			{
@@ -1318,7 +1320,7 @@ class Helmeter : BaseStatusBar
 	void DrawCustomPickupMessage(Vector2 pos, int flags, double scale = 1.0)
 	{
 		int msgcount = pickupMsgStrings.Size();
-		if (msgcount <= 0) return;
+		if (msgcount <= 0 || !CheckInventory("MessageOn", 1)) return;
 		// Get the height of the font (we will use this for vertical
 		// spacing):
 		double stringHeight = enlFont.mFont.GetHeight() * scale;

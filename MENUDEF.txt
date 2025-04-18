@@ -57,6 +57,9 @@ OptionMenu "HELM_HELMOPT" {
 	Tooltip "Show/hide the cracks that appear when taking heavy damage."
 	Slider "Crack Transparency", "helm_crackalpha", 0, 1, 0.05, 2, "helm_showcracks"
 	Tooltip "Transparency of the cracks, if they are a bit too intrusive."
+	Slider "Minimum Armor to Repair", "helm_minrepair", 1, 200, 1, 0, "helm_showcracks"
+	Tooltip "Minimum amount of armor needed for cracks to repair themselves."
+
 	StaticText ""
 	Option "Show Blood", "helm_blood", "YesNo"
 	Tooltip "Show/hide the blood splats on the visor when injured."
