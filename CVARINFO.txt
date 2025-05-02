@@ -16,6 +16,7 @@ user bool helm_projectbeam = true;
 user bool helm_armorlay = true;
 user float helm_armoralpha = 1.0;
 user bool helm_armoranim = true;
+user bool helm_armoridle = true;
 user float helm_armoranimalpha = 1.0;
 user bool helm_customlog = true;
 user bool helm_showchips = true;

@@ -205,6 +205,7 @@ class Helmeter : BaseStatusBar
 		int AmmoExtra2;
 		HUDFont mIndexFont;
 		HUDFont mHudFont;
+		HUDFont mHudFontMono;
 		HUDFont enlFont;
 		Inventory ammotype1, ammotype2;
 		DynamicValueInterpolator WarnFlashInterp;
@@ -301,6 +302,7 @@ class Helmeter : BaseStatusBar
         mIndexFont = HUDFont.Create(fnt);
 		Font fnt2 = "04FONTOL"; //obtain the font named "MYHUDFNT"
         mHudFont = HUDFont.Create(fnt2);
+		mHudFontMono = HUDFont.Create(fnt2, fnt2.GetCharWidth("0"), Mono_CellRight);
 		Font fnt3 = "cyberfnt"; //obtain the font named "MYHUDFNT"
         enlFont = HUDFont.Create(fnt3);
 //		Font fnt4 = "BOLO"; //obtain the font named "MYHUDFNT"
@@ -501,8 +503,14 @@ class Helmeter : BaseStatusBar
 			DrawImage(DamageAnimPlaceBot, (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerAlt, (-1, -1), (1,1), STYLE_Add, DamageColor2);
 			DrawImage(DamageAnimPlaceBot, (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM | DI_MIRROR, HLFlickerAlt, (-1, -1), (1, 1), STYLE_Add, DamageColor2);
 			DrawImage(DamageAnimPlaceTop, (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerAlt, (-1, -1), (1,1), STYLE_Add, DamageColor2);			
-		}
 
+		}
+		if ((ArmorValue >= 1 && HealthPoints >= 1) && Cvar.GetCVar("helm_armoridle", CPlayer).GetInt())
+		{
+			DrawImage("VLLAN101", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add, DamageColor2);
+			DrawImage("VLLAN101", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM | DI_MIRROR, HLFlickerTrue, (-1, -1), (1,1), STYLE_Add, DamageColor2);
+			DrawImage("VLTAN101", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HLFlickerAlt, (-1, -1), (1,1), STYLE_Add, DamageColor2);			
+		}
 		DrawImage("VSRBLC", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmetAlpha);
 		DrawImage("VSRBRC", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
 		DrawImage("VSRTPC", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
@@ -863,15 +871,15 @@ class Helmeter : BaseStatusBar
 					DrawBar("PHBARHP3", "PHBARHP4", (HealthPoints - 100), 100, (BLCX + 43, BLCY - 57), 0, SHADER_VERT | SHADER_REVERSE, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
 					DrawImage("HPICON2", (BLCX + 49, BLCY - 71), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, OverhealthAlpha);
 				}
-				DrawString(mHUDFont, "000", (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, Font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));		
+				DrawString(mHUDFontMono, "000", (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, Font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));		
 				
 				if(CorruptNum == true)
 				{
-					DrawString(mHUDFont, String.Format("%c",Garbage1)..String.Format("%c",Garbage2)..String.Format("%c",Garbage3), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					DrawString(mHUDFontMono, String.Format("%c",Garbage1)..String.Format("%c",Garbage2)..String.Format("%c",Garbage3), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 				}
 				else
 				{
-					DrawString(mHUDFont, FormatNumber(HealthPoints, 1, 3), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					DrawString(mHUDFontMono, FormatNumber(HealthPoints, 1, 3), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 				}
 				/// ARMOR
 				if(ArmorValue >= 1 && ArmorValue <= 25)			// start flashing at 25%, but don't flash if you have none
@@ -901,14 +909,14 @@ class Helmeter : BaseStatusBar
 				{
 					DrawString(mIndexFont, FormatNumber(ArmorProtection, 1, 3), (BLCX + 61.5, BLCY - 38), DI_TEXT_ALIGN_CENTER | DI_SCREEN_LEFT_BOTTOM, font.CR_WHITE, Alpha: DisplayFlicker, scale: (0.80, 0.8));
 				}
-				DrawString(mHUDFont, "000", (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));
+				DrawString(mHUDFontMono, "000", (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));
 				if(CorruptNum == true)
 				{
-					DrawString(mHUDFont, String.Format("%c",Garbage1)..String.Format("%c",Garbage3)..String.Format("%c",Garbage2), (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					DrawString(mHUDFontMono, String.Format("%c",Garbage1)..String.Format("%c",Garbage3)..String.Format("%c",Garbage2), (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 				}
 				else
 				{
-					DrawString(mHUDFont, FormatNumber(ArmorValue, 1, 3), (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					DrawString(mHUDFontMono, FormatNumber(ArmorValue, 1, 3), (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 				}
 				
 				/// KEYS
@@ -1013,14 +1021,14 @@ class Helmeter : BaseStatusBar
 						DrawImage("PHBARBKM", (BLCX - 25, BLCY - 45), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
 					}						DrawImage("MGICON", (BLCX - 49, BRCY - 71), DI_ITEM_CENTER | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
 					DrawBar("PHBARMG", "PHBARMG2", ammotype1.Amount, ammotype1.MaxAmount, (BRCX - 43, BRCY - 57), 0, SHADER_HORZ | SHADER_REVERSE, DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_TOP, DisplayFlicker);
-					DrawString(mHUDFont, "000", (BRCX - 71, BRCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));		
+					DrawString(mHUDFontMono, "000", (BRCX - 71, BRCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));		
 					if(CorruptNum == true)
 					{
-						DrawString(mHUDFont, String.Format("%c",Garbage3)..String.Format("%c",Garbage2)..String.Format("%c",Garbage1), (BRCX - 71, BRCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Gold, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+						DrawString(mHUDFontMono, String.Format("%c",Garbage3)..String.Format("%c",Garbage2)..String.Format("%c",Garbage1), (BRCX - 71, BRCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Gold, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 					}
 					else
 					{
-						DrawString(mHUDFont, FormatNumber(ammotype1.Amount, 1, 3), (BRCX - 71, BRCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Gold, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+						DrawString(mHUDFontMono, FormatNumber(ammotype1.Amount, 1, 3), (BRCX - 71, BRCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Gold, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 					}
 					priLight = 2;
 				}
@@ -1041,14 +1049,14 @@ class Helmeter : BaseStatusBar
 					}	
 					DrawImage("RSICON", (BRCX - 62, BRCY - 34), DI_ITEM_CENTER | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
 					DrawBar("PHBARRS", "PHBARRS2", ammotype2.Amount, ammotype2.MaxAmount, (BRCX - 56, BRCY - 20), 0, SHADER_HORZ | SHADER_REVERSE, DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_TOP, DisplayFlicker);
-					DrawString(mHUDFont, "000", (BRCX - 84, BRCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));
+					DrawString(mHUDFontMono, "000", (BRCX - 84, BRCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));
 					if(CorruptNum == true)
 					{
-						DrawString(mHUDFont, String.Format("%c",Garbage2)..String.Format("%c",Garbage1)..String.Format("%c",Garbage3), (BRCX - 84, BRCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Yellow, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+						DrawString(mHUDFontMono, String.Format("%c",Garbage2)..String.Format("%c",Garbage1)..String.Format("%c",Garbage3), (BRCX - 84, BRCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Yellow, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 					}
 					else
 					{
-						DrawString(mHUDFont, FormatNumber(ammotype2.Amount, 1, 3), (BRCX - 84, BRCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Yellow, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+						DrawString(mHUDFontMono, FormatNumber(ammotype2.Amount, 1, 3), (BRCX - 84, BRCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_Yellow, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 					}
 					resLight = 1;
 				}

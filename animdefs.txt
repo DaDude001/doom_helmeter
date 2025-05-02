@@ -145,3 +145,70 @@ TEXTURE BRKNAR16
 	pic BRKNAR19 tics 2
 	pic BRKNAR20 tics 2
 	pic BRKNAR21 tics 1
+	
+TEXTURE VLLAN101
+	pic VLLAN101 tics 1
+	pic VLLAN102 tics 1
+	pic VLLAN103 tics 1
+	pic VLLAN104 tics 1
+	pic VLLAN105 tics 1
+	pic VLLAN106 tics 1
+	pic VLLAN107 tics 1
+	pic VLLAN108 tics 1
+	pic VLLAN109 tics 1
+	pic VLLAN110 tics 1
+	pic VLLAN111 tics 1
+	pic VLLAN112 tics 1
+	pic VLLAN113 tics 1 
+//	pic VLLAN114 tics 1 
+	pic VLLAN115 tics 1
+//	pic VLLAN116 tics 1
+	pic VLLAN117 tics 1
+//	pic VLLAN118 tics 1 
+	pic VLLAN119 tics 1 
+	pic VLLAN120 tics 175
+
+TEXTURE VLTAN101
+	pic VLTAN101 tics 1
+	pic VLTAN102 tics 1
+	pic VLTAN103 tics 1
+	pic VLTAN104 tics 1
+	pic VLTAN105 tics 1
+	pic VLTAN106 tics 1
+	pic VLTAN107 tics 1
+	pic VLTAN108 tics 1
+	pic VLTAN109 tics 1
+	pic VLTAN110 tics 1
+	pic VLTAN111 tics 1
+	pic VLTAN112 tics 1
+	pic VLTAN113 tics 1 
+//	pic VLTAN114 tics 1 
+	pic VLTAN115 tics 1
+//	pic VLTAN116 tics 1
+	pic VLTAN117 tics 1
+//	pic VLTAN118 tics 1 
+	pic VLTAN119 tics 1 
+	pic VLTAN120 tics 175
+
+TEXTURE BERZIND
+	pic BERZIN01 tics 3	
+	pic BERZIN02 tics 3	
+	pic BERZIN03 tics 3	
+	pic BERZIN04 tics 3	
+	pic BERZIN05 tics 3	
+	pic BERZIN06 tics 3	
+	pic BERZIN07 tics 3	
+	pic BERZIN08 tics 3	
+	pic BERZIN09 tics 3	
+	pic BERZIN10 tics 3	
+	pic BERZIN11 tics 3	
+	pic BERZIN12 tics 3	
+	pic BERZIN13 tics 3	
+	pic BERZIN14 tics 3	
+	pic BERZIN15 tics 3 
+	pic BERZIN16 tics 3	
+	pic BERZIN17 tics 3	
+	pic BERZIN18 tics 3	
+	pic BERZIN19 tics 3
+	pic BERZIN20 tics 3	
+	

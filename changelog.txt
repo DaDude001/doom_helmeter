@@ -1,9 +1,11 @@
 Full List of Changes (from newest to oldest)
 
-=====v1.2.0 // 4/20/2025=====
+=====v1.2.0 // 5/2/2025=====
 -Updated armor damage animation
 -Armor overlay colors are now entirely handled with code, should reduce file size quite a bit
-
+-Added an idle animation to the armor overlay
+-Updated number glitch effect; now can show any character, with much simpler code
+-Berserk icon is now animated to better indicate that it is an indicator
 =====v1.1.1 // 4/18/2025=====
 -Fixed a VM abort relating to the startup sequence
 -Minimum armor to repair cracks is now customizable
