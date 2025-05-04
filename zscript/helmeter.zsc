@@ -207,6 +207,7 @@ class Helmeter : BaseStatusBar
 		HUDFont mHudFont;
 		HUDFont mHudFontMono;
 		HUDFont enlFont;
+		HUDFont statRepSmall;
 		Inventory ammotype1, ammotype2;
 		DynamicValueInterpolator WarnFlashInterp;
 		DynamicValueInterpolator HPInterp;
@@ -305,6 +306,8 @@ class Helmeter : BaseStatusBar
 		mHudFontMono = HUDFont.Create(fnt2, fnt2.GetCharWidth("0"), Mono_CellRight);
 		Font fnt3 = "cyberfnt"; //obtain the font named "MYHUDFNT"
         enlFont = HUDFont.Create(fnt3);
+		Font fnt4 = "STRPSML"; //obtain the font named "MYHUDFNT"
+        statRepSmall = HUDFont.Create(fnt4);
 //		Font fnt4 = "BOLO"; //obtain the font named "MYHUDFNT"
  //       enlFont = HUDFont.Create(fnt4);
 //		OffsetXInterp;
@@ -995,6 +998,19 @@ class Helmeter : BaseStatusBar
 					DrawImage("PHSTMIC", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
 					DrawBar("PSTMBR1", "PSTMBR2", (100 - GetAmount("DummyStamina")), 100, (BLCX + 115, BLCY - 18), 0, SHADER_VERT | SHADER_REVERSE, DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
 				}
+				else if(CheckInventory("FR_Stam", 1))
+				{
+					if(CorruptDisp == true)
+					{
+						DrawImage("PSTMR1", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
+					}
+					else
+					{
+						DrawImage("PHSTMBK", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
+					}
+					DrawImage("PHSTMIC", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+					DrawBar("PSTMBR1", "PSTMBR2", GetAmount("DummyStamina"), 1000, (BLCX + 115, BLCY - 18), 0, SHADER_VERT | SHADER_REVERSE, DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+				}
 			}
 			if(CheckInventory("AmmoOn", 1))
 			{
@@ -1083,11 +1099,11 @@ class Helmeter : BaseStatusBar
 					DrawImage("PHGRNBK3", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
 					if(CorruptNum == true)
 					{
-							DrawString(enlFont, String.Format("%c",Garbage2), (BRCX - 43, BRCY - 91.5), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker, scale: (0.75, 0.75));
+							DrawString(statRepSmall, String.Format("%c",Garbage2), (BRCX - 45, BRCY - 91.5), DI_TEXT_ALIGN_CENTER | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker);
 					}
 					else
 					{
-							DrawString(enlFont, FormatNumber(NumNades, 1, 4), (BRCX - 43, BRCY - 91.5), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker, scale: (0.75, 0.75));
+							DrawString(statRepSmall, FormatNumber(NumNades, 1, 4), (BRCX - 45, BRCY - 91.5), DI_TEXT_ALIGN_CENTER | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker);
 					}
 				
 				}
@@ -1109,10 +1125,46 @@ class Helmeter : BaseStatusBar
 				{
 					DrawImage("PHSTABK", (TopX, TopY + 7), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HudBackAlpha);
 				}
-				DrawString(enlFont, "K: "..level.killed_monsters.."/"..level.total_monsters, (TopX - 75, TopY + 13), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_GREY, Alpha: DisplayFlicker);
-				DrawString(enlFont, "I: "..level.found_items.."/"..level.total_items, (TopX - 66, TopY + 23), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_GREEN, Alpha: DisplayFlicker);
-				DrawString(enlFont, "S: "..level.found_secrets.."/"..level.total_secrets, (TopX + 75, TopY + 13), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_LIGHTBLUE, Alpha: DisplayFlicker);
-				DrawString(enlFont, level.TimeFormatted(), (TopX + 66, TopY + 23), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+				int killRemain = level.total_monsters - level.killed_monsters;
+				int itemRemain = level.total_items - level.found_items;
+				int secrRemain = level.total_secrets - level.found_secrets;
+				int kCol;
+				int iCol;
+				int sCol;
+				if(killRemain == 0)
+					kCol = Font.CR_GOLD;
+				else
+					kCol = Font.CR_GREY;
+				if(itemRemain == 0)
+					iCol = Font.CR_GOLD;
+				else
+					iCol = Font.CR_GREEN;
+				if(secrRemain == 0)
+					sCol = Font.CR_GOLD;
+				else
+					sCol = Font.CR_LIGHTBLUE;
+					
+				DrawString(statRepSmall, "KILLS", (TopX - 26, TopY + 19), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_DARKGRAY, Alpha: DisplayFlicker);
+				DrawString(statRepSmall, "ITEMS", (TopX -1, TopY + 19), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_DARKGREEN, Alpha: DisplayFlicker);
+				DrawString(statRepSmall, "SCRTS", (TopX + 26, TopY + 19), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_BLUE, Alpha: DisplayFlicker);
+				if(Cvar.GetCVar("helm_statstyle", CPlayer).GetInt())
+				{
+					DrawString(enlFont, FormatNumber(level.killed_monsters, 1, 3), (TopX - 26, TopY + 26), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, kCol, Alpha: DisplayFlicker);
+					DrawString(enlFont, FormatNumber(level.found_items, 1, 3), (TopX - 1, TopY + 26), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, iCol, Alpha: DisplayFlicker);
+					DrawString(enlFont, FormatNumber(level.found_secrets, 1, 3), (TopX + 26, TopY + 26), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, sCol, Alpha: DisplayFlicker);
+				}
+				else
+				{
+					DrawString(enlFont, FormatNumber(killRemain, 1, 3), (TopX - 26, TopY + 26), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, kCol, Alpha: DisplayFlicker);
+					DrawString(enlFont, FormatNumber(itemRemain, 1, 3), (TopX - 1, TopY + 26), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, iCol, Alpha: DisplayFlicker);
+					DrawString(enlFont, FormatNumber(secrRemain, 1, 3), (TopX + 26, TopY + 26), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, sCol, Alpha: DisplayFlicker);
+				}
+
+//				DrawString(statRepSmall, level.Mapname, (TopX - 10, TopY + 12), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+//				DrawString(statRepSmall, level.TimeFormatted(), (TopX + 10, TopY + 12), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+				DrawString(statRepSmall, level.Mapname, (TopX - 70, TopY + 12), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+				DrawString(statRepSmall, level.TimeFormatted(), (TopX + 70, TopY + 12), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+//				DrawString(enlFont, level.TimeFormatted(), (TopX + 66, TopY + 23), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
 //				DrawString(enlFont, level.TimeFormatted(true), (TopX + 67, TopY + 19), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_YELLOW, Alpha: DisplayFlicker);			
 //				DrawString(enlFont, level.Mapname, (TopX - 1, TopY + 19), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
 	//			DrawString(enlFont, level.Levelname, (TopX, TopY + 23), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
@@ -1464,11 +1516,18 @@ class DummyStamina: Inventory
 {
 	Default
 	{
-		Inventory.MaxAmount 100;
+		Inventory.MaxAmount 1000;
 	}
 }
 
 class HelmShaker : Inventory
+{
+	Default
+	{
+		Inventory.MaxAmount 1;
+	}
+}
+class FR_Stam : Inventory
 {
 	Default
 	{

@@ -51,7 +51,7 @@ OptionMenu "HELM_HELMOPT" {
 	Tooltip "Shows a brief flash around the helmet when you are damaged and have armor."
 	Option "Overlay Idle Animation", "helm_armoridle", "OnOff"
 	Tooltip "Shows a little animation whenever you have armor."
-	Slider "Animation Transparency", "helm_armoranimalpha", 0, 1, 0.05, 2, "helm_armoranim"
+	Slider "Animation Transparency", "helm_armoranimalpha", 0, 1, 0.05, 2
 	Tooltip "Transparency/intensity of the armor overlay animations."
 
 	StaticText ""
@@ -91,6 +91,8 @@ OptionMenu "HELM_HUDOPT" {
 	Tooltip "Show/hide the mugshot display."
 	Option "Show Level Stats", "helm_showstats", "YesNo", "helm_showdisplay"
 	Tooltip "Show/hide level stats at the top. Includes kills, items, secrets, and level time."
+	Option "Level Stat Style", "helm_statstyle", "StatStyle", "helm_showstats"
+	Tooltip "Change how you want the stats to be counted. \nBoth options also have the number turn gold when it is 100%."
 	Option "Show Damage Chips", "helm_showchips", "YesNo", "helm_showdisplay"
 	Tooltip "Show/hide an additional grey bar on the health and armor bars that will show briefly how much damage you took."
 	Option "Low Number Warning Flashes", "helm_warnflash", "OnOff", "helm_showdisplay"
@@ -100,6 +102,7 @@ OptionMenu "HELM_HUDOPT" {
 	Tooltip "Swaps whether the top bar is ammotype1 and the bottom is ammotype2 or vice versa. Some mods use ammotype1 for the magazine, others use ammotype2. \nThis HUD is designed to have the magazine ammo be the top bar, so make sure it's correct"
 //	StaticText "This HUD is designed to have the magazine ammo be the top bar, so make sure it's correct", "Grey"
 }
+
 OptionMenu "HELM_SWAYOPT" {
 	Class "TF_TooltipOptionMenu"
 	Title "Sway Settings"
@@ -144,4 +147,10 @@ OptionMenu "HELM_MISCOPT" {
 	StaticText ""
 	Option "Display Damage", "helm_dispdamage", "OnOff"
 	Tooltip "Enable/disable displays randomly glitching out if the visor is cracked."
+}
+
+OptionValue "StatStyle"
+{
+	0, "K/I/S remaining"
+	1, "K/I/S total"
 }

@@ -1,0 +1,100 @@
+#library "CRACK"
+#include "zcommon.acs"
+
+script "ourch" (void)
+{
+	GiveInventory("Ouchies", 1);
+	Delay(10);
+	TakeInventory("Ouchies", 1);
+}
+script "helmquake" (void)
+{
+	GiveInventory("HelmShaker", 1);
+	GiveInventory("OuchMore", 1);
+	Delay(10);
+	TakeInventory("HelmShaker", 1);
+	Delay(25);
+	TakeInventory("OuchMore", 1);
+}
+// The stinky codes below are for compatibility with other mods
+// ZScript gets mad if you try to check for an actor that doesn't exist,
+// so this serves as a buffer 
+script "IGotNades" ENTER	
+{
+	if (CheckClass("HandGrenades") && CheckClass("GrenadeAmmo"))		//do we have BDv22's grenade swep (or one with the same name)?
+    {
+		GiveInventory("IGotNades", 1);
+		if(CheckInventory("DummyGrenadeAmmo") > CheckInventory("GrenadeAmmo"))
+		{
+			TakeInventory("DummyGrenadeAmmo", 1);
+		}
+		else if(CheckInventory("DummyGrenadeAmmo") < CheckInventory("GrenadeAmmo"))
+		{
+			GiveInventory("DummyGrenadeAmmo", 1);
+		}
+		Delay(1);
+		restart;		// this probably isn't a good idea...
+    }
+}
+script "Staminas" ENTER
+{
+	if (CheckClass("IsTacticalClass"))		//are we playing a mod with BD's tactical class?
+	{
+		if(CheckInventory("IsTacticalClass"))	// are we tactical?
+		{
+			GiveInventory("ITactic", 1);
+			if(CheckInventory("DummyStamina") > CheckInventory("UsedStamina"))
+			{
+				TakeInventory("DummyStamina", 1);
+			}
+			else if(CheckInventory("DummyStamina") < CheckInventory("UsedStamina"))
+			{
+				GiveInventory("DummyStamina", 1);
+			}
+		Delay(1);
+		restart;
+		}
+	}
+}
+script "FRStamina" ENTER
+{
+	if (CheckClass("StaminaBar"))		//again, but with Francium's stamina
+	{
+		GiveInventory("FR_Stam", 1);
+		if(CheckInventory("DummyStamina") > CheckInventory("StaminaBar"))
+		{
+			while(CheckInventory("DummyStamina") > CheckInventory("StaminaBar"))
+			{
+				TakeInventory("DummyStamina", 1);
+			}
+		}
+		else if(CheckInventory("DummyStamina") < CheckInventory("StaminaBar"))
+		{
+			while(CheckInventory("DummyStamina")< CheckInventory("StaminaBar"))
+			{
+				GiveInventory("DummyStamina", 1);
+			}
+		}
+		Delay(1);
+		restart;
+	}
+}
+
+script "IGotPipebombs" ENTER	
+{
+	if (CheckClass("FR_PipebombAmmo"))	//bombs? you want it? it's yours my friend
+    {
+		GiveInventory("IGotNades", 1);
+		if(CheckInventory("DummyGrenadeAmmo") > CheckInventory("FR_PipebombAmmo"))
+		{
+			TakeInventory("DummyGrenadeAmmo", 1);
+		}
+		else if(CheckInventory("DummyGrenadeAmmo") < CheckInventory("FR_PipebombAmmo"))
+		{
+			GiveInventory("DummyGrenadeAmmo", 1);
+		}
+		Delay(1);
+		restart;		
+    }
+}
+
