@@ -190,7 +190,7 @@ extend class Helmeter
 				EventHandler.SendNetworkEvent("gimmethe:VitalsOn");		// This is only because booleans don't seem to persist in saves???
 				if(!StartSpamStopper)
 				{
-					S_StartSound("VBEEP2", CHAN_7, 0, 0.8);
+					S_StartSound("VBEEP2", CHAN_7, 0, 0.8 * SFXVolume);
 					StartSpamStopper = true;
 				}
 	//			VitalsOn = true;
@@ -204,7 +204,7 @@ extend class Helmeter
 				EventHandler.SendNetworkEvent("gimmethe:AmmoOn");
 				if(!StartSpamStopper)
 				{
-					S_StartSound("VBEEP3", CHAN_7, 0, 0.8);
+					S_StartSound("VBEEP3", CHAN_7, 0, 0.8 * SFXVolume);
 					StartSpamStopper = true;
 				}			break;
 				case 11:
@@ -216,7 +216,7 @@ extend class Helmeter
 				EventHandler.SendNetworkEvent("gimmethe:StatsOn");
 				if(!StartSpamStopper)
 				{
-					S_StartSound("VBEEP1", CHAN_7, 0, 0.8);
+					S_StartSound("VBEEP1", CHAN_7, 0, 0.8 * SFXVolume);
 					StartSpamStopper = true;
 				}			
 				break;
@@ -247,7 +247,7 @@ extend class Helmeter
 							Startuper++;
 							AlreadyAdvancedThisStartTic = true;
 							StartupDelayTarget = StartupTics;
-							S_StartSound("logmessage", CHAN_AUTO, 0, 0.8);
+							S_StartSound("logmessage", CHAN_AUTO, 0, 0.8 * SFXVolume);
 						}
 						else
 						{
@@ -258,7 +258,7 @@ extend class Helmeter
 					{
 						if(!StartedUp)
 						{
-							S_StartSound("STRTSUCC", CHAN_AUTO, 0, 0.8);
+							S_StartSound("STRTSUCC", CHAN_AUTO, 0, 0.8 * SFXVolume);
 						}
 						StartedUp = true;
 					}
@@ -305,7 +305,7 @@ extend class Helmeter
 					AlreadyAdvancedThisDeathTic = true;
 					DeathDelayTarget = DeathTics;
 					DeathDelayAmount = clamp((random((20-Deather),28) - Deather), 0, 28);
-					S_StartSound("logmessage", CHAN_AUTO, 0, 0.8);
+					S_StartSound("logmessage", CHAN_AUTO, 0, 0.8 * SFXVolume);
 				}
 				else
 				{

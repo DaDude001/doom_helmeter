@@ -36,6 +36,24 @@ script "IGotNades" ENTER
 		restart;		// this probably isn't a good idea...
     }
 }
+script "UBGLNade" ENTER	
+{
+	if (CheckClass("RFGrenade"))		//BDv22 rifle grenade
+    {
+		GiveInventory("RFGrenPresent", 1);
+		if(CheckInventory("DummyUBGL") > CheckInventory("RFGLoaded"))
+		{
+			TakeInventory("DummyUBGL", 1);
+		}
+		else if(CheckInventory("DummyUBGL") < CheckInventory("RFGLoaded"))
+		{
+			GiveInventory("DummyUBGL", 1);
+		}
+		Delay(1);
+		restart;		// this probably isn't a good idea...
+    }
+}
+
 script "Staminas" ENTER
 {
 	if (CheckClass("IsTacticalClass"))		//are we playing a mod with BD's tactical class?
