@@ -243,6 +243,7 @@ class Helmeter : BaseStatusBar
 		int MinRepairAmount;
 		double SFXVolume;
 		string BlankChar;
+		Color dispCol;
 //		double ForwardSpeed;
 //		vector2 speedRel;
 //		int Garbage2;
@@ -635,6 +636,7 @@ class Helmeter : BaseStatusBar
 		HelmTopY = TopY * SwayParallax;
 		GlassX = TrueGlassX * SwayParallax;
 		GlassY = TrueGlassY * SwayParallax;
+		dispCol = Cvar.GetCVar("helm_dispcolor", CPlayer).GetString();
 /*
 		switch(Cvar.GetCVar("helm_blankchar", CPlayer).GetInt())
 		{
@@ -738,58 +740,72 @@ class Helmeter : BaseStatusBar
 		{
 			if(CheckInventory("VitalsOn", 1))
 			{
-				DrawImage("VDSPLIA", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);
+				DrawImage("VDSPLIA", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 			}
 			if(CheckInventory("AmmoOn", 1))
 			{
-				DrawImage("VDSPLIA", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
+				DrawImage("VDSPLIA", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 			}
 			if(CheckInventory("StatsOn", 1))
 			{
-				DrawImage("VDSPLIA", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
-				DrawImage("VDSPLIA", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
+				DrawImage("VDSPLIA", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+				DrawImage("VDSPLIA", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 			}
 			if(Cvar.GetCVar("helm_showdisplay", CPlayer).GetInt())
 			{
 				if(CheckInventory("VitalsOn", 1))
 				{
-					DrawImage("VDSPLIB", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
+					DrawImage("VDSPLIB", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add, color(255, dispCol.r, dispCol.g, dispCol.b));
 				}
 				if(CheckInventory("AmmoOn", 1))
 				{
 					if(ammotype1 != null || ammotype2 != null) 
 					{
-						DrawImage("VDSPLIB", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
+						DrawImage("VDSPLIB", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else
 					{
-						DrawImage("VDSPLIC", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
+						DrawImage("VDSPLIC", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 				}
 				if(CheckInventory("StatsOn", 1))
 				{
 					if(Cvar.GetCVar("helm_showstats", CPlayer).GetInt())
 					{
-						DrawImage("VDSPLIB", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
-						DrawImage("VDSPLIB", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
+						DrawImage("VDSPLIB", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						DrawImage("VDSPLIB", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else
 					{
-						DrawImage("VDSPLIC", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
-						DrawImage("VDSPLIC", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
+						DrawImage("VDSPLIC", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						DrawImage("VDSPLIC", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 				}
 				if(Cvar.GetCVar("helm_projectbeam", CPlayer).GetInt())
 				{
 					if(CheckInventory("VitalsOn", 1))
 					{
-						if(Cvar.GetCVar("helm_showmugshot", CPlayer).GetInt())
+						if(Cvar.GetCVar("helm_minmode", CPlayer).GetInt())
 						{
-							DrawImage("VDSPLLA", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HudBackAlpha);
+							if(Cvar.GetCVar("helm_showmugshot", CPlayer).GetInt())
+							{
+								DrawImage("VDSPLLH", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+							}
+							else
+							{
+								DrawImage("VDSPLLE", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+							}
 						}
 						else
 						{
-							DrawImage("VDSPLLB", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HudBackAlpha);
+							if(Cvar.GetCVar("helm_showmugshot", CPlayer).GetInt())
+							{
+								DrawImage("VDSPLLA", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+							}
+							else
+							{
+								DrawImage("VDSPLLB", (BLCX, BLCY), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+							}
 						}
 					}
 		//			DrawImage("VDSPLID", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
@@ -803,32 +819,32 @@ class Helmeter : BaseStatusBar
 					case 0:
 						break;
 					case 1:
-						DrawImage("VDSPLRG", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+						DrawImage("VDSPLRG", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 						break;
 					case 2:
-						DrawImage("VDSPLRD", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+						DrawImage("VDSPLRD", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 						break;
 					case 3:
-						DrawImage("VDSPLRC", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+						DrawImage("VDSPLRC", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 						break;
 					case -1:
-						DrawImage("VDSPLRG", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
-						DrawImage("VDSPLRF", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);						
+						DrawImage("VDSPLRG", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						DrawImage("VDSPLRF", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));						
 						break;
 					case -2:
-						DrawImage("VDSPLRE", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+						DrawImage("VDSPLRE", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 						break;
 					case -3:
-						DrawImage("VDSPLRB", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
+						DrawImage("VDSPLRB", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 						break;
 					}
 					if(AmmoLightStyle == 0 && AmmoExtra2 == -1)
 					{
-						DrawImage("VDSPLRF", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);						
+						DrawImage("VDSPLRF", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));						
 					}
 					if(Cvar.GetCVar("helm_showstats", CPlayer).GetInt() && CheckInventory("StatsOn", 1))
 					{
-						DrawImage("VDSPLTA", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HudBackAlpha);
+						DrawImage("VDSPLTA", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 				}
 			}
@@ -858,100 +874,128 @@ class Helmeter : BaseStatusBar
 				{
 					if(CorruptDisp == true)
 					{
-						DrawImage("PMUGL1", (BLCX + 40, BLCY - 100.5), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_CENTER, HudBackAlpha);
+						DrawImage("PMUGL1", (BLCX + 40, BLCY - 100.5), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_CENTER, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else
 					{
-						DrawImage("PHMUGBK", (BLCX + 40, BLCY - 100.5), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_CENTER, HudBackAlpha);
+						DrawImage("PHMUGBK", (BLCX + 40, BLCY - 100.5), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_CENTER, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					DrawTexture(GetMugShot(5), (BLCX + 40, BLCY - 100.5), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_CENTER, DisplayFlicker);
 				}
-				if(HealthPoints <= 25)			// start flashing at 25%
+				if(Cvar.GetCVar("helm_minmode", CPlayer).GetInt())
 				{
-					DrawImage("PHWARNL", (BRCX + 68, BRCY - 60), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, WarnFlash);
-				}
-				if(CorruptDisp == true)
-				{
-					DrawImage("PRHCR1", (BLCX + 25, BLCY - 45), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
-				}
-				else
-				{
-					DrawImage("PHBARBKH", (BLCX + 25, BLCY - 45), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
-				}
-				DrawImage("HPICON", (BLCX + 49, BLCY - 71), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, HealthIconAlpha);
-				if(Cvar.GetCVar("helm_showchips", CPlayer).GetInt())
-				{
-					DrawBar("PHBARHP5", "PHBARHP2", HPInterp.GetValue() / 5, 100, (BLCX + 43, BLCY - 57), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
-				}
-				DrawBar("PHBARHP", "PHBARHP2", HealthPoints, 100, (BLCX + 43, BLCY - 57), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
-				if(CheckInventory("PowerStrength", 1))
-				{
-					DrawImage("BERZIND", (BLCX + 49, BLCY - 71), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
-		//			DrawImage("PHBRZKIN", (BLCX + 30, BLCY - 45), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
-				}
-				if(HealthPoints >= 101)
-				{
-					DrawBar("PHBARHP3", "PHBARHP4", (HealthPoints - 100), 100, (BLCX + 43, BLCY - 57), 0, SHADER_VERT | SHADER_REVERSE, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
-					DrawImage("HPICON2", (BLCX + 49, BLCY - 71), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, OverhealthAlpha);
-				}
-				DrawString(mHUDFontMono, BlankChar, (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, Font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));		
-				
-				if(CorruptNum == true)
-				{
-					DrawString(mHUDFontMono, String.Format("%c",Garbage1)..String.Format("%c",Garbage2)..String.Format("%c",Garbage3), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					DrawImage("PHMINBKL", (BLCX + 25, BLCY - 45), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+					//HEALTH	
+					DrawString(mHUDFontMono, BlankChar, (BLCX + 70, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, Font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.25, 1.25));		
+					if(CorruptNum == true)
+					{
+						DrawString(mHUDFontMono, String.Format("%c",Garbage1)..String.Format("%c",Garbage2)..String.Format("%c",Garbage3), (BLCX + 70, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.25, 1.25));
+					}
+					else
+					{
+						DrawString(mHUDFontMono, FormatNumber(HealthPoints, 1, 3), (BLCX + 70, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.25, 1.25));
+					}
+					//ARMOR
+					DrawString(mHUDFontMono, BlankChar, (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.25, 1.25));
+					if(CorruptNum == true)
+					{
+						DrawString(mHUDFontMono, String.Format("%c",Garbage1)..String.Format("%c",Garbage3)..String.Format("%c",Garbage2), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.25, 1.25));
+					}
+					else
+					{
+						DrawString(mHUDFontMono, FormatNumber(ArmorValue, 1, 3), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.25, 1.25));
+					}
+					
+
 				}
 				else
 				{
-					DrawString(mHUDFontMono, FormatNumber(HealthPoints, 1, 3), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					if(HealthPoints <= 25)			// start flashing at 25%
+					{
+						DrawImage("PHWARNL", (BRCX + 68, BRCY - 60), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, WarnFlash);
+					}
+					if(CorruptDisp == true)
+					{
+						DrawImage("PRHCR1", (BLCX + 25, BLCY - 45), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+					}
+					else
+					{
+						DrawImage("PHBARBKH", (BLCX + 25, BLCY - 45), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+					}
+					DrawImage("HPICON", (BLCX + 49, BLCY - 71), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, HealthIconAlpha);
+					if(Cvar.GetCVar("helm_showchips", CPlayer).GetInt())
+					{
+						DrawBar("PHBARHP5", "PHBARHP2", HPInterp.GetValue() / 5, 100, (BLCX + 43, BLCY - 57), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
+					}
+					DrawBar("PHBARHP", "PHBARHP2", HealthPoints, 100, (BLCX + 43, BLCY - 57), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
+					if(CheckInventory("PowerStrength", 1))
+					{
+						DrawImage("BERZIND", (BLCX + 49, BLCY - 71), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+			//			DrawImage("PHBRZKIN", (BLCX + 30, BLCY - 45), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+					}
+					if(HealthPoints >= 101)
+					{
+						DrawBar("PHBARHP3", "PHBARHP4", (HealthPoints - 100), 100, (BLCX + 43, BLCY - 57), 0, SHADER_VERT | SHADER_REVERSE, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
+						DrawImage("HPICON2", (BLCX + 49, BLCY - 71), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, OverhealthAlpha);
+					}
+					DrawString(mHUDFontMono, BlankChar, (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, Font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));		
+					
+					if(CorruptNum == true)
+					{
+						DrawString(mHUDFontMono, String.Format("%c",Garbage1)..String.Format("%c",Garbage2)..String.Format("%c",Garbage3), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					}
+					else
+					{
+						DrawString(mHUDFontMono, FormatNumber(HealthPoints, 1, 3), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, HPCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					}
+					/// ARMOR
+					if(ArmorValue >= 1 && ArmorValue <= 25)			// start flashing at 25%, but don't flash if you have none
+					{
+						DrawImage("PHWARNL", (BRCX + 81, BRCY - 23), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, WarnFlash);
+					}
+					if(CorruptDisp == true)
+					{
+						DrawImage("PRACR1", (BLCX + 38, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+					}
+					else
+					{
+						DrawImage("PHBARBKA", (BLCX + 38, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+					}
+					DrawImage("APICON", (BLCX + 62, BLCY - 34), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, ArmorIconAlpha);
+					if(Cvar.GetCVar("helm_showchips", CPlayer).GetInt())
+					{
+						DrawBar("PHBARAP5", "PHBARAP2", APInterp.GetValue() / 5, 100, (BLCX + 56, BLCY - 20), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
+					}
+					DrawBar("PHBARAP", "PHBARAP2", ArmorValue, 100, (BLCX + 56, BLCY - 20), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
+					if(ArmorValue >= 101)
+					{
+						DrawImage("APICON2", (BLCX + 62, BLCY - 34), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, MegaArmorAlpha);
+						DrawBar("PHBARAP3", "PHBARAP4", (ArmorValue - 100), 100, (BLCX + 56, BLCY - 20), 0, SHADER_VERT | SHADER_REVERSE, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
+					}
+					if(ArmorValue >= 1)
+					{
+						DrawString(mIndexFont, FormatNumber(ArmorProtection, 1, 3), (BLCX + 61.5, BLCY - 38), DI_TEXT_ALIGN_CENTER | DI_SCREEN_LEFT_BOTTOM, font.CR_WHITE, Alpha: DisplayFlicker, scale: (0.80, 0.8));
+					}
+					DrawString(mHUDFontMono, BlankChar, (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));
+					if(CorruptNum == true)
+					{
+						DrawString(mHUDFontMono, String.Format("%c",Garbage1)..String.Format("%c",Garbage3)..String.Format("%c",Garbage2), (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					}
+					else
+					{
+						DrawString(mHUDFontMono, FormatNumber(ArmorValue, 1, 3), (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
+					}
 				}
-				/// ARMOR
-				if(ArmorValue >= 1 && ArmorValue <= 25)			// start flashing at 25%, but don't flash if you have none
-				{
-					DrawImage("PHWARNL", (BRCX + 81, BRCY - 23), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, WarnFlash);
-				}
-				if(CorruptDisp == true)
-				{
-					DrawImage("PRACR1", (BLCX + 38, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
-				}
-				else
-				{
-					DrawImage("PHBARBKA", (BLCX + 38, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
-				}
-				DrawImage("APICON", (BLCX + 62, BLCY - 34), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, ArmorIconAlpha);
-				if(Cvar.GetCVar("helm_showchips", CPlayer).GetInt())
-				{
-					DrawBar("PHBARAP5", "PHBARAP2", APInterp.GetValue() / 5, 100, (BLCX + 56, BLCY - 20), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
-				}
-				DrawBar("PHBARAP", "PHBARAP2", ArmorValue, 100, (BLCX + 56, BLCY - 20), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
-				if(ArmorValue >= 101)
-				{
-					DrawImage("APICON2", (BLCX + 62, BLCY - 34), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, MegaArmorAlpha);
-					DrawBar("PHBARAP3", "PHBARAP4", (ArmorValue - 100), 100, (BLCX + 56, BLCY - 20), 0, SHADER_VERT | SHADER_REVERSE, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
-				}
-				if(ArmorValue >= 1)
-				{
-					DrawString(mIndexFont, FormatNumber(ArmorProtection, 1, 3), (BLCX + 61.5, BLCY - 38), DI_TEXT_ALIGN_CENTER | DI_SCREEN_LEFT_BOTTOM, font.CR_WHITE, Alpha: DisplayFlicker, scale: (0.80, 0.8));
-				}
-				DrawString(mHUDFontMono, BlankChar, (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));
-				if(CorruptNum == true)
-				{
-					DrawString(mHUDFontMono, String.Format("%c",Garbage1)..String.Format("%c",Garbage3)..String.Format("%c",Garbage2), (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
-				}
-				else
-				{
-					DrawString(mHUDFontMono, FormatNumber(ArmorValue, 1, 3), (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
-				}
-				
 				/// KEYS
 				if(Cvar.GetCVar("helm_showmugshot", CPlayer).GetInt())		//if the mug is enabled the key panel moves and connects to it
 				{
 					if(CorruptDisp == true)
 					{
-						DrawImage("PK3YC1", (BLCX + 62, BLCY - 82), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
+						DrawImage("PK3YC1", (BLCX + 62, BLCY - 82), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else
 					{
-						DrawImage("PHK3YBK", (BLCX + 62, BLCY - 82), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
+						DrawImage("PHK3YBK", (BLCX + 62, BLCY - 82), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					//this code is pretty much just ripped from gzdoom.pk3 because I am not smart
 					for (i = 0; i < 6; i++) locks[i] = CPlayer.mo.CheckKeys(i + 1, false, true);
@@ -979,11 +1023,11 @@ class Helmeter : BaseStatusBar
 					
 					if(CorruptDisp == true)
 					{
-						DrawImage("PKEYC1", (BLCX + 21, BLCY - 82), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
+						DrawImage("PKEYC1", (BLCX + 21, BLCY - 82), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else
 					{
-						DrawImage("PHKEYBK", (BLCX + 21, BLCY - 82), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
+						DrawImage("PHKEYBK", (BLCX + 21, BLCY - 82), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					for (i = 0; i < 6; i++) locks[i] = CPlayer.mo.CheckKeys(i + 1, false, true);
 					// key 1
@@ -1009,11 +1053,11 @@ class Helmeter : BaseStatusBar
 				{
 					if(CorruptDisp == true)
 					{
-						DrawImage("PSTMR1", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
+						DrawImage("PSTMR1", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else
 					{
-						DrawImage("PHSTMBK", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
+						DrawImage("PHSTMBK", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					DrawImage("PHSTMIC", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
 					DrawBar("PSTMBR1", "PSTMBR2", (100 - GetAmount("DummyStamina")), 100, (BLCX + 115, BLCY - 18), 0, SHADER_VERT | SHADER_REVERSE, DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
@@ -1022,11 +1066,11 @@ class Helmeter : BaseStatusBar
 				{
 					if(CorruptDisp == true)
 					{
-						DrawImage("PSTMR1", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
+						DrawImage("PSTMR1", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else
 					{
-						DrawImage("PHSTMBK", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha);
+						DrawImage("PHSTMBK", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					DrawImage("PHSTMIC", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
 					DrawBar("PSTMBR1", "PSTMBR2", GetAmount("DummyStamina"), 1000, (BLCX + 115, BLCY - 18), 0, SHADER_VERT | SHADER_REVERSE, DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
@@ -1050,11 +1094,11 @@ class Helmeter : BaseStatusBar
 					}
 					if(CorruptDisp == true)
 					{
-						DrawImage("PRMCR1", (BLCX - 25, BLCY - 45), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
+						DrawImage("PRMCR1", (BLCX - 25, BLCY - 45), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else
 					{
-						DrawImage("PHBARBKM", (BLCX - 25, BLCY - 45), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
+						DrawImage("PHBARBKM", (BLCX - 25, BLCY - 45), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}						DrawImage("MGICON", (BLCX - 49, BRCY - 71), DI_ITEM_CENTER | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
 					DrawBar("PHBARMG", "PHBARMG2", ammotype1.Amount, ammotype1.MaxAmount, (BRCX - 43, BRCY - 57), 0, SHADER_HORZ | SHADER_REVERSE, DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_TOP, DisplayFlicker);
 					DrawString(mHUDFontMono, BlankChar, (BRCX - 71, BRCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.5, 1.5));		
@@ -1077,11 +1121,11 @@ class Helmeter : BaseStatusBar
 					}
 					if(CorruptDisp == true)
 					{
-						DrawImage("PRRCR1", (BRCX - 38, BRCY - 8), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
+						DrawImage("PRRCR1", (BRCX - 38, BRCY - 8), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else
 					{
-						DrawImage("PHBARBKR", (BRCX - 38, BRCY - 8), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
+						DrawImage("PHBARBKR", (BRCX - 38, BRCY - 8), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}	
 					DrawImage("RSICON", (BRCX - 62, BRCY - 34), DI_ITEM_CENTER | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
 					DrawBar("PHBARRS", "PHBARRS2", ammotype2.Amount, ammotype2.MaxAmount, (BRCX - 56, BRCY - 20), 0, SHADER_HORZ | SHADER_REVERSE, DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_TOP, DisplayFlicker);
@@ -1101,7 +1145,7 @@ class Helmeter : BaseStatusBar
 				// Brutal Doom v22 & any other mods that use the same actor names
 				if(CheckInventory("RFGrenPresent") && GetWeaponTag() == "Rifle")
 				{
-					DrawImage("RFGRNBK", (BRCX - 62, BRCY - 77), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
+					DrawImage("RFGRNBK", (BRCX - 62, BRCY - 77), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					if(CheckInventory("DummyUBGL", 1))
 						DrawImage("RFGRNIG", (BRCX - 63, BRCY - 78), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
 					else
@@ -1114,15 +1158,15 @@ class Helmeter : BaseStatusBar
 					int NumNades = GetAmount("DummyGrenadeAmmo");
 					if(CorruptDisp == true)
 					{
-						DrawImage("PGRNR1", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
+						DrawImage("PGRNR1", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else if(ammotype1 == null)
 					{
-						DrawImage("PHGRNBK2", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
+						DrawImage("PHGRNBK2", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else
 					{
-						DrawImage("PHGRNBK", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha);
+						DrawImage("PHGRNBK", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					DrawImage("PHGRNBK3", (BRCX - 19, BRCY - 82), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
 					if(CorruptNum == true)
@@ -1147,11 +1191,11 @@ class Helmeter : BaseStatusBar
 			{
 				if(CorruptDisp == true)
 				{
-					DrawImage("PSTAC1", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HudBackAlpha);
+					DrawImage("PSTAC1", (TopX, TopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 				}
 				else
 				{
-					DrawImage("PHSTABK", (TopX, TopY + 7), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HudBackAlpha);
+					DrawImage("PHSTABK", (TopX, TopY + 7), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 				}
 				int killRemain = level.total_monsters - level.killed_monsters;
 				int itemRemain = level.total_items - level.found_items;

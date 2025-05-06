@@ -40,3 +40,5 @@ user float helm_swayparallax = 0.75;
 user float helm_volume = 1.0;
 user int helm_blankchar = 1;
 user string helm_blankcharstring = "000";
+user color helm_dispcolor = "FF FF FF";
+user bool helm_minmode = false;

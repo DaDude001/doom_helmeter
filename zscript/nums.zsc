@@ -416,9 +416,9 @@ extend class Helmeter
 		
 	void DoGarbage()		// Generates the random strings that appear when the numbers glitch out. It's meant to look like it's outputting garbage data
 	{
-		Garbage1 = random(33,166);	//These numbers are the ASCII index for the character that's going to be printed
-		Garbage2 = random(33,166);	//Fun fact: this code was originally a vile stack of switch/case statements
-		Garbage3 = random(33,166);
+		Garbage1 = random(33,165);	//These numbers are the ASCII index for the character that's going to be printed
+		Garbage2 = random(33,165);	//Fun fact: this code was originally a vile stack of switch/case statements
+		Garbage3 = random(33,165);
 ///		Garbage1 = randompick(34, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 61, 64, 65, 66, 67, 68, 69, 70, 97, 98, 99, 100, 101, 102);	//These numbers are the ASCII index for the character that's going to be printed
 //		Garbage2 = randompick(34, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 61, 64, 65, 66, 67, 68, 69, 70, 97, 98, 99, 100, 101, 102);	//Fun fact: this code was originally a vile stack of switch/case statements
 //		Garbage3 = randompick(34, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 61, 64, 65, 66, 67, 68, 69, 70, 97, 98, 99, 100, 101, 102);
