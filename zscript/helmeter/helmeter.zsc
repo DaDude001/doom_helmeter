@@ -1018,6 +1018,33 @@ class Helmeter : BaseStatusBar
 					{
 						DrawString(mHUDFontMono, FormatNumber(ArmorValue, 1, 3), (BLCX + 123, BLCY - 43), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.5, 1.5));
 					}
+					if(CheckInventory("ITactic", 1))
+					{
+						if(CorruptDisp == true)
+						{
+							DrawImage("PSTMR1", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						}
+						else
+						{
+							DrawImage("PHSTMBK", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						}
+						DrawImage("PHSTMIC", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+						DrawBar("PSTMBR1", "PSTMBR2", (100 - GetAmount("DummyStamina")), 100, (BLCX + 115, BLCY - 18), 0, SHADER_VERT | SHADER_REVERSE, DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+					}
+					else if(CheckInventory("FR_Stam", 1))
+					{
+						if(CorruptDisp == true)
+						{
+							DrawImage("PSTMR1", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						}
+						else
+						{
+							DrawImage("PHSTMBK", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						}
+						DrawImage("PHSTMIC", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+						DrawBar("PSTMBR1", "PSTMBR2", GetAmount("DummyStamina"), 1000, (BLCX + 115, BLCY - 18), 0, SHADER_VERT | SHADER_REVERSE, DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+					}
+
 				}
 				/// KEYS
 				if(Cvar.GetCVar("helm_showmugshot", CPlayer).GetInt())		//if the mug is enabled the key panel moves and connects to it
@@ -1081,32 +1108,6 @@ class Helmeter : BaseStatusBar
 					else if (locks[3]) image = "STKEYS5";
 					else image = "";
 					DrawImage(image, (BLCX + 51.5, BLCY - 88.5), DI_ITEM_CENTER | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
-				}
-				if(CheckInventory("ITactic", 1))
-				{
-					if(CorruptDisp == true)
-					{
-						DrawImage("PSTMR1", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
-					}
-					else
-					{
-						DrawImage("PHSTMBK", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
-					}
-					DrawImage("PHSTMIC", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
-					DrawBar("PSTMBR1", "PSTMBR2", (100 - GetAmount("DummyStamina")), 100, (BLCX + 115, BLCY - 18), 0, SHADER_VERT | SHADER_REVERSE, DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
-				}
-				else if(CheckInventory("FR_Stam", 1))
-				{
-					if(CorruptDisp == true)
-					{
-						DrawImage("PSTMR1", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
-					}
-					else
-					{
-						DrawImage("PHSTMBK", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
-					}
-					DrawImage("PHSTMIC", (BLCX + 113, BLCY - 8), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
-					DrawBar("PSTMBR1", "PSTMBR2", GetAmount("DummyStamina"), 1000, (BLCX + 115, BLCY - 18), 0, SHADER_VERT | SHADER_REVERSE, DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
 				}
 			}
 			if(CheckInventory("AmmoOn", 1))
@@ -1327,6 +1328,11 @@ class Helmeter : BaseStatusBar
 		{
 			DrawBar("PHMNBH3", "PHMNBH4", HealthPoints - 100, 100, (BLCX + 39, BLCY - 61), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
 		}
+		if(CheckInventory("PowerInvulnerable", 1))
+		{
+			let god = Powerup(CPlayer.mo.FindInventory("PowerInvulnerable"));
+			DrawString(statRepSmall, "GOD:"..FormatNumber(god.EffectTics/35, 1, 3), (BLCX + 40, BLCY - 62), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_BOTTOM, Font.CR_Ice, Alpha:DisplayFlicker);
+		}
 		if(CheckInventory("PowerStrength", 1))
 		{
 			DrawString(statRepSmall, "+", (BLCX + 29, BLCY - 83), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_BOTTOM, Font.CR_DarkRed, Alpha: DisplayFlicker);
@@ -1350,6 +1356,12 @@ class Helmeter : BaseStatusBar
 		{
 			DrawBar("PHMNBA3", "PHMNBA4", ArmorValue - 100, 100, (BLCX + 42, BLCY - 53), 0, SHADER_HORZ, DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT_TOP, DisplayFlicker);
 		}
+		if(CheckInventory("PowerIronFeet", 1))
+		{
+			let rad = Powerup(CPlayer.mo.FindInventory("PowerIronFeet"));
+			DrawString(statRepSmall, "RAD:"..FormatNumber(rad.EffectTics/35, 1, 3), (BLCX + 43, BLCY - 54), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_BOTTOM, Font.CR_Ice, Alpha:DisplayFlicker);
+		}
+
 		DrawString(mHUDFontMono, BlankChar, (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, font.CR_DarkGray, Alpha: (HudBackAlpha / 2), scale: (1.25, 1.25));
 		if(CorruptNum == true)
 		{
@@ -1359,7 +1371,20 @@ class Helmeter : BaseStatusBar
 		{
 			DrawString(mHUDFontMono, FormatNumber(ArmorValue, 1, 3), (BLCX + 110, BLCY - 80), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_LEFT_BOTTOM, APCol, Alpha: DisplayFlicker, scale: (1.25, 1.25));
 		}
-		
+		if(CheckInventory("ITactic", 1))
+		{
+			DrawImage("MNSTMBK", (BLCX + 113, BLCY - 46), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+			DrawImage("MNSTMIC", (BLCX + 113, BLCY - 46), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+			DrawBar("MNSTMBR1", "MNSTMBR2", (100 - GetAmount("DummyStamina")), 100, (BLCX + 116, BLCY - 56), 0, SHADER_VERT | SHADER_REVERSE, DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+		}
+		else if(CheckInventory("FR_Stam", 1))
+		{
+			DrawImage("MNSTMBK", (BLCX + 73, BLCY - 45), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+			DrawImage("MNSTMIC", (BLCX + 73, BLCY - 45), DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+			DrawBar("MNSTMBR1", "MNATMBR2", GetAmount("DummyStamina"), 1000, (BLCX + 75, BLCY - 55), 0, SHADER_VERT | SHADER_REVERSE, DI_ITEM_LEFT_BOTTOM | DI_SCREEN_LEFT_BOTTOM, DisplayFlicker);
+		}
+
+		//AMMO
 		resLight = 0;
 		if(ammotype1 != null && (ammotype2 == null || ammotype2 == ammotype1)) //Draw the non-minimized ammo1 display if no ammo2 or if they're the same
 		{

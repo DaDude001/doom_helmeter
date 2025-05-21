@@ -34,7 +34,7 @@ Should be compatible with most gameplay mods that are compatible with any custom
 
 This has explicit support for Brutal Doom v22.
 
-Tested and proven to work in Rust and Bones, Hellrider v0.9, Beautiful Doom, and Gunslinger Set.
+Tested and proven to work in Rust and Bones, Act of Violence, Beautiful Doom, and several other mods.
 
 Although, several elements are disabled due to this HUD not supporting them yet (eg. Hellrider's grenades, GS' weapon fire modes, etc)
 
