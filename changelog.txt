@@ -1,6 +1,6 @@
 Full List of Changes (from newest to oldest)
 
-=====v1.3.0 // 5/??/2025=====
+=====v1.3.0 // 5/21/2025=====
 -Added "compact mode" (experimental)
 -Color of displays is fully customizable
 -Ammo will no longer be drawn twice if ammotype 1 and 2 are the same
