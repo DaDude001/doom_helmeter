@@ -102,6 +102,17 @@ TEXTURE PSTMR1
 	pic PSTMR6 tics 2
 	pic PSTMR7 tics 1
 	
+TEXTURE PHMINCR1
+	random
+	pic PHMINCR1 tics 3
+	pic PHMINCR2 tics 1
+	pic PHMINCR3 tics 2
+	pic PHMINCR4 tics 3
+	pic PHMINCR5 tics 1
+	pic PHMINCR6 tics 2
+	pic PHMINCR7 tics 1
+	pic PHMINCR8 tics 2
+	
 TEXTURE BRKNAR2
 	random
 	pic BRKNAR1 tics 10
@@ -212,3 +223,36 @@ TEXTURE BERZIND
 	pic BERZIN19 tics 3
 	pic BERZIN20 tics 3	
 	
+TEXTURE PHGODHP
+	pic PHGODHP3 tics 3
+	pic PHGODHP4 tics 3
+	pic PHGODHP5 tics 3
+	pic PHGODHP6 tics 3
+	pic PHGODHP7 tics 3
+	pic PHGODHP8 tics 3
+	
+TEXTURE PHGODEP
+	pic PHGODEP3 tics 3
+	pic PHGODEP4 tics 3
+	pic PHGODEP5 tics 3
+	pic PHGODEP6 tics 3
+	pic PHGODEP7 tics 3
+	pic PHGODEP8 tics 3
+	
+TEXTURE PHINVST1 
+	random
+	pic PHINVST1 tics 5
+	pic PHINVST2 tics 5
+	pic PHINVST3 tics 5
+	pic PHINVST4 tics 5
+	pic PHINVST5 tics 5
+	pic PHINVST6 tics 5
+	
+TEXTURE PHINVFD1 
+	pic PHINVFD1 tics 3
+	pic PHINVFD2 tics 3
+	pic PHINVFD3 tics 3
+	pic PHINVFD4 tics 3
+	pic PHINVFD5 tics 3
+	pic PHINVFD6 tics 3
+	pic PHINVFD7 tics 105

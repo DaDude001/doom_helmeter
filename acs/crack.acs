@@ -116,3 +116,14 @@ script "IGotPipebombs" ENTER
     }
 }
 
+Script "CameraCheck" Enter			//Check if player is in third person, give them a token if they are
+{
+	While(true)
+		{
+			while (CheckPlayerCamera(PlayerNumber()) == -1) Delay(1);
+			GiveInventory("HLM_InThirdPerson",1);
+			while (CheckPlayerCamera(PlayerNumber()) != -1) Delay(1);
+			TakeInventory("HLM_InThirdPerson",1);
+			delay(1);
+		}
+}

@@ -6,7 +6,9 @@ I made it to try zscript HUDs, and to make a more "modern" visor HUD.
 ### REQUIRES at least GZDoom v4.11, tested in 4.11.3, 4.13.2, and 4.14.0.
 
 Note: Display graphics are kinda ugly. I am not a sprite artist, but I tried my best. 
+
 	If you wish to contribute some better looking graphics, go ahead
+
 It probably is not the most well optimized either; I am terribly sorry
 
 ## Features
@@ -29,6 +31,7 @@ Supports HUD scaling[^exception], but I developed and tested this mod with a sca
 	
 ## Compatibility
 Should be compatible with most gameplay mods that are compatible with any custom HUD, although a minor amount of configuration is needed
+
 This has explicit support for Brutal Doom v22.
 
 Tested and proven to work in Rust and Bones, Hellrider v0.9, Beautiful Doom, and Gunslinger Set.

@@ -1,5 +1,13 @@
 Full List of Changes (from newest to oldest)
 
+=====v1.3.0 // 5/??/2025=====
+-Added "compact mode" (experimental)
+-Color of displays is fully customizable
+-Ammo will no longer be drawn twice if ammotype 1 and 2 are the same
+-Chance of displays malfunctioning is customizable
+-Helmet overlay (and, optionally, the HUD) will be hidden in third person
+-Added some powerup displays
+
 =====v1.2.1 // 5/5/2025=====
 -Added a volume slider for the HUD sounds
 -Added an indicator for Brutal Doom v22's rifle grenade launcher
