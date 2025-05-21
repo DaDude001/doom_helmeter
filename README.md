@@ -7,7 +7,7 @@ I made it to try zscript HUDs, and to make a more "modern" visor HUD.
 
 Note: Display graphics are kinda ugly. I am not a sprite artist, but I tried my best. 
 
-	If you wish to contribute some better looking graphics, go ahead
+If you wish to contribute some better looking graphics, go ahead
 
 It probably is not the most well optimized either; I am terribly sorry
 
