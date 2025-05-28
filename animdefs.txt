@@ -256,3 +256,44 @@ TEXTURE PHINVFD1
 	pic PHINVFD5 tics 3
 	pic PHINVFD6 tics 3
 	pic PHINVFD7 tics 105
+	
+TEXTURE PHINVL1
+	pic PHINVL1 tics 3
+	pic PHINVL2 tics 3
+	pic PHINVL3 tics 3
+	pic PHINVL4 tics 3
+	pic PHINVL5 tics 3
+	pic PHINVL6 tics 3
+	pic PHINVL7 tics 3
+	pic PHINVL8 tics 3
+	pic PHINVL9 tics 3
+	pic PHINVL9 tics 3
+	pic PHINVL8 tics 3
+	pic PHINVL7 tics 3
+	pic PHINVL6 tics 3
+	pic PHINVL5 tics 3
+	pic PHINVL4 tics 3
+	pic PHINVL3 tics 3
+	pic PHINVL2 tics 3
+	pic PHINVL1 tics 3
+
+TEXTURE PHINVR1
+	pic PHINVR1 tics 3
+	pic PHINVR2 tics 3
+	pic PHINVR3 tics 3
+	pic PHINVR4 tics 3
+	pic PHINVR5 tics 3
+	pic PHINVR6 tics 3
+	pic PHINVR7 tics 3
+	pic PHINVR8 tics 3
+	pic PHINVR9 tics 3
+	pic PHINVR9 tics 3
+	pic PHINVR8 tics 3
+	pic PHINVR7 tics 3
+	pic PHINVR6 tics 3
+	pic PHINVR5 tics 3
+	pic PHINVR4 tics 3
+	pic PHINVR3 tics 3
+	pic PHINVR2 tics 3
+	pic PHINVR1 tics 3
+	

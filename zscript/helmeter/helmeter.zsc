@@ -244,6 +244,7 @@ class Helmeter : BaseStatusBar
 		double SFXVolume;
 		string BlankChar;
 		Color dispCol;
+		InventoryBarState invbarst;
 //		double ForwardSpeed;
 //		vector2 speedRel;
 //		int Garbage2;
@@ -325,6 +326,7 @@ class Helmeter : BaseStatusBar
 		DynSwayY = DynamicValueInterpolator.Create(0, 0.25, 1, 50);
 		DynFallAnim = DynamicValueInterpolator.Create(0, 0.75, 1, 300);
 		DamageAnimTics = 0;
+		invbarst = InventoryBarState.CreateNoBox(statRepSmall, Font.CR_SAPPHIRE, DisplayFlicker, (30, 30), "TNT1A0", (0,0), "PHINVL1", "PHINVR1");
     }
 
     override void Draw(int state, double ticFrac)
@@ -728,7 +730,8 @@ class Helmeter : BaseStatusBar
 //					{
 //						DrawImage("VDSPLRF", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
 //					}
-					AmmoLightStyle = (resLight + priLight) * AmmoExtra2;
+					AmmoLightStyle = (resLight + priLight) * AmmoExtra2; // yes, this is actually how it gets what the HUD style is
+					//DrawString(enlFont, FormatNumber(AmmoLightStyle, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
 					switch(AmmoLightStyle)	//This one doesn't need the check if it's on because ammo display already handles the beams visibility, so if that's not on it can't handle this
 					{
 					case 0:
@@ -752,10 +755,27 @@ class Helmeter : BaseStatusBar
 					case -3:
 						DrawImage("VDSPLRB", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 						break;
+					case 10:
+						DrawImage("VDSPLRZ", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));						
+						DrawImage("VDSPLRG", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						break;
+					case 20:
+						DrawImage("VDSPLRH", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						break;
+					case 30:
+						DrawImage("VDSPLRA", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						break;
 					}
-					if(AmmoLightStyle == 0 && AmmoExtra2 == -1)
+					if(AmmoLightStyle == 0)
 					{
-						DrawImage("VDSPLRF", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));						
+						if(AmmoExtra2 == 10)
+						{
+							DrawImage("VDSPLRZ", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));						
+						}
+						else if(AmmoExtra2 == -1)
+						{
+							DrawImage("VDSPLRF", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));						
+						}
 					}
 					if(Cvar.GetCVar("helm_showstats", CPlayer).GetInt() && CheckInventory("StatsOn", 1))
 					{
@@ -1188,7 +1208,25 @@ class Helmeter : BaseStatusBar
 							DrawImage("RFGRNIR", (BRCX - 63, BRCY - 78), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
 					}
 				}
-				if(CheckInventory("IGotNades", 1))
+				if(ValidateInvFirst(1) != null)
+				{
+					AmmoExtra1 = true;
+					AmmoExtra2 = 10;	
+					if(CorruptDisp == true)
+					{
+						DrawImage("PMUGL1", (BRCX - 40, BRCY - 100.5), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_CENTER | DI_MIRROR, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));		
+					}
+					else if(ammotype1 == null)
+					{
+						DrawImage("PHMUGB2", (BRCX - 40, BRCY - 100.5), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_CENTER | DI_MIRROR, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));		
+					}
+					else
+					{
+						DrawImage("PHMUGBK", (BRCX - 40, BRCY - 100.5), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_CENTER | DI_MIRROR, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));		
+					}
+					DrawInventoryBar(invbarst, (BRCX - 40, BRCY - 100.5), 1, DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_CENTER, 0);
+				}
+				else if(CheckInventory("IGotNades", 1))
 				{
 					AmmoExtra1 = true;
 					AmmoExtra2 = -1;	
