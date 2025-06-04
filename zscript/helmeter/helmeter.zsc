@@ -1225,6 +1225,19 @@ class Helmeter : BaseStatusBar
 						DrawImage("PHMUGBK", (BRCX - 40, BRCY - 100.5), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_CENTER | DI_MIRROR, HudBackAlpha, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));		
 					}
 					DrawInventoryBar(invbarst, (BRCX - 40, BRCY - 100.5), 1, DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_CENTER, 0);
+					if(CheckInventory("IGotNades", 1))
+					{
+						int NumNades = GetAmount("DummyGrenadeAmmo");
+						DrawImage("PHGRNBK3", (BRCX - 14, BRCY - 106), DI_ITEM_RIGHT_BOTTOM | DI_SCREEN_RIGHT_BOTTOM, DisplayFlicker);
+						if(CorruptNum == true)
+						{
+							DrawString(statRepSmall, String.Format("%c",Garbage2), (BRCX - 33, BRCY - 116.5), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker);
+						}
+						else
+						{
+							DrawString(statRepSmall, FormatNumber(NumNades, 1, 4), (BRCX - 33, BRCY - 116.5), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_RIGHT_BOTTOM, Font.CR_DarkGreen, Alpha: DisplayFlicker);
+						}
+					}
 				}
 				else if(CheckInventory("IGotNades", 1))
 				{
