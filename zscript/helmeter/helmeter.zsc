@@ -196,6 +196,7 @@ class Helmeter : BaseStatusBar
 		double MegaArmorAlpha;
 //		int MaxHP;
 		double DisplayFlicker;
+		double ProjectorFlicker;
 		double HudBackAlpha;
 		bool IsDead;
 		double HelmLightFlicker;
@@ -206,8 +207,9 @@ class Helmeter : BaseStatusBar
 		HUDFont mIndexFont;
 		HUDFont mHudFont;
 		HUDFont mHudFontMono;
-		HUDFont enlFont;
+		HUDFont cybFont;
 		HUDFont statRepSmall;
+		HUDFont Q2Small;
 		Inventory ammotype1, ammotype2;
 		DynamicValueInterpolator WarnFlashInterp;
 		DynamicValueInterpolator HPInterp;
@@ -280,6 +282,7 @@ class Helmeter : BaseStatusBar
 		FlickerTics = 100;
 		OverhealthAlpha = 0;
 		DisplayFlicker = 1.0;
+		ProjectorFlicker = 1.0;
 		HelmLightFlicker = 1.0;
 		HelmLightOutInterp = DynamicValueInterpolator.Create(100, 0.05, 1, 10);
 		StartextFadeInterp = DynamicValueInterpolator.Create(200, 0.1, 1, 20);
@@ -302,17 +305,19 @@ class Helmeter : BaseStatusBar
 		BloodAlpha = 0.75;
 		HPInterp = DynamicValueInterpolator.Create(500, 0.1, 1, 50);
 		APInterp = DynamicValueInterpolator.Create(500, 0.1, 1, 50);
-		Font fnt = "04FONT"; //obtain the font named "MYHUDFNT"
+		Font fnt = "04FONT"; //Nought Point Four. Used literally once in the whole HUD but still here
         mIndexFont = HUDFont.Create(fnt);
-		Font fnt2 = "04FONTOL"; //obtain the font named "MYHUDFNT"
+		Font fnt2 = "04FONTOL"; //Nought Point Four - Outlined. Main bigfont used for the health, armor, and ammo counters.
         mHudFont = HUDFont.Create(fnt2);
 		mHudFontMono = HUDFont.Create(fnt2, fnt2.GetCharWidth("0"), Mono_CellRight);
-		Font fnt3 = "cyberfnt"; //obtain the font named "MYHUDFNT"
-        enlFont = HUDFont.Create(fnt3);
-		Font fnt4 = "STRPSML"; //obtain the font named "MYHUDFNT"
+		Font fnt3 = "cyberfnt"; // My custom edit of Cyberfonter. Main smallfont used for small numbers.
+        cybFont = HUDFont.Create(fnt3);
+		Font fnt4 = "STRPSML"; // Status Report Small. Used for very small numbers, such as the level time and grenade counter.
         statRepSmall = HUDFont.Create(fnt4);
+		Font fnt5 = "Q2SMFONO"; // Quake 2 small font, used for startup and death sequences
+		Q2Small = HUDFont.Create(fnt5);
 //		Font fnt4 = "BOLO"; //obtain the font named "MYHUDFNT"
- //       enlFont = HUDFont.Create(fnt4);
+ //       cybFont = HUDFont.Create(fnt4);
 //		OffsetXInterp;
 //		random(85,100) && FlickerTics > random(60,75)) || (FlickerTics < random(40,60) && FlickerTics > random(20,40)))
 		flcval1 = random(81,99);
@@ -387,21 +392,21 @@ class Helmeter : BaseStatusBar
 //		CPlayer.GiveInventory("CrackNumber");
 //		CPlayer.ACS_NamedExecute("YesThisWorks", 0, 0, 0, 0);
 	}
-
+	
 	void DrawFullscreenStuff()
 	{
-//		DrawString(enlFont, FormatNumber(BobAmount, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
-//		DrawString(enlFont, FormatNumber(SpeedAmount, 1, 4), (TopX - 1, TopY + 69), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
-//		DrawString(enlFont, FormatNumber((sin(SpeedAmount + BobAmount) * 50), 1, 4), (TopX - 1, TopY + 79), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+//		DrawString(cybFont, FormatNumber(BobAmount, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+//		DrawString(cybFont, FormatNumber(SpeedAmount, 1, 4), (TopX - 1, TopY + 69), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+//		DrawString(cybFont, FormatNumber((sin(SpeedAmount + BobAmount) * 50), 1, 4), (TopX - 1, TopY + 79), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 /*
-		DrawString(enlFont, FormatNumber(SwayOffX * 100, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
-		DrawString(enlFont, FormatNumber(SwayOffY * 100, 1, 4), (TopX - 1, TopY + 69), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
-		DrawString(enlFont, FormatNumber(relVel.X, 1, 4), (TopX - 1, TopY + 79), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
-		DrawString(enlFont, FormatNumber(relVel.Y, 1, 4), (TopX - 1, TopY + 89), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+		DrawString(cybFont, FormatNumber(SwayOffX * 100, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+		DrawString(cybFont, FormatNumber(SwayOffY * 100, 1, 4), (TopX - 1, TopY + 69), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+		DrawString(cybFont, FormatNumber(relVel.X, 1, 4), (TopX - 1, TopY + 79), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+		DrawString(cybFont, FormatNumber(relVel.Y, 1, 4), (TopX - 1, TopY + 89), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 */
 //		int testInt = randompick(34, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 61, 64, 65, 66, 67, 68, 69, 70, 97, 98, 99, 100, 101, 102);
 //		DrawString(mHudFont, String.Format("%c",testInt)..String.Format("%c",testInt), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
-//		DrawString(enlFont, "Dynamic, Reactive Visor HUD", (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+//		DrawString(cybFont, "Dynamic, Reactive Visor HUD", (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 		if(CPlayer.Health <= 0)
 		{
 			DrawImage("VSRDCRK", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, 1.0);
@@ -439,23 +444,6 @@ class Helmeter : BaseStatusBar
 				case 0:
 					break;
 				}
-				/*
-				DrawImage("VSRCRK7", (GlassX, GlassY), DI_SCREEN_LEFT_TOP | DI_ITEM_LEFT_TOP, CrackCVarAlpha);
-				if (CrackCount >= 4)
-				{
-					DrawImage("VSRCRK1", (GlassX - 50, GlassY + 50), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, CrackCvarAlpha);
-					//DrawImage("VSRCRK3", (GlassX - 20,GlassY), DI_SCREEN_CENTER_BOTTOM | DI_ITEM_CENTER, CrackCvarAlpha);
-				} 
-				if (CrackCount >= 3)
-				{
-					DrawImage("VSRCRK4", (GlassX + 100,GlassY - 80), DI_SCREEN_RIGHT_TOP | DI_ITEM_RIGHT_TOP, CrackCVarAlpha);
-				} 
-				if (CrackCount >= 2)	
-				{		//This one is drawn after the others so if they overlap it doesn't look as bad
-					DrawImage("VSRCRK2", (GlassX + 10,GlassY + 50), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, CrackCVarAlpha);
-				} 
-				*/
-
 			}
 		}
 //		if (CheckInventory("CrackNumber", 1))
@@ -565,8 +553,8 @@ class Helmeter : BaseStatusBar
 //			DrawImage("VDSPLIA", (BLCX - 1, BLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker);
 //			DrawImage("VDSPLIA", (BRCX + 3, BRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
 //		}
-//		DrawString(enlFont, FormatNumber(DamageAnimTics, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
-//		DrawString(enlFont, DamageAnimPlaceLeft, (TopX - 1, TopY + 69), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+//		DrawString(cybFont, FormatNumber(DamageAnimTics, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+//		DrawString(cybFont, DamageAnimPlaceLeft, (TopX - 1, TopY + 69), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 
 		if(ArmorValue >= 1 && Cvar.GetCVar("helm_armorlay", CPlayer).GetInt())	
 		{
@@ -584,7 +572,7 @@ class Helmeter : BaseStatusBar
 		{
 			HurtLevel = (HealthPoints + 15) / 15;
 			BloodAlpha = Clamp(Cvar.GetCVar("helm_bloodalpha", CPlayer).GetFloat(), 0, 1);
-//			DrawString(enlFont, FormatNumber(HurtLevel, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+//			DrawString(cybFont, FormatNumber(HurtLevel, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
 			//DrawImage("VSBLD4", (GlassX + 30, GlassY - 30), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT_BOTTOM, BloodAlpha);
 			switch(HurtLevel)
 			{
@@ -657,45 +645,45 @@ class Helmeter : BaseStatusBar
 		{
 			if(CheckInventory("VitalsOn", 1))
 			{
-				DrawImage("VDSPLIA", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+				DrawImage("VDSPLIA", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, ProjectorFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 			}
 			if(CheckInventory("AmmoOn", 1))
 			{
-				DrawImage("VDSPLIA", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+				DrawImage("VDSPLIA", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, ProjectorFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 			}
 			if(CheckInventory("StatsOn", 1))
 			{
-				DrawImage("VDSPLIA", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
-				DrawImage("VDSPLIA", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+				DrawImage("VDSPLIA", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, ProjectorFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+				DrawImage("VDSPLIA", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, ProjectorFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 			}
 			if(Cvar.GetCVar("helm_showdisplay", CPlayer).GetInt())
 			{
 				if(CheckInventory("VitalsOn", 1))
 				{
-					DrawImage("VDSPLIB", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add, color(255, dispCol.r, dispCol.g, dispCol.b));
+					DrawImage("VDSPLIB", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, ProjectorFlicker, (-1, -1), (1,1), STYLE_Add, color(255, dispCol.r, dispCol.g, dispCol.b));
 				}
 				if(CheckInventory("AmmoOn", 1))
 				{
 					if(ammotype1 != null || ammotype2 != null) 
 					{
-						DrawImage("VDSPLIB", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add, color(255, dispCol.r, dispCol.g, dispCol.b));
+						DrawImage("VDSPLIB", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, ProjectorFlicker, (-1, -1), (1,1), STYLE_Add, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else
 					{
-						DrawImage("VDSPLIC", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add, color(255, dispCol.r, dispCol.g, dispCol.b));
+						DrawImage("VDSPLIC", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, ProjectorFlicker, (-1, -1), (1,1), STYLE_Add, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 				}
 				if(CheckInventory("StatsOn", 1))
 				{
 					if(Cvar.GetCVar("helm_showstats", CPlayer).GetInt())
 					{
-						DrawImage("VDSPLIB", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
-						DrawImage("VDSPLIB", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						DrawImage("VDSPLIB", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, ProjectorFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						DrawImage("VDSPLIB", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, ProjectorFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 					else
 					{
-						DrawImage("VDSPLIC", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
-						DrawImage("VDSPLIC", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						DrawImage("VDSPLIC", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, ProjectorFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
+						DrawImage("VDSPLIC", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, ProjectorFlicker, (-1, -1), (1, 1), STYLE_Translucent, color(255, dispCol.r, dispCol.g, dispCol.b));
 					}
 				}
 				if(Cvar.GetCVar("helm_projectbeam", CPlayer).GetInt())
@@ -725,13 +713,13 @@ class Helmeter : BaseStatusBar
 							}
 						}
 					}
-		//			DrawImage("VDSPLID", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker);
+		//			DrawImage("VDSPLID", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, ProjectorFlicker);
 //					if((ammotype1 == null && ammotype2 == null) && AmmoExtra1 == true)
 //					{
 //						DrawImage("VDSPLRF", (BRCX, BRCY), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HudBackAlpha);
 //					}
 					AmmoLightStyle = (resLight + priLight) * AmmoExtra2; // yes, this is actually how it gets what the HUD style is
-					//DrawString(enlFont, FormatNumber(AmmoLightStyle, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+					//DrawString(cybFont, FormatNumber(AmmoLightStyle, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
 					switch(AmmoLightStyle)	//This one doesn't need the check if it's on because ammo display already handles the beams visibility, so if that's not on it can't handle this
 					{
 					case 0:
@@ -787,16 +775,16 @@ class Helmeter : BaseStatusBar
 			{
 				if(CheckInventory("VitalsOn", 1))
 				{
-					DrawImage("VDSPLIC", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
+					DrawImage("VDSPLIC", (HelmBLCX - 1, HelmBLCY - 18), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, ProjectorFlicker, (-1, -1), (1,1), STYLE_Add);
 				}
 				if(CheckInventory("AmmoOn", 1))
 				{
-					DrawImage("VDSPLIC", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, DisplayFlicker, (-1, -1), (1,1), STYLE_Add);
+					DrawImage("VDSPLIC", (HelmBRCX + 3, HelmBRCY - 18), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, ProjectorFlicker, (-1, -1), (1,1), STYLE_Add);
 				}
 				if(CheckInventory("StatsOn", 1))
 				{
-					DrawImage("VDSPLIC", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, DisplayFlicker);
-					DrawImage("VDSPLIC", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, DisplayFlicker);
+					DrawImage("VDSPLIC", (HelmTopX - 98, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_RIGHT | DI_ITEM_TOP, ProjectorFlicker);
+					DrawImage("VDSPLIC", (HelmTopX + 100, HelmTopY - 13), DI_SCREEN_CENTER_TOP | DI_ITEM_LEFT | DI_ITEM_TOP, ProjectorFlicker);
 				}
 			}
 		}	
@@ -862,10 +850,24 @@ class Helmeter : BaseStatusBar
 				else
 				{
 					HelmLightFlicker = 1.0;
+				}		
+				if (!CheckInventory("StartupCompleted", 1))
+				{
+					DisplayFlicker = 1.0 - (StartupTextFade * 0.9);
 				}
-				DisplayFlicker = 1.0;
+				else
+					DisplayFlicker = 1.0;
 			}
-		}	
+		}
+		if (CheckInventory("StartupCompleted", 1) || IsDead == true)
+		{
+			ProjectorFlicker = DisplayFlicker;
+		}
+		else 
+		{
+			ProjectorFlicker = 1.0;
+		}
+
 		if(CPlayer.Health <= 0)
 		{
 			IsDead = true;
@@ -1309,34 +1311,34 @@ class Helmeter : BaseStatusBar
 				DrawString(statRepSmall, "SCRTS", (TopX + 26, TopY + 19), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_BLUE, Alpha: DisplayFlicker);
 				if(Cvar.GetCVar("helm_statstyle", CPlayer).GetInt())
 				{
-					DrawString(enlFont, FormatNumber(level.killed_monsters, 1, 3), (TopX - 26, TopY + 26), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, kCol, Alpha: DisplayFlicker);
-					DrawString(enlFont, FormatNumber(level.found_items, 1, 3), (TopX - 1, TopY + 26), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, iCol, Alpha: DisplayFlicker);
-					DrawString(enlFont, FormatNumber(level.found_secrets, 1, 3), (TopX + 26, TopY + 26), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, sCol, Alpha: DisplayFlicker);
+					DrawString(cybFont, FormatNumber(level.killed_monsters, 1, 3), (TopX - 26, TopY + 26), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, kCol, Alpha: DisplayFlicker);
+					DrawString(cybFont, FormatNumber(level.found_items, 1, 3), (TopX - 1, TopY + 26), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, iCol, Alpha: DisplayFlicker);
+					DrawString(cybFont, FormatNumber(level.found_secrets, 1, 3), (TopX + 26, TopY + 26), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, sCol, Alpha: DisplayFlicker);
 				}
 				else
 				{
-					DrawString(enlFont, FormatNumber(killRemain, 1, 3), (TopX - 26, TopY + 26), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, kCol, Alpha: DisplayFlicker);
-					DrawString(enlFont, FormatNumber(itemRemain, 1, 3), (TopX - 1, TopY + 26), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, iCol, Alpha: DisplayFlicker);
-					DrawString(enlFont, FormatNumber(secrRemain, 1, 3), (TopX + 26, TopY + 26), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, sCol, Alpha: DisplayFlicker);
+					DrawString(cybFont, FormatNumber(killRemain, 1, 3), (TopX - 26, TopY + 26), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, kCol, Alpha: DisplayFlicker);
+					DrawString(cybFont, FormatNumber(itemRemain, 1, 3), (TopX - 1, TopY + 26), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, iCol, Alpha: DisplayFlicker);
+					DrawString(cybFont, FormatNumber(secrRemain, 1, 3), (TopX + 26, TopY + 26), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, sCol, Alpha: DisplayFlicker);
 				}
 
 //				DrawString(statRepSmall, level.Mapname, (TopX - 10, TopY + 12), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
 //				DrawString(statRepSmall, level.TimeFormatted(), (TopX + 10, TopY + 12), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
 				DrawString(statRepSmall, level.Mapname, (TopX - 70, TopY + 12), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
 				DrawString(statRepSmall, level.TimeFormatted(), (TopX + 70, TopY + 12), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
-//				DrawString(enlFont, level.TimeFormatted(), (TopX + 66, TopY + 23), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
-//				DrawString(enlFont, level.TimeFormatted(true), (TopX + 67, TopY + 19), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_YELLOW, Alpha: DisplayFlicker);			
-//				DrawString(enlFont, level.Mapname, (TopX - 1, TopY + 19), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
-	//			DrawString(enlFont, level.Levelname, (TopX, TopY + 23), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+//				DrawString(cybFont, level.TimeFormatted(), (TopX + 66, TopY + 23), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+//				DrawString(cybFont, level.TimeFormatted(true), (TopX + 67, TopY + 19), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_YELLOW, Alpha: DisplayFlicker);			
+//				DrawString(cybFont, level.Mapname, (TopX - 1, TopY + 19), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+	//			DrawString(cybFont, level.Levelname, (TopX, TopY + 23), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
 				/*
 				DrawImage("PHSTABK", (TopX, TopY + 7), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HudBackAlpha);
-				DrawString(enlFont, "K: "..level.killed_monsters.."/"..level.total_monsters, (TopX - 74, TopY + 10), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_GREY, Alpha: DisplayFlicker);
-				DrawString(enlFont, "I: "..level.found_items.."/"..level.total_items, (TopX - 67, TopY + 19), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_GREEN, Alpha: DisplayFlicker);
-				DrawString(enlFont, "S: "..level.found_secrets.."/"..level.total_secrets, (TopX - 60, TopY + 28), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_LIGHTBLUE, Alpha: DisplayFlicker);
-				DrawString(enlFont, level.TimeFormatted(), (TopX + 74, TopY + 10), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
-				DrawString(enlFont, level.TimeFormatted(true), (TopX + 67, TopY + 19), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_YELLOW, Alpha: DisplayFlicker);			
-//				DrawString(enlFont, level.Mapname, (TopX - 1, TopY + 19), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
-	//			DrawString(enlFont, level.Levelname, (TopX, TopY + 23), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+				DrawString(cybFont, "K: "..level.killed_monsters.."/"..level.total_monsters, (TopX - 74, TopY + 10), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_GREY, Alpha: DisplayFlicker);
+				DrawString(cybFont, "I: "..level.found_items.."/"..level.total_items, (TopX - 67, TopY + 19), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_GREEN, Alpha: DisplayFlicker);
+				DrawString(cybFont, "S: "..level.found_secrets.."/"..level.total_secrets, (TopX - 60, TopY + 28), DI_TEXT_ALIGN_LEFT | DI_SCREEN_CENTER_TOP, Font.CR_LIGHTBLUE, Alpha: DisplayFlicker);
+				DrawString(cybFont, level.TimeFormatted(), (TopX + 74, TopY + 10), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+				DrawString(cybFont, level.TimeFormatted(true), (TopX + 67, TopY + 19), DI_TEXT_ALIGN_RIGHT | DI_SCREEN_CENTER_TOP, Font.CR_YELLOW, Alpha: DisplayFlicker);			
+//				DrawString(cybFont, level.Mapname, (TopX - 1, TopY + 19), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+	//			DrawString(cybFont, level.Levelname, (TopX, TopY + 23), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
 				*/
 			}
 			if(CheckInventory("PowerLightAmp", 1))
@@ -1728,7 +1730,7 @@ class Helmeter : BaseStatusBar
 		if (msgcount <= 0 || !CheckInventory("MessageOn", 1)) return;
 		// Get the height of the font (we will use this for vertical
 		// spacing):
-		double stringHeight = enlFont.mFont.GetHeight() * scale;
+		double stringHeight = cybFont.mFont.GetHeight() * scale;
 		// If there's more than 1 message in the queue, offset each
 		// message to create an effect of them scrolling:
 //		if (msgcount > 1)
@@ -1738,7 +1740,7 @@ class Helmeter : BaseStatusBar
 		// Finally, draw all messages, starting from the newest one:
 		for (int j = msgcount - 1; j >= 0; j--)
 		{
-			DrawString(enlFont, 
+			DrawString(cybFont, 
 				pickupMsgStrings[j],
 				pos,
 				flags: flags,

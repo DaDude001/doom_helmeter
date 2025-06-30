@@ -15,7 +15,8 @@ extend class Helmeter
 	int StartupDelayAmount;
 	bool StartedUpOut;
 	bool StartSpamStopper;
-	String StartupSequenceText[18];
+//	String StartupSequenceText[18];
+	Array<String> StartupSequenceText;
 	double SwayOffX;
 	double SwayOffY;
 	double ZOffset;
@@ -114,21 +115,62 @@ extend class Helmeter
 	}
 	void FigureOutStartup()	// set the array for the startup text and make it different depending on your config, like in UDV
 	{
-		StartupSequenceText[0] = "\cfUAC OFFENSIVE HELMET OS v1.4 ONLINE\c-";
-		StartupSequenceText[1] = "Copyright(C) 2025-2032 \cdUnion Aerospace Corporation\c-. All rights reserved.";
-		StartupSequenceText[2] = "UAC User ID \""..CPlayer.GetUserName().. "\" VERIFIED";
-		StartupSequenceText[3] = "\cfBEGIN STARTUP SEQUENCE...\c-";
-		StartupSequenceText[4] = "\n";
-		StartupSequenceText[5] = "Augumented reality display INITIALIZED";
-		if(Cvar.GetCVar("helm_showdisplay", CPlayer).GetInt())
+		StartupSequenceText.Push("CPU : Argentium (tm) E1930 @ 10.35 GHz"); 				// 0
+		StartupSequenceText.Push("   Speed : 10.35 GHz    Count : 4");						// 1
+		StartupSequenceText.Push("Memory test : 63856432K OK");								// 2
+		StartupSequenceText.Push("Auto-Detecting SATA01 : UAC SSD H377 4TB"); 				// 3
+		StartupSequenceText.Push("UAC User ID \""..CPlayer.GetUserName().. "\" verified");	// 4
+		StartupSequenceText.Push("\n");														// 5
+		StartupSequenceText.Push("Initializing AR Display..");								// 6
+		if(Cvar.GetCVar("helm_showdisplay", CPlayer).GetInt())	
 		{
-		StartupSequenceText[6] = "Holographic information panels ENABLED";
+		StartupSequenceText.Push("Initializing Holo-Pan (tm) Display..");				// 7
 		}
 		else 
-		StartupSequenceText[6] = "Holographic information panels DISABLED";
+		StartupSequenceText.Push("Initializing Holo-Pan (tm) Display.. skipped");			// 7
 		
-		StartupSequenceText[7] = "Vital link INITIALIZED";
-		StartupSequenceText[8] = "Shield system ACTIVE";
+		StartupSequenceText.Push("Initializing Vit-Link (tm)..");						// 8
+		StartupSequenceText.Push("Initializing shield..");							// 9
+		StartupSequenceText.Push("Initializing inventory monitor..");					// 10
+		StartupSequenceText.Push("Initializing repair nexus..");						// 11
+		if(Cvar.GetCVar("helm_showstats", CPlayer).GetInt())
+		{
+		StartupSequenceText.Push("Initializing area scanner..");									// 12
+		}
+		else 
+		StartupSequenceText.Push("Initializng area scanner.. skipped");									// 12
+		StartupSequenceText.Push("Connecting to network..");								// 13
+//		StartupSequenceText.Push("\ckUACNet warning: Network not found. Please contact UAC for support.\c-");
+		
+		if(Cvar.GetCVar("helm_customlog", CPlayer).GetInt())
+		{
+		StartupSequenceText.Push("Initializing message system.. ");
+		}
+		else 
+		StartupSequenceText.Push("Initializing message system.. skipped");
+		
+		StartupSequenceText.Push("\n");
+		StartupSequenceText.Push("\cwUOH-OS: Init successful. Have a nice day :)\c-");
+//		StartupSequenceText.Push(".");
+//		StartupSequenceText[17] = "\n";
+		/*
+		StartupSequenceText[0] = "CPU : Argentium (tm) E1930 @ 10.35 GHz";
+		StartupSequenceText[1] = "\tSpeed : 10.35 GHz \tCount : 4";
+		StartupSequenceText[2] = "Memory test : 63856432K OK";
+		StartupSequenceText[3] = "Auto-Detecting SATA01 : UAC SSD H377 4TB";
+		StartupSequenceText[4] = "UAC User ID \""..CPlayer.GetUserName().. "\" verified";
+
+		StartupSequenceText[4] = "\n";
+		StartupSequenceText[5] = "Initializing AR Display... Done";
+		if(Cvar.GetCVar("helm_showdisplay", CPlayer).GetInt())
+		{
+		StartupSequenceText[6] = "Initializing Holo-Pan (tm) Display... Done";
+		}
+		else 
+		StartupSequenceText[6] = "Initializing Holo-Pan (tm) Display... skipped";
+		
+		StartupSequenceText[7] = "Initializing Vit-Link (tm)... Done";
+		StartupSequenceText[8] = "Intializing shield... Done";
 		StartupSequenceText[9] = "Inventory monitor INITIALIZED";
 		StartupSequenceText[10] = "Repair nexus ACTIVE";
 		
@@ -138,7 +180,6 @@ extend class Helmeter
 		}
 		else 
 		StartupSequenceText[11] = "Area scanner DISABLED";	
-		
 		StartupSequenceText[12] = "\ckUACNet warning: Network not found. Please contact UAC for support.\c-";
 		
 		if(Cvar.GetCVar("helm_customlog", CPlayer).GetInt())
@@ -152,6 +193,7 @@ extend class Helmeter
 		StartupSequenceText[15] = "\cwUOH-OS: Init successful. Have a nice day :)\c-";
 		StartupSequenceText[16] = "\n";
 		StartupSequenceText[17] = "\n";
+		*/
 	}
 	void DoStartupSequence()
 	{
@@ -180,13 +222,25 @@ extend class Helmeter
 				StartupDelayAmount = 10;
 				break;
 				case 6:
-				StartupDelayAmount = 7;
-				break;
-				case 7:
 				StartupDelayAmount = 8;
 				break;
+				case 7:
+				StartupDelayAmount = 7;
+				break;
 				case 8:
+				StartupSequenceText[6] = "Initializing AR Display..             Done"; //Update these as it goes through to make it seem like it's actually processing
+				StartupDelayAmount = 7;	
+				break;
+				case 9:
+				StartupDelayAmount = 8;
+				if(Cvar.GetCVar("helm_showdisplay", CPlayer).GetInt())	
+				{
+				StartupSequenceText[7] = "Initializing Holo-Pan (tm) Display..  Done";
+				}
+				break;
+				case 10:
 				StartupDelayAmount = 6;
+				StartupSequenceText[8] = "Initializing Vit-Link (tm)..          Done";
 				EventHandler.SendNetworkEvent("gimmethe:VitalsOn");		// This is only because booleans don't seem to persist in saves???
 				if(!StartSpamStopper)
 				{
@@ -195,24 +249,31 @@ extend class Helmeter
 				}
 	//			VitalsOn = true;
 				break;
-				case 9:
+				case 11:
+				StartupSequenceText[9] = "Initializing shield..                 Done";
 				StartupDelayAmount = 11;
 				StartSpamStopper = false;
 				break;
-				case 10:
+				case 12:
 				StartupDelayAmount = 8;
+				StartupSequenceText[10] = "Initializing inventory monitor..      Done";
 				EventHandler.SendNetworkEvent("gimmethe:AmmoOn");
 				if(!StartSpamStopper)
 				{
 					S_StartSound("VBEEP3", CHAN_7, 0, 0.8 * SFXVolume);
 					StartSpamStopper = true;
 				}			break;
-				case 11:
+				case 13:
 				StartupDelayAmount = 5;
+				StartupSequenceText[11] = "Initializing repair nexus..           Done";
 				StartSpamStopper = false;
 				break;
-				case 12:
+				case 14:
 				StartupDelayAmount = 6;
+				if(Cvar.GetCVar("helm_showstats", CPlayer).GetInt())
+				{
+				StartupSequenceText[12] = "Initializing area scanner..           Done";
+				}
 				EventHandler.SendNetworkEvent("gimmethe:StatsOn");
 				if(!StartSpamStopper)
 				{
@@ -220,26 +281,28 @@ extend class Helmeter
 					StartSpamStopper = true;
 				}			
 				break;
-				case 13:
+				case 15:
 				StartupDelayAmount = 6;
+				StartupSequenceText[13] = "Connecting to network..               \ckNetwork not found";
 				StartSpamStopper = false;
 				break;
-				case 14:
+				case 16:
 				StartSpamStopper = false;
+				StartupSequenceText[14] = "Initializing message system..         Done";
 				StartupDelayAmount = 5;
 				EventHandler.SendNetworkEvent("gimmethe:MessageOn");
 				break;
-				case 15:
+				case 17:
 				StartupDelayAmount = 6;
 				break;
 			}	
-			StartupTextFade = (StartextFadeInterp.GetValue() / 200.0) * DisplayFlicker;
+			StartupTextFade = (StartextFadeInterp.GetValue() / 200.0);
 			if(StartupTics >= 0)
 			{
 				if(!CheckInventory("StartupCompleted", 1))
 				{
 		//			DrawImage("STRTVR", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, (100 - StartupTics), (-1, -1), (1, ((100 - StartupTics) * 0.1)), STYLE_Subtract);
-					if(Startuper < (StartupSequenceText.Size() - 2))		// -2 because for some fucking reason it returns out of bounds otherwise ???
+					if(Startuper < StartupSequenceText.Size() - 1)		// -2 because for some fucking reason it returns out of bounds otherwise ???
 					{
 						StartedUp = false;
 						if(StartupTics >= StartupDelayTarget + StartupDelayAmount && !AlreadyAdvancedThisStartTic)
@@ -263,10 +326,17 @@ extend class Helmeter
 						StartedUp = true;
 					}
 					int StartupSpace;
-					DrawString(enlFont, LoadBar[Startuper], (TopX + 20, TopY + 10), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_GREY, Alpha: StartupTextFade);
+					DrawImage("BIOSICN", (TopX + 15, TopY), DI_ITEM_LEFT_TOP | DI_SCREEN_LEFT_TOP, StartupTextFade);
+//					DrawString(04FONTOL, "Union\nAerospace", (TopX + 60, TopY + 20), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_White, Alpha: StartupTextFade);
+					DrawString(mIndexFont, "Union", (TopX+85, TopY+10), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_Ice, Alpha: StartupTextFade, scale: (2.0, 2.0));
+					DrawString(mIndexFont, "Aerospace", (TopX+85, TopY+30), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_Ice, Alpha: StartupTextFade, scale: (2.0, 2.0));
+					DrawString(Q2Small, "UOHBIOS (C) 1993-2032 Union Aerospace Corporation, Inc.", (TopX+15, TopY+60), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_White, Alpha: StartupTextFade);
+					DrawString(Q2Small, "UAC Offensive Helmet OS version 1.4a", (TopX+15, TopY+70), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_White, Alpha: StartupTextFade);
+					
+					DrawString(Q2Small, LoadBar[Startuper], (TopX + 15, TopY - 20), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_BOTTOM, Font.CR_GREY, Alpha: StartupTextFade);
 					for(int k = 0; k < Startuper; k++)
 					{
-						DrawString(enlFont, StartupSequenceText[k], (TopX + 20, StartupSpace + (TopY + 30)), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_GREY, Alpha: StartupTextFade);
+						DrawString(Q2Small, StartupSequenceText[k], (TopX + 15, StartupSpace + (TopY + 90)), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_White, Alpha: StartupTextFade);
 						StartupSpace += 10;
 					}
 				}
@@ -296,7 +366,7 @@ extend class Helmeter
 	{
 		if(HealthPoints <= 0 && Cvar.GetCVar("helm_death", CPlayer).GetInt())
 		{
-			//DrawString(enlFont, FormatNumber(DeathTics, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
+			//DrawString(cybFont, FormatNumber(DeathTics, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
 			if(Deather < DeathSequenceText.Size())
 			{
 				if(DeathTics >= DeathDelayTarget + DeathDelayAmount && !AlreadyAdvancedThisDeathTic)
@@ -315,7 +385,7 @@ extend class Helmeter
 			int DeathSpace;
 			for(int q = 0; q < Deather; q++)
 			{
-				DrawString(enlFont, DeathSequenceText[q], (TopX + 20, DeathSpace + (TopY + 20)), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_GREY, Alpha: DisplayFlicker);
+				DrawString(Q2Small, DeathSequenceText[q], (TopX + 20, DeathSpace + (TopY + 20)), DI_TEXT_ALIGN_LEFT | DI_SCREEN_LEFT_TOP, Font.CR_GREY, Alpha: DisplayFlicker);
 				DeathSpace += 10;
 			}
 		}

@@ -2,6 +2,10 @@ CyberFnt
 {
   Template CYBFT%03d
 }
+CyberFntBasic
+{
+  Template BYBFT%03d
+}
 SMALLFONT
 {
   Template CYBFT%03d
