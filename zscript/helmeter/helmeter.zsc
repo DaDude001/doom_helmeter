@@ -221,6 +221,13 @@ class Helmeter : BaseStatusBar
 		array<String> pickupMsgStrings; //this will contain every message as it's received
 		array<double> pickupMsgAlpha; //this will track the alpha value for each message to fade them out
 		double pickupMsgScrollTics; //this timer will be updated as new messages appear
+		String notifString;
+		int notifWorldtick;
+//		array<String> notifStrings;
+//		double notifAlpha;
+//		int notifTicks;
+		array<double> notifAlpha;	//Same as before but for screen messages such as "secret revealed"
+//		double notifScrollTics; 
 		int flcval1;
 		int flcval2;
 		int flcval3;
@@ -243,7 +250,9 @@ class Helmeter : BaseStatusBar
 		int DamageColor;
 		Color DamageColor2;
 		int MinRepairAmount;
-		double SFXVolume;
+		double RealVolume;
+		double NotifVolume;
+		double MiscVolume;
 		string BlankChar;
 		Color dispCol;
 		InventoryBarState invbarst;
@@ -324,6 +333,9 @@ class Helmeter : BaseStatusBar
 		flcval2 = random(61,80);
 		flcval3 = random(51,60);
 		flcval4 = random(40,50);
+//		notifString = "";
+//		notifAlpha = 1.0;
+//		notifTicks = 0;
 		CorruptDisp = false;
 		CorruptNum = false;
 		DamageColor2 = Color(255, 0, 0, 0);
@@ -354,6 +366,7 @@ class Helmeter : BaseStatusBar
 			if(!(CheckInventory("HLM_InThirdPerson", 1) && Cvar.GetCVar("helm_hidetp", CPlayer).GetInt())) // Also don't draw these if the config is set
 			{
 				DrawCustomPickupMessage((TopX, TopY + statoffset), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);	// Handles the custom status messages.
+//				DrawCustomNotifMessage((TopX, TopY + statoffset), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);
 				DrawHudLights();
 				DrawHudNumberStuff();		// Handles the actual displays; the HUD part of this HUD.
 				DoStartupSequence();		// Handles the startup sequence text. Vile code lies here.
@@ -371,6 +384,7 @@ class Helmeter : BaseStatusBar
 			if(!(CheckInventory("HLM_InThirdPerson", 1) && Cvar.GetCVar("helm_hidetp", CPlayer).GetInt())) // Also don't draw these if the config is set
 			{
 				DrawCustomPickupMessage((TopX, TopY + statoffset), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);
+//				DrawCustomNotifMessage((TopX, TopY + 100), DI_SCREEN_CENTER_TOP | DI_TEXT_ALIGN_CENTER, msgscl);
 				DrawHudLights();
 				DrawHudNumberStuff();
 				DoStartupSequence();
@@ -384,7 +398,7 @@ class Helmeter : BaseStatusBar
 	{
 		CrackAlphaInterp.Reset(100);
 		CrackAlpha = 1;
-		S_StartSound("visorcrack", CHAN_AUTO, 0, 0.8 * SFXVolume);
+		S_StartSound("visorcrack", CHAN_AUTO, 0, 0.8 * RealVolume);
 //		if(CrackCount < 4)
 //		{
 //			CrackCount++;
@@ -406,7 +420,6 @@ class Helmeter : BaseStatusBar
 */
 //		int testInt = randompick(34, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 61, 64, 65, 66, 67, 68, 69, 70, 97, 98, 99, 100, 101, 102);
 //		DrawString(mHudFont, String.Format("%c",testInt)..String.Format("%c",testInt), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
-//		DrawString(cybFont, "Dynamic, Reactive Visor HUD", (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
 		if(CPlayer.Health <= 0)
 		{
 			DrawImage("VSRDCRK", (GlassX,GlassY), DI_SCREEN_CENTER | DI_ITEM_CENTER, 1.0);
@@ -540,6 +553,12 @@ class Helmeter : BaseStatusBar
 				DrawImage("VSRBLA", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, HelmLightLevel);
 				DrawImage("VSRBRA", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmLightLevel);
 				DrawImage("VSRTPA", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmLightLevel);	
+				if(!CheckInventory("StartupCompleted", 1))
+				{
+					DrawImage("VSRBLB", (HelmBLCX - 10, HelmBLCY + 10), DI_SCREEN_LEFT_BOTTOM | DI_ITEM_LEFT | DI_ITEM_BOTTOM, (HelmetAlpha * (1.0 - (((StartupTics*2) + 10.0) * 0.01))));
+					DrawImage("VSRBRB", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, (HelmetAlpha * (1.0 - (((StartupTics*2) + 10.0) * 0.01))));
+					DrawImage("VSRTPB", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, (HelmetAlpha * (1.0 - (((StartupTics*2) + 10.0) * 0.01))));	
+				}
 			}
 			else
 			{
@@ -547,6 +566,7 @@ class Helmeter : BaseStatusBar
 				DrawImage("VSRBRA", (HelmBRCX + 10, HelmBRCY + 10), DI_SCREEN_RIGHT_BOTTOM | DI_ITEM_RIGHT | DI_ITEM_BOTTOM, HelmetAlpha);
 				DrawImage("VSRTPA", (HelmTopX, HelmTopY - 10), DI_SCREEN_CENTER_TOP | DI_ITEM_CENTER | DI_ITEM_TOP, HelmetAlpha);
 			}
+
 		}
 //		if(Cvar.GetCVar("helm_projectlight", CPlayer).GetInt())
 //		{
@@ -612,13 +632,32 @@ class Helmeter : BaseStatusBar
 			}
 		}
 	}
-		
+	override bool ProcessMidPrint(font fnt, String msg, bool bold)
+	{
+		if(Cvar.GetCVar("helm_customlog", CPlayer).GetInt())
+		{
+			notifstring = msg;
+			notifWorldtick = level.totaltime;
+			Console.PrintfEx(PRINT_BOLD | PRINT_NONOTIFY, msg);
+			if(Cvar.GetCVar("helm_logimportant", CPlayer).GetInt())
+			{ 
+				S_StartSound("logmessage", CHAN_AUTO, 0, 0.8 * notifVolume);
+			}
+			return true;
+		}
+		else return false;
+	}
+	
 
 	override bool ProcessNotify(EPrintLevel printlevel, String outline)
 	{
 		if(gamestate != GS_LEVEL || consoleState == c_down) return false;		// if console is open or not in level, do not engage
 		if ((printlevel >= PRINT_LOW || printlevel < PRINT_LOG) && Cvar.GetCVar("helm_customlog", CPlayer).GetInt()) // if not a pickup, death, critical, or chat message, or if this feature is disabled, stop
 		{
+			if(Cvar.GetCVar("helm_logitem", CPlayer).GetInt())
+			{ 
+				S_StartSound("logmessage", CHAN_AUTO, 0, 0.8 * notifVolume);
+			}
 			// When a new message appears, push it to our
 			// array of strings:
 			pickupMsgStrings.Push(outline);
@@ -637,6 +676,7 @@ class Helmeter : BaseStatusBar
 		}
 		return false;
 	}
+
 	
 	// WARNING: vile code ahead
 	void DrawHudLights()
@@ -820,7 +860,9 @@ class Helmeter : BaseStatusBar
 */
 		BlankChar = Cvar.GetCvar("helm_blankcharstring", CPlayer).GetString().Left(3);
 		msgscl = Clamp(Cvar.GetCVar("helm_msgscl", CPlayer).GetFloat(), 0, 1);
-		SFXVolume = Clamp(Cvar.GetCVar("helm_volume", CPlayer).GetFloat(), 0, 1);
+		RealVolume = Clamp(Cvar.GetCVar("helm_realvolume", CPlayer).GetFloat(), 0, 1);
+		NotifVolume = Clamp(Cvar.GetCVar("helm_notifvolume", CPlayer).GetFloat(), 0, 1);
+		MiscVolume = Clamp(Cvar.GetCVar("helm_miscvolume", CPlayer).GetFloat(), 0, 1);
 		if(Cvar.GetCVar("helm_flicker", CPlayer).GetInt() && CPlayer.Health >= 1)
 		{
 			if(CheckInventory("Ouchies", 1))
@@ -1554,11 +1596,11 @@ class Helmeter : BaseStatusBar
 			if(StartupTics == -69)
 			{
 				FigureOutStartup();	// only call this once at the beginning of the startup sequence
-				S_StartSound("HDDSTRT", CHAN_7, 0, 0.8 * SFXVolume);
+				S_StartSound("HDDSTRT", CHAN_7, 0, 0.8 * RealVolume);
 			}
 			if(StartupTics == -49)
 			{
-				S_StartSound("DSPON", CHAN_AUTO, 0, 0.9 * SFXVolume);
+				S_StartSound("DSPON", CHAN_AUTO, 0, 0.9 * MiscVolume);
 			}
 		}
 		if(HealthPoints <= 0 && Cvar.GetCVar("helm_death", CPlayer).GetInt())
@@ -1570,7 +1612,7 @@ class Helmeter : BaseStatusBar
 		if(Cvar.GetCVar("helm_dispdamage", CPlayer).GetInt() && (CrackCount != 0 && random(1,(CorruptChance - ((CrackCount - 1)* 10))) <= 1))
 		{
 			randomcorrupt = random(4,4 + (CrackCount * 4));
-			S_StartSound("displaycorrupt", CHAN_7, 0, (HelmLightOutInterp.GetValue() / 100.0) * SFXVolume);
+			S_StartSound("displaycorrupt", CHAN_7, 0, (HelmLightOutInterp.GetValue() / 100.0) * MiscVolume);
 		}
 		if(randomcorrupt != 0)
 		{
@@ -1596,12 +1638,12 @@ class Helmeter : BaseStatusBar
 		if ((DisplayFlicker < 0.9 && DisplayFlicker > 0.1) && FaultySpamTics == 0)
 		{
 			FaultySpamTics = random(5,10);	// This variable is to prevent it from playing the glitch sound every tic, which leads to insane earrape due to overlapping sounds
-			S_StartSound("DSPFLTY", CHAN_7, 0, (HelmLightOutInterp.GetValue() / 100.0) * SFXVolume);
+			S_StartSound("DSPFLTY", CHAN_7, 0, (HelmLightOutInterp.GetValue() / 100.0) * MiscVolume);
 		}
 		if (FlickerTics == 99)
 		{
-			S_StartSound("DSHTDN", CHAN_7, CHANF_NOSTOP, SFXVolume);
-			S_StartSound("visorcrack", CHAN_AUTO, 0, 0.8 * SFXVolume);
+			S_StartSound("DSHTDN", CHAN_7, CHANF_NOSTOP, MiscVolume);
+			S_StartSound("visorcrack", CHAN_AUTO, 0, 0.8 * RealVolume);
 		}
 		if (HealthPoints <= 0 && FlickerTics > 0)
 		{
@@ -1694,6 +1736,10 @@ class Helmeter : BaseStatusBar
 		{
 			WarnFlash = 0.0;
 		}
+		if (level.totaltime == notifWorldtick + 105)
+		{
+			notifString = "";
+		}
 		if (pickupMsgStrings.Size() > 0)
 		{
 			// Update the alpha values of each message.
@@ -1726,6 +1772,10 @@ class Helmeter : BaseStatusBar
 	}
 	void DrawCustomPickupMessage(Vector2 pos, int flags, double scale = 1.0)
 	{
+		if(notifString != "")
+		{
+			DrawString(cybFont, notifString, (TopX, TopY + 100), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);		
+		}
 		int msgcount = pickupMsgStrings.Size();
 		if (msgcount <= 0 || !CheckInventory("MessageOn", 1)) return;
 		// Get the height of the font (we will use this for vertical
@@ -1741,15 +1791,15 @@ class Helmeter : BaseStatusBar
 		for (int j = msgcount - 1; j >= 0; j--)
 		{
 			DrawString(cybFont, 
-				pickupMsgStrings[j],
-				pos,
-				flags: flags,
-				translation: Font.CR_White,
-				// Pass the alpha value from the alpha values array.
-				// Don't forget to clamp it  to 1.0 here, since it
-				// starts at 2.0:
-				alpha: (min(pickupMsgAlpha[j], 1.0)) * DisplayFlicker,
-				scale: (scale, scale));
+			pickupMsgStrings[j],
+			pos,
+			flags: flags,
+			translation: Font.CR_White,
+			// Pass the alpha value from the alpha values array.
+			// Don't forget to clamp it  to 1.0 here, since it
+			// starts at 2.0:
+			alpha: (min(pickupMsgAlpha[j], 1.0)) * DisplayFlicker,
+			scale: (scale, scale));
 			// move up for the next message:
 			pos.y += stringheight;
 		}

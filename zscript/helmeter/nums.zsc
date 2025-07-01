@@ -244,7 +244,7 @@ extend class Helmeter
 				EventHandler.SendNetworkEvent("gimmethe:VitalsOn");		// This is only because booleans don't seem to persist in saves???
 				if(!StartSpamStopper)
 				{
-					S_StartSound("VBEEP2", CHAN_7, 0, 0.8 * SFXVolume);
+					S_StartSound("VBEEP2", CHAN_7, 0, 0.8 * notifVolume);
 					StartSpamStopper = true;
 				}
 	//			VitalsOn = true;
@@ -260,7 +260,7 @@ extend class Helmeter
 				EventHandler.SendNetworkEvent("gimmethe:AmmoOn");
 				if(!StartSpamStopper)
 				{
-					S_StartSound("VBEEP3", CHAN_7, 0, 0.8 * SFXVolume);
+					S_StartSound("VBEEP3", CHAN_7, 0, 0.8 * notifVolume);
 					StartSpamStopper = true;
 				}			break;
 				case 13:
@@ -277,7 +277,7 @@ extend class Helmeter
 				EventHandler.SendNetworkEvent("gimmethe:StatsOn");
 				if(!StartSpamStopper)
 				{
-					S_StartSound("VBEEP1", CHAN_7, 0, 0.8 * SFXVolume);
+					S_StartSound("VBEEP1", CHAN_7, 0, 0.8 * notifVolume);
 					StartSpamStopper = true;
 				}			
 				break;
@@ -310,7 +310,7 @@ extend class Helmeter
 							Startuper++;
 							AlreadyAdvancedThisStartTic = true;
 							StartupDelayTarget = StartupTics;
-							S_StartSound("logmessage", CHAN_AUTO, 0, 0.8 * SFXVolume);
+							S_StartSound("logmessage", CHAN_AUTO, 0, 0.8 * notifVolume);
 						}
 						else
 						{
@@ -321,7 +321,7 @@ extend class Helmeter
 					{
 						if(!StartedUp)
 						{
-							S_StartSound("STRTSUCC", CHAN_AUTO, 0, 0.8 * SFXVolume);
+							S_StartSound("STRTSUCC", CHAN_AUTO, 0, 0.8 * notifVolume);
 						}
 						StartedUp = true;
 					}
@@ -364,6 +364,10 @@ extend class Helmeter
 	}
 	void DoDeathSequence()
 	{
+		if(HealthPoints <= 0 && Cvar.GetCVar("helm_deathmus", CPlayer).GetInt())
+        {
+			SetMusicVolume(0);
+		}
 		if(HealthPoints <= 0 && Cvar.GetCVar("helm_death", CPlayer).GetInt())
 		{
 			//DrawString(cybFont, FormatNumber(DeathTics, 1, 4), (TopX - 1, TopY + 59), DI_TEXT_ALIGN_CENTER | DI_SCREEN_CENTER_TOP, Font.CR_GOLD, Alpha: DisplayFlicker);
@@ -375,7 +379,7 @@ extend class Helmeter
 					AlreadyAdvancedThisDeathTic = true;
 					DeathDelayTarget = DeathTics;
 					DeathDelayAmount = clamp((random((20-Deather),28) - Deather), 1, 28);
-					S_StartSound("logmessage", CHAN_AUTO, 0, 0.8 * SFXVolume);
+					S_StartSound("logmessage", CHAN_AUTO, 0, 0.8 * notifVolume);
 				}
 				else
 				{

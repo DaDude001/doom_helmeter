@@ -26,9 +26,14 @@ OptionMenu "HELM_SETTINGS" {
 	StaticText "The dynamic swaying of the HUD. You can mess with (and disable) it here.", "Green"
 	StaticText ""
 
+	Submenu "Sound Settings", "HELM_SFXOPT"
+	Tooltip ""
+	StaticText "Sound volume and toggles found here.", "Blue"
+	StaticText ""
+
 	Submenu "Misc. Settings", "HELM_MISCOPT"
 	Tooltip ""
-	StaticText "These options are for some of the more intrusive effects that may cause issues in some", "Blue"
+	StaticText "Miscellanous options that may affect gameplay more than the ones in other categories.", "Purple"
 	StaticText ""
 //	Option "Show Cracks", "helm
 }
@@ -137,13 +142,31 @@ OptionMenu "HELM_SWAYOPT" {
 	Slider "Sway Parallax", "helm_swayparallax", 0.1, 1, 0.05, 2, "helm_sway"
 	Tooltip "Simulates a parallax effect; the displays will move more than the helmet.\nLower is more, higher is less.\n Reccommended to leave between 0.6 and 0.9."
 }
+
+OptionMenu "HELM_SFXOPT" {
+	Class "TF_TooltipOptionMenu"
+	Title "Sound Settings"
+	StaticText "Sound volume and toggles found here.", "Gold"
+	Slider "Helmet Volume", "helm_realvolume", 0, 1, 0.1, 1
+	Tooltip "Volume of sounds that physically come from the helmet itself, e.g. glass cracking."
+	Slider "Notification Volume", "helm_notifvolume", 0, 1, 0.1, 1
+	Tooltip "Volume of various notification sounds."
+	Slider "Misc Volume", "helm_miscvolume", 0, 1, 0.1, 1
+	Tooltip "Volume of various other sounds, such as the displays glitching, the display powering on, etc."
+	Option "Mute Music on Death", "helm_deathmus", "YesNo"
+	Tooltip "Mutes the music when you die. Best paired with the death sequence."	
+	Option "Log Sound on Centered Messages", "helm_logimportant", "YesNo"
+	Tooltip "Plays the log sound (used in the startup and death sequences) whenever a centered message (e.g. \"A secret has been revealed!\") appears."	
+	Option "Log Sound on Any Item Pickup", "helm_logitem", "YesNo"
+	Tooltip "Plays the log sound whenever an item is picked up."	
+	StaticText ""
+
+}
+
 OptionMenu "HELM_MISCOPT" {
 	Class "TF_TooltipOptionMenu"
 	Title "Misc Settings"
-	StaticText "These options are for some of the more intrusive effects that may cause issues in some", "Gold"
-	StaticText ""
-	Slider "Sound Volume", "helm_volume", 0, 1, 0.1, 1
-	Tooltip "Volume of ALL helmet sounds. \nWill not affect sounds that are already playing."
+	StaticText "Miscellanous options that may affect gameplay more than the ones in other categories.", "Gold"
 	StaticText ""
 	Option "Startup Sequence", "helm_startup", "OnOff"
 	Tooltip "Enable/disable the animation of the helmet booting up at the beginning of a new game."

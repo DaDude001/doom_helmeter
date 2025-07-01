@@ -1,7 +1,11 @@
 Full List of Changes (from newest to oldest)
 
-=====v1.4.0 // 6/??/2025=====
+=====v1.4.0 // 7/1/2025=====
 -Added inventory display 
+-Remade the startup sequence and tweaked the death sequence
+-Volume slider has been separated into categories
+-Music can now be optionally muted on death
+-Centered messages are now replaced by the HUD just like the log messages are
 
 =====v1.3.0 // 5/21/2025=====
 -Added "compact mode" (experimental)
